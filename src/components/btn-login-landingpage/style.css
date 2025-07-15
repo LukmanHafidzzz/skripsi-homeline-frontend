@@ -1,0 +1,17 @@
+.btn-login-primary {
+    border: 2px solid #654D39;
+    color: #654D39;
+    border-radius: 5px;
+    width: 110px;
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.btn-login-primary:hover {
+    background-color: #654D39;
+    color: white;
+}
