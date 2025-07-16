@@ -1,0 +1,75 @@
+.input-group:focus-within .input-group-text {
+    border-top: 1px solid #654D39 !important;
+    border-left: 1px solid #654D39 !important;
+    border-bottom: 1px solid #654D39 !important;
+    border-right: 1px solid #ced4da !important;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+    transition: 0.1s;
+    z-index: 2;
+    background-color: #fff;
+    position: relative;
+}
+
+.input-group:focus-within .form-maxmin {
+    border-top: 1px solid #654D39 !important;
+    border-right: 1px solid #654D39 !important;
+    border-bottom: 1px solid #654D39 !important;
+    border-left: 1px solid #ced4da !important;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+    transition: 0.1s;
+}
+
+/* Styling awal */
+.input-group-text {
+    border: 1px solid #ced4da;
+    border-right: none;
+    border-radius: 0.375rem 0 0 0.375rem;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    transition: 0.1s;
+}
+
+.form-maxmin {
+    border: 1px solid #ced4da;
+    border-left: none;
+    border-radius: 0 0.375rem 0.375rem 0;
+    transition: 0.1s;
+}
+
+.loc-container {
+    overflow-y: auto;
+    max-height: 150px;
+}
+
+.box-filter {
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    
+}
+
+.form-check-input:focus {
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.search-form {
+    transition: 0.1s !important;
+}
+
+.search-form:focus {
+    outline: none !important;
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.25) !important;
+    border: solid #654D39 1px !important;
+    transition: .1s !important;
+}
+
+#dropdown-basic-button {
+    width: 160px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: transparent;
+    color: #000;
+    font-weight: 600;
+    border-color: #000;
+}

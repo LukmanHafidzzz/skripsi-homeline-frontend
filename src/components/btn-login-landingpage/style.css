@@ -15,3 +15,13 @@
     background-color: #654D39;
     color: white;
 }
+
+.btn-login-primary.scrolled {
+    border: 2px solid white;
+    color: white;
+}
+
+.btn-login-primary.scrolled:hover {
+    background-color: white !important;
+    color: #654D39 !important;
+}

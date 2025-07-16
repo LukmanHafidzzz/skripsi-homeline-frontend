@@ -7,15 +7,14 @@ import { Container, Card, Button } from 'react-bootstrap'
 import { IoLocationOutline } from "react-icons/io5";
 import { LuBath, LuBuilding, LuRuler } from "react-icons/lu";
 import { MdOutlineBed } from "react-icons/md";
-import { FaRegBuilding } from "react-icons/fa";
 
 export default function index() {
     return (
         <>
-            <Card style={{ width: '19rem' }}>
+            <Card style={{ width: '18rem' }}>
                 <Card.Img variant="top" src="housephotos/example.jpg" />
                 <Card.Body>
-                    <Card.Title className='mb-2'>Rumah Daerah Jakarta Selatan</Card.Title>
+                    <Card.Title className='mb-2 card-title-ellipsis'>Rumah Daerah Jakarta Selatan</Card.Title>
                     <Card.Text>
                         <div className='d-flex align-items-center gap-2 mb-2'><IoLocationOutline /> Jakarta Selatan</div>
                         <div className='fs-7 d-flex align-items-center gap-3 mb-4'>

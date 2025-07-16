@@ -9,14 +9,14 @@
 
 .detail-btn:active {
     background-color: #654D39 !important;
-    box-shadow: none;
-    color: #fff;
-    outline: none;
+    box-shadow: none !important;
+    color: #fff !important;
+    outline: none !important;
 }
 
 .card-title-ellipsis {
-    display: block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    display: block !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
 }

@@ -1,0 +1,20 @@
+.custom-navbar {
+    transition: box-shadow 0.2s ease;
+    transition: background-color 0.2s ease;
+    border-bottom: 2px solid transparent;
+    background-color: transparent !important;
+    /* border-radius: 0 0 50px 50px !important; */
+}
+
+.custom-navbar.scrolled {
+    box-shadow: 0 0 10px 4px #FFD39A !important;
+    background-color: #7A5B46 !important;
+}
+
+.scroll-text.scrolled {
+    transition: color 0.2s ease;
+}
+
+.scroll-text.scrolled {
+    color: white !important;
+}

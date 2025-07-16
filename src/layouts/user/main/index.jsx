@@ -1,8 +1,11 @@
 import React, {useState} from 'react'
 import NavbarHomeUser from '../../../components/navbar-home-user/index'
 import Landingpage from '../../../pages/user/landingpage/index'
+import FooterGeneral from '../../../components/footer-general/index'
 
 import { Container, Row, Col, InputGroup, Form, Dropdown, DropdownButton } from 'react-bootstrap'
+
+import { Outlet } from 'react-router-dom'
 
 import './style.css'
 
@@ -16,7 +19,7 @@ export default function index() {
     return (
         <>
             <NavbarHomeUser />
-            <Container fluid className="mt-5 px-4">
+            <Container fluid className="mt-21 px-4">
                 <Row>
                     <Col xs={3} className="">
                         <div className='fw-bold fs-5 mb-3'>Filter</div>
@@ -64,13 +67,13 @@ export default function index() {
                             </div>
                         </div>
                         <div>
-                            <Landingpage />
+                            <Outlet />
                         </div>
                     </Col>
                 </Row>
             </Container>
-
-            Nanti ada footer
+            
+            <FooterGeneral />
         </>
     )
 }
