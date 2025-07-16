@@ -1,0 +1,15 @@
+.detail-btn {
+    background-color: #654D39 !important;
+    border: none !important;
+}
+
+.detail-btn:hover {
+    background-color: #7a5b46 !important;
+}
+
+.detail-btn:active {
+    background-color: #7a5b46 !important;
+    box-shadow: none;
+    color: #fff;
+    outline: none;
+}

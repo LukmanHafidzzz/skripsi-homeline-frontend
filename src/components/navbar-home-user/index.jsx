@@ -7,28 +7,23 @@ export default function index() {
     return (
         <>
             <Navbar expand="lg" className="border-bottom">
-                <Container className=''>
+                <Container fluid className="px-4">
                     <Navbar.Brand href="#home">
-                        {/* <img src="/assets/logo.png" alt="" width={100} /> */}
+                        {/* <img src="/assets/logo.png" alt="logo" width={120} /> */}
                         <div className='fw-bold fs-4'><span className='clr-primary'>H</span>omeline</div>
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
-                        <Container>
-                            <Row className="w-100 align-items-center">
-                                <Col xs={4}></Col>
-                                <Col xs={4} className="d-flex justify-content-center">
-                                    <Nav className="justify-content-center gap-3">
-                                        <Nav.Link href="">Home</Nav.Link>
-                                        <Nav.Link href="">About Us</Nav.Link>
-                                        <Nav.Link href="">Contact Us</Nav.Link>
-                                    </Nav>
-                                </Col>
-                                <Col xs={4} className="d-flex justify-content-end align-items-center">
-                                    <LoginLandingpage />
-                                </Col>
-                            </Row>
-                        </Container>
+                        <div className="d-flex flex-column flex-lg-row w-100 align-items-start align-items-lg-center justify-content-between mt-3 mt-lg-0">
+                            <Nav className="mx-auto gap-4 text-center">
+                                <Nav.Link href="#home">Home</Nav.Link>
+                                <Nav.Link href="#about">About Us</Nav.Link>
+                                <Nav.Link href="#contact">Contact Us</Nav.Link>
+                            </Nav>
+                        </div>
+                        <div className="mt-3 mt-lg-0 d-flex justify-content-center justify-content-lg-end">
+                            <LoginLandingpage />
+                        </div>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>

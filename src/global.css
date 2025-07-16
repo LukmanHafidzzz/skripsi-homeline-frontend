@@ -4,3 +4,7 @@
 .clr-primary {
     color: #654D39;
 }
+
+.fs-7 {
+    font-size: 0.875rem !important;
+}
