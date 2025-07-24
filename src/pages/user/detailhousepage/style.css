@@ -1,0 +1,106 @@
+.breadcrumb a {
+    text-decoration: none !important;
+    color: #7A5B46 !important;
+}
+
+.btn-visit {
+    border: solid 2px #7A5B46 !important;
+    text-decoration: none !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    color: #7A5B46;
+    width: 7.2rem !important;
+    height: 2.7rem !important;
+    border-radius: 7rem !important;
+    transition: .2s;
+}
+
+.btn-visit:hover, .btn-visit:active {
+    color: #fff;
+    background-color: #7A5B46 !important;
+    transition: .2s;
+}
+
+.cek {
+    text-decoration: none !important;
+    color: #7A5B46 !important;
+}
+
+.card-contact {
+    background-color: #7A5B46 !important;
+    color: #fff !important;
+}
+
+.btn-wa {
+    border: solid 2px #fff !important;
+    background-color: #7A5B46 !important;
+    width: 100% !important;
+    height: 2.8rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: .2s;
+}
+
+.btn-wa:hover, .btn-wa:active {
+    background-color: #fff !important;
+    color: #7A5B46 !important;
+    transition: .2s;
+}
+
+.profile-contact {
+    border: solid 2px #fff !important;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-contact img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 100%;
+}
+
+.frame {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease-in-out;
+}
+
+.frame:hover img {
+    transform: scale(1.1);
+}
+
+.frame::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 100%, rgba(0,0,0,0.8) 100%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.frame .card-img-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+    color: white;
+}

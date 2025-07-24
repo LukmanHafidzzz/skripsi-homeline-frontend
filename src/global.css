@@ -2,7 +2,11 @@
 
 
 .clr-primary {
-    color: #654D39;
+    color: #7A5B46;
+}
+
+.clr-secondary {
+    color: #FFD39A;
 }
 
 .fs-7 {
@@ -23,4 +27,8 @@
 
 .mt-21 {
     margin-top: 7rem !important;
+}
+
+.section-gap {
+    margin-top: 6rem;
 }

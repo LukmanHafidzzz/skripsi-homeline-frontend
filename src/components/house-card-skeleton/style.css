@@ -20,3 +20,9 @@
     overflow: hidden !important;
     text-overflow: ellipsis !important;
 }
+
+.badge-3d {
+    position: absolute;
+    top: 0px;
+    right: 10px;
+}

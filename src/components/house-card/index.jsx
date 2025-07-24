@@ -12,7 +12,7 @@ export default function index() {
     return (
         <>
             <Card style={{ width: '18rem' }}>
-                <Card.Img variant="top" src="housephotos/example.jpg" />
+                <Card.Img variant="top" src="/housephotos/example.jpg" />
                 <Card.Body>
                     <Card.Title className='mb-2 card-title-ellipsis'>Rumah Daerah Jakarta Selatan</Card.Title>
                     <Card.Text>

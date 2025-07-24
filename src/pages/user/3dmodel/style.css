@@ -1,0 +1,10 @@
+.breadcrumb a {
+    text-decoration: none !important;
+    color: #7A5B46 !important;
+}
+
+canvas {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+}

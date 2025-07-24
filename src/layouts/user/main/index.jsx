@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import NavbarHomeUser from '../../../components/navbar-home-user/index'
-import Landingpage from '../../../pages/user/landingpage/index'
+import Searchpage from '../../../pages/user/searchpage/index'
 import FooterGeneral from '../../../components/footer-general/index'
 
 import { Container, Row, Col, InputGroup, Form, Dropdown, DropdownButton } from 'react-bootstrap'
@@ -39,17 +39,17 @@ export default function index() {
                         <Container className="border p-3 rounded-2 box-filter">
                             <div className='fw-bold mb-3'>Lokasi</div>
                             <div className="d-flex flex-column gap-2 mb-4 loc-container">
-                                <Form.Check type='checkbox' id='' label='DKI Jakarta' />
-                                <Form.Check type='checkbox' id='' label='Bandung' />
-                                <Form.Check type='checkbox' id='' label='DI Yogyakarta' />
-                                <Form.Check type='checkbox' id='' label='Surabaya' />
-                                <Form.Check type='checkbox' id='' label='Semarang' />
-                                <Form.Check type='checkbox' id='' label='Medan' />
-                                <Form.Check type='checkbox' id='' label='Makassar' />
-                                <Form.Check type='checkbox' id='' label='Palembang' />
-                                <Form.Check type='checkbox' id='' label='Batam' />
-                                <Form.Check type='checkbox' id='' label='Malang' />
-                                <Form.Check type='checkbox' id='' label='Bali' />
+                                <Form.Check className='checkbox-ellipsis' type='checkbox' id='' label='DKI Jakarta' />
+                                <Form.Check className='checkbox-ellipsis' type='checkbox' id='' label='Bandung' />
+                                <Form.Check className='checkbox-ellipsis' type='checkbox' id='' label='DI Yogyakarta' />
+                                <Form.Check className='checkbox-ellipsis' type='checkbox' id='' label='Surabaya' />
+                                <Form.Check className='checkbox-ellipsis' type='checkbox' id='' label='Semarang' />
+                                <Form.Check className='checkbox-ellipsis' type='checkbox' id='' label='Medan' />
+                                <Form.Check className='checkbox-ellipsis' type='checkbox' id='' label='Makassar' />
+                                <Form.Check className='checkbox-ellipsis' type='checkbox' id='' label='Palembang' />
+                                <Form.Check className='checkbox-ellipsis' type='checkbox' id='' label='Batam' />
+                                <Form.Check className='checkbox-ellipsis' type='checkbox' id='' label='Malang' />
+                                <Form.Check className='checkbox-ellipsis' type='checkbox' id='' label='Bali' />
                             </div>
                         </Container>
                     </Col>

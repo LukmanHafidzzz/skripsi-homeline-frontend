@@ -18,3 +18,38 @@
 .scroll-text.scrolled {
     color: white !important;
 }
+
+.scroll-text.scrolled span {
+    color: #FFD39A !important;
+    transition: color 0.2s ease;
+}
+
+.profile {
+    all: unset !important;
+    border: solid 3px #7A5B46 !important;
+    width: 3rem !important;
+    height: 3rem !important;
+    border-radius: 100% !important;
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: color 0.2s ease !important;
+    cursor: pointer !important;
+}
+
+.profile.scrolled {
+    border: solid 3px #fff !important;
+    transition: color 0.2s ease !important;
+}
+
+.profile img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    border-radius: 100% !important;
+}
+
+.custom-toggle::after {
+    display: none !important;
+}

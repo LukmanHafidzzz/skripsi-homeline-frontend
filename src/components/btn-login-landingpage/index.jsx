@@ -1,5 +1,7 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import './style.css'
+
+import { Link } from 'react-router-dom';
 
 export default function index() {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -13,11 +15,13 @@ export default function index() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-  return (
-    <>
-        <div className={`fw-semibold btn-login-primary ${isScrolled ? 'scrolled' : ''}`}>
-            Login
-        </div>
-    </>
-  )
+    return (
+        <>
+            <Link to="/auth/login" className='text-decoration-none'>
+                <div className={`fw-semibold btn-login-primary ${isScrolled ? 'scrolled' : ''}`}>
+                    Login
+                </div>
+            </Link>
+        </>
+    )
 }

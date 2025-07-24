@@ -1,0 +1,12 @@
+.sub-menu {
+    background-color: #fff;
+    transition: .2s;
+}
+.sub-menu:hover {
+    background-color: #F5F5F5;
+    transition: .2s;
+}
+
+.active-menu {
+    background-color: #F5F5F5;
+}
