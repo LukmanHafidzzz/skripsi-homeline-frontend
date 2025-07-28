@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState, useEffect } from 'react'
 import NavbarHomeUser from '../../../components/navbar-home-user/index'
 import Searchpage from '../../../pages/user/searchpage/index'
 import FooterGeneral from '../../../components/footer-general/index'

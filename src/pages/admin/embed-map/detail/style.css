@@ -1,0 +1,27 @@
+.photos-frame {
+    height: 30rem;
+}
+
+.img-fill {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.splide__track,
+.splide__slide {
+    height: 100%;
+}
+
+.form-add-textarea {
+    border: 1px solid #ced4da !important;
+    transition: .2s !important;
+}
+
+.form-add-textarea:focus {
+    border: 1px solid #ced4da !important;
+    outline: none !important;
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.25) !important;
+    border: solid #7A5B46 1px !important;
+    transition: .2s !important;
+}

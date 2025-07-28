@@ -1,48 +1,84 @@
-import React, { useState, useEffect } from 'react'
-import { Col, Container, Row  } from 'react-bootstrap'
+import React, { useState, useEffect, Suspense } from 'react';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls, useGLTF, Bounds } from '@react-three/drei';
 
-import ThreeDViewer from './ThreeDViewer';
-
-import './style.css'
-
+import { Breadcrumb, Col, Container, Row } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import Skeleton from 'react-loading-skeleton';
+import './style.css';
 import '@splidejs/react-splide/css';
 
-import Skeleton from 'react-loading-skeleton';
+function Model({ fileName }) {
+    const { scene } = useGLTF(`/models/${fileName}`);
+    return <primitive object={scene} />;
+}
 
-export default function index() {
+function ThreeDViewer({ fileName }) {
+    return (
+        <Canvas style={{ height: '500px', background: '#BDDDE4' }} shadows>
+            <ambientLight intensity={0.5} />
+            <directionalLight position={[5, 10, 5]} intensity={2} castShadow />
+            <spotLight position={[0, 5, 5]} angle={Math.PI / 6} intensity={2} castShadow />
+
+            <Suspense fallback={null}>
+                <Bounds fit clip observe margin={0.9}>
+                    <Model fileName={fileName} />
+                </Bounds>
+            </Suspense>
+
+            <OrbitControls enableDamping dampingFactor={0.05} />
+        </Canvas>
+    );
+}
+
+export default function DetailModelPage() {
     const [loading, setLoading] = useState(true);
 
+    const modelFileName = 'test 10.glb';
+
     useEffect(() => {
-        const timer = setTimeout(() => setLoading(false), 3000);
+        const timer = setTimeout(() => setLoading(false), 2000);
         return () => clearTimeout(timer);
     }, []);
+
     return (
-        <>
-            <Container className='fluid'>
-                <Row className="h-100 mb-4">
-                    <Col className='p-0'>
-                        {loading ? (
-                            <Skeleton height={500} width='100%' />
-                        ) : (
-                            <ThreeDViewer />
-                        )}
-                    </Col>
-                </Row>
-                <Row className='d-grid'>
-                    <Col className='p-0'>
-                        <span className="fw-semibold fs-5">Catatan:</span>
-                    </Col>
-                    <Col className='p-0'>
-                        <span className="">- Scroll mouse untuk zoom in / zoom out</span>
-                    </Col>
-                    <Col className='p-0'>
-                        <span className="">- Tekan tombol kiri pada mouse untuk interaksi</span>
-                    </Col>
-                    <Col className='p-0'>
-                        <span className="">- Tekan Shift + tombol kiri pada mouse untuk memindahkan object</span>
-                    </Col>
-                </Row>
-            </Container >
-        </>
-    )
+        <Container className='fluid'>
+            <Row>
+                <Col className="p-0 fs-7">
+                    <Breadcrumb>
+                        <Breadcrumb.Item>
+                            <Link to='/search' className='breadcrumb-link'>Pencarian</Link>
+                        </Breadcrumb.Item>
+                        <Breadcrumb.Item>
+                            <Link to='/detail' className='breadcrumb-link'>Detail (Judul Rumah)</Link>
+                        </Breadcrumb.Item>
+                        <Breadcrumb.Item active>Detail (nama model)</Breadcrumb.Item>
+                    </Breadcrumb>
+                </Col>
+            </Row>
+            <Row className="h-100 mb-4">
+                <Col className='p-0'>
+                    {loading ? (
+                        <Skeleton height={500} width='100%' />
+                    ) : (
+                        <ThreeDViewer fileName={modelFileName} />
+                    )}
+                </Col>
+            </Row>
+            <Row className='d-grid'>
+                <Col className='p-0'>
+                    <span className="fw-semibold fs-5">Catatan:</span>
+                </Col>
+                <Col className='p-0'>
+                    <span>- Scroll mouse untuk zoom in / zoom out</span>
+                </Col>
+                <Col className='p-0'>
+                    <span>- Tekan tombol kiri pada mouse untuk interaksi</span>
+                </Col>
+                <Col className='p-0'>
+                    <span>- Tekan Shift + tombol kiri pada mouse untuk memindahkan object</span>
+                </Col>
+            </Row>
+        </Container>
+    );
 }
