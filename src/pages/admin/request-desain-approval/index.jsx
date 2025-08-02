@@ -3,18 +3,61 @@ import './style.css'
 import { DropdownButton, Form, Dropdown, Table, Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom';
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
+import axios from 'axios';
 
 export default function index() {
-    const [selected, setSelected] = useState('Terbaru');
+    const [selected, setSelected] = useState('semua');
 
     const handleSelect = (value) => {
         setSelected(value);
+    };
+
+    const [surveyRequests, setSurveyRequests] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchSurveyRequest = async () => {
+            try {
+                const res = await axios.get('http://localhost:5773/api/admin/request/design-request', {
+                    withCredentials: true
+                });
+                setSurveyRequests(res.data);
+            } catch (err) {
+                console.error(err.response?.data?.message || err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchSurveyRequest();
+    }, []);
+    
+
+    if (loading) {
+        return <div className="mt-5 pt-5 text-center">Loading...</div>;
+    };
+
+    if (surveyRequests.length === 0) {
+        return (
+            <div className="mt-5 pt-5 text-center">
+                Tidak ada data rumah...
+            </div>
+        );
     };
 
     return (
         <>
             <div className='mb-3'>
                 <Form.Control type="text" className='search-form rounded-5 p-3 mb-3' placeholder="Cari rumah..." />
+                <div className='d-flex align-items-center text-black gap-3'>
+                    <div className='fw-semibold'>Status:</div>
+                    <DropdownButton id="dropdown-basic-button" title={`${selected}`}>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('semua')}>semua</Dropdown.Item>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('waiting')}>waiting</Dropdown.Item>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('approved')}>approved</Dropdown.Item>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('rejected')}>rejected</Dropdown.Item>
+                    </DropdownButton>
+                </div>
             </div>
 
             <Table bordered>
@@ -24,25 +67,29 @@ export default function index() {
                         <th className='custom-table-header'>ID</th>
                         <th className='custom-table-header'>Judul</th>
                         <th className='custom-table-header'>Harga</th>
+                        <th className='custom-table-header'>Request Status</th>
                         <th className='custom-table-header'>Action</th>
                     </tr>
                 </thead>
                 <tbody className='align-middle'>
-                    <tr>
-                        <td>1.</td>
-                        <td>H00001</td>
-                        <td>Rumah daerah Jakarta Selatan</td>
-                        <td className='text-end'>550.000.000</td>
-                        <td className="align-middle">
-                            <div className="d-flex justify-content-center">
-                                <Link to='./detail' className='text-decoration-none'>
-                                    <Button className="d-flex align-items-center gap-1" variant="outline-success">
-                                        <MdOutlineRemoveRedEye /> view
-                                    </Button>
-                                </Link>
-                            </div>
-                        </td>
-                    </tr>
+                    {surveyRequests.map((surveyRequest, index) => (
+                        <tr key={index}>
+                            <td className='text-center'>{index + 1}.</td>
+                            <td>{surveyRequest.house_id}</td>
+                            <td>{surveyRequest.house.title}</td>
+                            <td className='text-end'>{Number(surveyRequest.house.price).toLocaleString('id-ID')}</td>
+                            <td className='text-end'>{surveyRequest.request_status}</td>
+                            <td className="align-middle">
+                                <div className="d-flex justify-content-center">
+                                    <Link to={`./detail/${surveyRequest.house.id}`} className='text-decoration-none'>
+                                        <Button className="d-flex align-items-center gap-1" variant="outline-success">
+                                            <MdOutlineRemoveRedEye /> view
+                                        </Button>
+                                    </Link>
+                                </div>
+                            </td>
+                        </tr>
+                    ))}
                 </tbody>
             </Table>
         </>

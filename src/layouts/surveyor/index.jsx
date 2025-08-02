@@ -1,24 +1,38 @@
-import React from 'react'
+import React from 'react';
+import axios from 'axios';
 import { Col, Container, Dropdown, Image, Row } from 'react-bootstrap'
-import { Outlet } from 'react-router-dom'
-import DesignerSidebar from '../../components/designer-sidebar/index'
+import { Outlet, useNavigate } from 'react-router-dom'
+import SurveyorSidebar from '../../components/surveyor-sidebar/index'
 
 import './style.css'
 import { FaUser } from "react-icons/fa";
 
 export default function index() {
+    
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        try {
+            await axios.delete('http://localhost:5773/api/auth/logout', {
+                withCredentials: true
+            });
+            navigate('/');
+        } catch (error) {
+            console.error('Logout gagal:', error);
+        }
+    };
     return (
         <>
             <Container fluid className="min-vh-100 d-flex">
                 <Row className="flex-grow-1 w-100">
                     <Col xs={3} className="border-end p-4">
-                        <DesignerSidebar />
+                        <SurveyorSidebar />
                     </Col>
                     <Col className="p-0">
                         <div className="bg-white border-bottom p-3 fs-5 fw-semibold sticky-top">
                             <div className="d-flex justify-content-between">
                                 <div>
-                                    Desginer Dashboard
+                                    Surveyor Dashboard
                                 </div>
                                 <div>
                                     <Dropdown align="end">
@@ -27,7 +41,7 @@ export default function index() {
                                             <FaUser />
                                         </Dropdown.Toggle>
                                         <Dropdown.Menu>
-                                            <Dropdown.Item href="#/action-1">Logout</Dropdown.Item>
+                                            <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
                                         </Dropdown.Menu>
                                     </Dropdown>
                                 </div>

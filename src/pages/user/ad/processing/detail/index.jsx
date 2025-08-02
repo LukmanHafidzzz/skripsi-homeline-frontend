@@ -3,12 +3,13 @@ import { Col, Container, Image, Row, Breadcrumb, Card, Button } from 'react-boot
 import './style.css'
 import '@splidejs/react-splide/css';
 
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 
 import Skeleton from 'react-loading-skeleton';
 import { FaRegFile } from 'react-icons/fa6';
+import axios from 'axios';
 
 export default function index() {
     const [loading, setLoading] = useState(true);
@@ -17,6 +18,26 @@ export default function index() {
         const timer = setTimeout(() => setLoading(false), 3000);
         return () => clearTimeout(timer);
     }, []);
+
+    const { id } = useParams();
+    const [house, setHouse] = useState(null);
+
+    useEffect(() => {
+        const fetchHouseDetail = async () => {
+            try {
+                const res = await axios.get(`http://localhost:5773/api/user/advertisement/detail/${id}`, {
+                    withCredentials: true
+                });
+                setHouse(res.data);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        fetchHouseDetail();
+    }, [id]);
+
+    if (!house) return <div>Loading...</div>;
     return (
         <>
             <Container className='fluid'>
@@ -33,12 +54,11 @@ export default function index() {
                                 }}
                                 className="h-100"
                             >
-                                <SplideSlide className="h-100">
-                                    <Image src="/housephotos/example.jpg" className="img-fill rounded-2" alt="img1" />
-                                </SplideSlide>
-                                <SplideSlide className="h-100">
-                                    <Image src="/housephotos/example-2.jpg" className="img-fill rounded-2" alt="img2" />
-                                </SplideSlide>
+                                {house.house_photos.map((item, index) => (
+                                    <SplideSlide className="h-100" key={index}>
+                                        <Image src={`/housephotos/${item.photo}`} className="img-fill rounded-2" />
+                                    </SplideSlide>
+                                ))}
                             </Splide>
                         )}
                     </Col>
@@ -46,13 +66,13 @@ export default function index() {
                 <Row className='mt-4' data-aos="fade-up" data-aos-duration="800">
                     <Col className='p-0'>
                         <div className='fs-4'>
-                            Rumah daerah Jakarta Selatan
+                            {house.title}
                         </div>
                         <div className='fs-3 mt-2 fw-semibold'>
-                            Rp 550.000.000
+                            Rp {Number(house.price).toLocaleString('id-ID')}
                         </div>
                         <div className='fs-7 mt-2'>
-                            Cianjur, Jakarta Selatan
+                            {house.address.subdistrict}, {house.address.city}
                         </div>
                     </Col>
                 </Row>
@@ -61,9 +81,9 @@ export default function index() {
                     <div className="fw-bold mb-2 fs-5 p-0" data-aos="fade-up" data-aos-duration="800">
                         DESKRIPSI
                     </div>
-                    <Col className="p-0" data-aos="fade-up" data-aos-duration="800">
+                    <Col xs={11} className="p-0" data-aos="fade-up" data-aos-duration="800">
                         <div>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam euismod, erat eu ultricies faucibus, mauris lacus tincidunt velit, in accumsan ligula erat id lorem. Mauris elementum purus nulla. Suspendisse in velit egestas, auctor augue a, scelerisque justo. Duis ligula dui, molestie vitae lacus sit amet, pellentesque laoreet quam. Mauris aliquet sapien placerat vehicula tempor. Donec posuere lectus neque, at tristique velit posuere in. Etiam faucibus suscipit augue ac rhoncus. Suspendisse hendrerit, elit et fringilla ultrices, velit risus blandit tortor, ut hendrerit nisi elit vitae nisi. Nulla eu sem bibendum, venenatis ipsum quis, condimentum urna. Sed rutrum nisl sit amet interdum dictum. Integer vestibulum nulla a nunc cursus, nec fringilla tellus ornare. Donec ut placerat ipsum. Integer ut ante maximus nisl commodo sodales. Vestibulum vel libero tincidunt, feugiat arcu et, ultrices neque. Curabitur rhoncus, dui a faucibus cursus, odio magna iaculis justo, a dictum sem odio id dolor. Etiam bibendum sem a justo consectetur, nec blandit sem egestas. Morbi ultrices sollicitudin sapien sollicitudin tempus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus aliquam eget dolor nec accumsan. Sed ultricies ut tellus eu consequat. Phasellus massa leo, dictum condimentum nisi id, maximus feugiat enim. Phasellus placerat augue non leo convallis, in maximus massa laoreet. Suspendisse eget ornare massa. Curabitur fringilla sem eget nisi hendrerit pellentesque. Etiam dapibus neque sit amet gravida faucibus. Cras sem felis, ullamcorper sit amet libero facilisis, vehicula lacinia tortor.
+                            {house.description}
                         </div>
                         <Row className='mt-4'>
                             <Col data-aos="fade-up" data-aos-duration="800">
@@ -71,21 +91,13 @@ export default function index() {
                                     INFORMASI LAINNYA
                                 </div>
                                 <div>
-                                    <Row className='mb-2'>
-                                        <Col className=''>Kamar Tidur</Col>
-                                        <Col className='' xs={1}>:</Col>
-                                        <Col className='p-0'>2</Col>
-                                    </Row>
-                                    <Row className='mb-2'>
-                                        <Col className=''>Kamar Mandi</Col>
-                                        <Col className='' xs={1}>:</Col>
-                                        <Col className='p-0'>2</Col>
-                                    </Row>
-                                    <Row className='mb-2'>
-                                        <Col className=''>Garasi</Col>
-                                        <Col className='' xs={1}>:</Col>
-                                        <Col className='p-0'>1</Col>
-                                    </Row>
+                                    {house.house_facilities.map((item, index) => (
+                                        <Row className='mb-2' key={index}>
+                                            <Col className=''>{item.facility.name}</Col>
+                                            <Col className='' xs={1}>:</Col>
+                                            <Col className='p-0'>{item.quantity}</Col>
+                                        </Row>
+                                    ))}
                                     <Row className='mb-2'>
                                         <Col className=''>Luas Bangunan</Col>
                                         <Col className='' xs={1}>:</Col>
@@ -100,16 +112,49 @@ export default function index() {
                             </Col>
                             <Col data-aos="fade-up" data-aos-duration="800">
                                 <div className="fw-bold mb-2 fs-5">
+                                    ALAMAT
+                                </div>
+                                <div className="mb-2">
+                                    {house.address.full_address}
+                                </div>
+                                <div>
+                                    <Link target='_blank' to={house.link_maps} className='text-decoration-none text-black'>{house.link_maps}</Link>
+                                </div>
+                                <div className="fw-bold mb-2 fs-5 mt-4">
                                     HASIL SURVEY
                                 </div>
                                 <div>
-                                    <Link to='' className='text-decoration-none text-black'><FaRegFile /></Link> <Link to='' className='text-decoration-none text-black ms-2'>Survey_01072025_aDs23Fsa.pdf</Link>
+                                    {house.house_survey?.notes_file ? (
+                                        <>
+                                            <Link
+                                                target='_blank'
+                                                to={`/surveyFile/${house.house_survey.notes_file}`}
+                                                className='text-decoration-none text-black'
+                                            >
+                                                <FaRegFile /> <span className="ms-2">{house.house_survey.notes_file}</span>
+                                            </Link>
+                                        </>
+                                    ) : (
+                                        <>-</>
+                                    )}
                                 </div>
                                 <div className="fw-bold mb-2 fs-5 mt-4">
                                     HASIL DESIGN MODEL 3D
                                 </div>
                                 <div>
-                                    <Link to='' className='text-decoration-none text-black'>-</Link>
+                                    {house.house_design?.design_file ? (
+                                        <>
+                                            <Link
+                                                target='_blank'
+                                                to={`./model/${house.id}`}
+                                                className='text-decoration-none text-black'
+                                            >
+                                                <FaRegFile /> <span className="ms-2">{house.house_design.design_file}</span>
+                                            </Link>
+                                        </>
+                                    ) : (
+                                        <>-</>
+                                    )}
                                 </div>
                             </Col>
                         </Row>

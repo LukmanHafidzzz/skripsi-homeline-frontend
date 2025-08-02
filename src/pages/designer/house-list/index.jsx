@@ -3,6 +3,7 @@ import './style.css'
 import { DropdownButton, Form, Dropdown, Table, Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom';
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
+import axios from 'axios';
 
 export default function index() {
     const [selected, setSelected] = useState('Semua');
@@ -11,6 +12,37 @@ export default function index() {
         setSelected(value);
     };
 
+    const [houseProcesses, setHouseProcesses] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchHouses = async () => {
+            try {
+                const res = await axios.get('http://localhost:5773/api/designer/house-list', {
+                    withCredentials: true
+                });
+                setHouseProcesses(res.data);
+            } catch (err) {
+                console.error(err.response?.data?.message || err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchHouses();
+    }, []);
+
+    if (loading) {
+        return <div className="mt-5 pt-5 text-center">Loading...</div>;
+    };
+
+    if (houseProcesses.length === 0) {
+        return (
+            <div className="mt-5 pt-5 text-center">
+                Tidak ada data rumah...
+            </div>
+        );
+    };
     return (
         <>
             <div className='mb-3'>
@@ -32,26 +64,30 @@ export default function index() {
                         <th className='custom-table-header'>No</th>
                         <th className='custom-table-header'>ID</th>
                         <th className='custom-table-header'>Judul</th>
+                        <th className='custom-table-header'>Alamat</th>
                         <th className='custom-table-header'>Status</th>
                         <th className='custom-table-header'>Action</th>
                     </tr>
                 </thead>
                 <tbody className='align-middle'>
-                    <tr>
-                        <td>1.</td>
-                        <td>H00001</td>
-                        <td>Rumah daerah Jakarta Selatan</td>
-                        <td className=''>Perlu Desain</td>
-                        <td className="align-middle">
-                            <div className="d-flex justify-content-center">
-                                <Link to='./detail' className='text-decoration-none'>
-                                    <Button className="d-flex align-items-center gap-1" variant="outline-success">
-                                        <MdOutlineRemoveRedEye /> view
-                                    </Button>
-                                </Link>
-                            </div>
-                        </td>
-                    </tr>
+                    {houseProcesses.map((houseProcess, index) => (
+                        <tr key={index}>
+                            <td className='text-center'>{index + 1}.</td>
+                            <td>{houseProcess.house.id}</td>
+                            <td>{houseProcess.house.title}</td>
+                            <td className=''>{houseProcess.house.address.full_address}</td>
+                            <td className=''>{houseProcess.design_process}</td>
+                            <td className="align-middle">
+                                <div className="d-flex justify-content-center">
+                                    <Link to={`./detail/${houseProcess.house.id}`} className='text-decoration-none'>
+                                        <Button className="d-flex align-items-center gap-1" variant="outline-success">
+                                            <MdOutlineRemoveRedEye /> view
+                                        </Button>
+                                    </Link>
+                                </div>
+                            </td>
+                        </tr>
+                    ))}
                 </tbody>
             </Table>
         </>

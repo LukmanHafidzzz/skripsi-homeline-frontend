@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
+import axios from 'axios';
 
 import { Container, Nav, Navbar, Row, Col, Image, Dropdown, DropdownButton } from 'react-bootstrap'
 import LoginLandingpage from '../btn-login-landingpage/index';
@@ -11,16 +13,43 @@ import './style.css'
 
 export default function index() {
     const [isScrolled, setIsScrolled] = useState(false);
+    const [user, setUser] = useState(null);
 
     useEffect(() => {
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 0);
         };
 
+        const fetchUser = async () => {
+            try {
+                const res = await axios.get('http://localhost:5773/api/auth/me', {
+                    withCredentials: true
+                });
+                setUser(res.data);
+            } catch (error) {
+                setUser(null);
+            }
+        };
+
+        handleScroll();
         window.addEventListener('scroll', handleScroll);
+        fetchUser();
+
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        try {
+            await axios.delete('http://localhost:5773/api/auth/logout', {
+                withCredentials: true
+            });
+            navigate('/');
+        } catch (error) {
+            console.error('Logout gagal:', error);
+        }
+    };
     return (
         <>
             <Navbar expand="lg" fixed="top" className={`px-4 py-2 custom-navbar ${isScrolled ? 'scrolled' : ''}`}>
@@ -37,21 +66,24 @@ export default function index() {
                                 <Nav.Link as={Link} to="/" className={`mx-auto gap-4 text-center scroll-text ${isScrolled ? 'scrolled' : ''}`}>Beranda</Nav.Link>
                                 <Nav.Link as={Link} to="/search" className={`mx-auto gap-4 text-center scroll-text ${isScrolled ? 'scrolled' : ''}`}>Pencarian</Nav.Link>
                                 <Nav.Link href="#contact" className={`mx-auto gap-4 text-center scroll-text ${isScrolled ? 'scrolled' : ''}`}>Kontak Kami</Nav.Link>
-                                <Nav.Link as={Link} to="/advertisement" className={`mx-auto gap-4 text-center scroll-text ${isScrolled ? 'scrolled' : ''}`}>Pasang Iklan</Nav.Link>
+                                {user && (
+                                    <Nav.Link as={Link} to="/advertisement" className={`scroll-text ${isScrolled ? 'scrolled' : ''}`}>Pasang Iklan</Nav.Link>
+                                )}
                             </Nav>
                         </div>
-                        {/* <div className="mt-3 mt-lg-0 d-flex justify-content-center justify-content-lg-end">
-                            <LoginLandingpage />
-                        </div> */}
                         <div className="mt-3 mt-lg-0 d-flex justify-content-center justify-content-lg-end">
-                            <Dropdown align="end">
-                                <Dropdown.Toggle bsPrefix="custom-toggle" className={`profile ${isScrolled ? 'scrolled' : ''}`}>
-                                    <Image src='/userphoto/user.jpg' />
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                    <Dropdown.Item href="#/action-1">Logout</Dropdown.Item>
-                                </Dropdown.Menu>
-                            </Dropdown>
+                            {user ? (
+                                <Dropdown align="end">
+                                    <Dropdown.Toggle bsPrefix="custom-toggle" className={`profile ${isScrolled ? 'scrolled' : ''}`}>
+                                        <Image src='/userphoto/user.jpg' />
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu>
+                                        <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            ) : (
+                                <LoginLandingpage />
+                            )}
                         </div>
                     </Navbar.Collapse>
                 </Container>

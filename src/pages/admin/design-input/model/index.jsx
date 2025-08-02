@@ -3,10 +3,11 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls, useGLTF, Bounds } from '@react-three/drei';
 
 import { Breadcrumb, Col, Container, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
 import './style.css';
 import '@splidejs/react-splide/css';
+import axios from 'axios';
 
 function Model({ fileName }) {
     const { scene } = useGLTF(`/models/${fileName}`);
@@ -31,7 +32,7 @@ function ThreeDViewer({ fileName }) {
     );
 }
 
-export default function DetailModelPage() {
+export default function index() {
     const [loading, setLoading] = useState(true);
 
     const modelFileName = 'test 10.glb';
@@ -41,27 +42,34 @@ export default function DetailModelPage() {
         return () => clearTimeout(timer);
     }, []);
 
+    const { id } = useParams();
+    const [house, setHouse] = useState(null);
+
+    useEffect(() => {
+        const fetchHouseDetail = async () => {
+            try {
+                const res = await axios.get(`http://localhost:5773/api/admin/house/model/${id}`, {
+                    withCredentials: true
+                });
+                setHouse(res.data);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        fetchHouseDetail();
+    }, [id]);
+
+    if (!house) return <div>Loading...</div>;
+
     return (
         <Container className='fluid'>
-            <Row>
-                <Col className="p-0 fs-7">
-                    <Breadcrumb>
-                        <Breadcrumb.Item>
-                            <Link to='/search' className='breadcrumb-link'>Pencarian</Link>
-                        </Breadcrumb.Item>
-                        <Breadcrumb.Item>
-                            <Link to='/detail' className='breadcrumb-link'>Detail (Judul Rumah)</Link>
-                        </Breadcrumb.Item>
-                        <Breadcrumb.Item active>Detail (nama model)</Breadcrumb.Item>
-                    </Breadcrumb>
-                </Col>
-            </Row>
             <Row className="h-100 mb-4">
                 <Col className='p-0'>
-                    {loading ? (
+                    {loading || !house.house_design?.design_file ? (
                         <Skeleton height={500} width='100%' />
                     ) : (
-                        <ThreeDViewer fileName={modelFileName} />
+                        <ThreeDViewer fileName={house.house_design.design_file} />
                     )}
                 </Col>
             </Row>

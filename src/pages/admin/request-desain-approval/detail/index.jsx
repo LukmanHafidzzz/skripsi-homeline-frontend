@@ -3,7 +3,7 @@ import { Button, Col, Container, Image, Row, Table } from 'react-bootstrap'
 import './style.css'
 import '@splidejs/react-splide/css';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 
@@ -12,14 +12,37 @@ import { FaRegFile } from 'react-icons/fa6';
 import { FaRegMap } from 'react-icons/fa';
 
 import Swal from 'sweetalert2';
+import axios from 'axios';
 
 export default function index() {
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const timer = setTimeout(() => setLoading(false), 3000);
         return () => clearTimeout(timer);
     }, []);
+
+
+    const { id } = useParams();
+    const [house, setHouse] = useState(null);
+
+    useEffect(() => {
+        const fetchHouseDetail = async () => {
+            try {
+                const res = await axios.get(`http://localhost:5773/api/admin/house/detail/${id}`, {
+                    withCredentials: true
+                });
+                setHouse(res.data);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        fetchHouseDetail();
+    }, [id]);
+
+    if (!house) return <div>Loading...</div>;
     return (
         <>
             <Container>
@@ -36,12 +59,11 @@ export default function index() {
                                 }}
                                 className="h-100"
                             >
-                                <SplideSlide className="h-100">
-                                    <Image src="/housephotos/example.jpg" className="img-fill rounded-2" alt="img1" />
-                                </SplideSlide>
-                                <SplideSlide className="h-100">
-                                    <Image src="/housephotos/example-2.jpg" className="img-fill rounded-2" alt="img2" />
-                                </SplideSlide>
+                                {house.house_photos.map((item, index) => (
+                                    <SplideSlide className="h-100" key={index}>
+                                        <Image src={`/housephotos/${item.photo}`} className="img-fill rounded-2" />
+                                    </SplideSlide>
+                                ))}
                             </Splide>
                         )}
                     </Col>
@@ -49,13 +71,13 @@ export default function index() {
                 <Row className='mt-4' data-aos="fade-up" data-aos-duration="800">
                     <Col className='p-0'>
                         <div className='fs-4'>
-                            Rumah daerah Jakarta Selatan
+                            {house.title}
                         </div>
                         <div className='fs-3 mt-2 fw-semibold'>
-                            Rp 550.000.000
+                            Rp {Number(house.price).toLocaleString('id-ID')}
                         </div>
                         <div className='fs-7 mt-2'>
-                            Cianjur, Jakarta Selatan
+                            {house.address.subdistrict}, {house.address.city}
                         </div>
                     </Col>
                 </Row>
@@ -66,7 +88,7 @@ export default function index() {
                     </div>
                     <Col className="p-0" data-aos="fade-up" data-aos-duration="800">
                         <div>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam euismod, erat eu ultricies faucibus, mauris lacus tincidunt velit, in accumsan ligula erat id lorem. Mauris elementum purus nulla. Suspendisse in velit egestas, auctor augue a, scelerisque justo. Duis ligula dui, molestie vitae lacus sit amet, pellentesque laoreet quam. Mauris aliquet sapien placerat vehicula tempor. Donec posuere lectus neque, at tristique velit posuere in. Etiam faucibus suscipit augue ac rhoncus. Suspendisse hendrerit, elit et fringilla ultrices, velit risus blandit tortor, ut hendrerit nisi elit vitae nisi. Nulla eu sem bibendum, venenatis ipsum quis, condimentum urna. Sed rutrum nisl sit amet interdum dictum. Integer vestibulum nulla a nunc cursus, nec fringilla tellus ornare. Donec ut placerat ipsum. Integer ut ante maximus nisl commodo sodales. Vestibulum vel libero tincidunt, feugiat arcu et, ultrices neque. Curabitur rhoncus, dui a faucibus cursus, odio magna iaculis justo, a dictum sem odio id dolor. Etiam bibendum sem a justo consectetur, nec blandit sem egestas. Morbi ultrices sollicitudin sapien sollicitudin tempus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus aliquam eget dolor nec accumsan. Sed ultricies ut tellus eu consequat. Phasellus massa leo, dictum condimentum nisi id, maximus feugiat enim. Phasellus placerat augue non leo convallis, in maximus massa laoreet. Suspendisse eget ornare massa. Curabitur fringilla sem eget nisi hendrerit pellentesque. Etiam dapibus neque sit amet gravida faucibus. Cras sem felis, ullamcorper sit amet libero facilisis, vehicula lacinia tortor.
+                            {house.description}
                         </div>
                         <Row className='mt-4'>
                             <Col xs={5} data-aos="fade-up" data-aos-duration="800">
@@ -74,37 +96,29 @@ export default function index() {
                                     INFORMASI LAINNYA
                                 </div>
                                 <div>
-                                    <Row className='mb-2'>
-                                        <Col className=''>Kamar Tidur</Col>
-                                        <Col className='' xs={1}>:</Col>
-                                        <Col className='p-0'>2</Col>
-                                    </Row>
-                                    <Row className='mb-2'>
-                                        <Col className=''>Kamar Mandi</Col>
-                                        <Col className='' xs={1}>:</Col>
-                                        <Col className='p-0'>2</Col>
-                                    </Row>
-                                    <Row className='mb-2'>
-                                        <Col className=''>Garasi</Col>
-                                        <Col className='' xs={1}>:</Col>
-                                        <Col className='p-0'>1</Col>
-                                    </Row>
+                                    {house.house_facilities.map((item, index) => (
+                                        <Row className='mb-2' key={index}>
+                                            <Col className=''>{item.facility.name}</Col>
+                                            <Col className='' xs={1}>:</Col>
+                                            <Col className='p-0'>{item.quantity}</Col>
+                                        </Row>
+                                    ))}
                                     <Row className='mb-2'>
                                         <Col className=''>Luas Bangunan</Col>
                                         <Col className='' xs={1}>:</Col>
-                                        <Col className='p-0'>200 m<sup>2</sup></Col>
+                                        <Col className='p-0'>{house.building_area} m<sup>2</sup></Col>
                                     </Row>
                                     <Row className='mb-2'>
                                         <Col className=''>Luas Tanah</Col>
                                         <Col className='' xs={1}>:</Col>
-                                        <Col className='p-0'>160 m<sup>2</sup></Col>
+                                        <Col className='p-0'>{house.land_area} m<sup>2</sup></Col>
                                     </Row>
                                 </div>
                                 <div className="fw-bold mb-2 fs-5 mt-4">
                                     Alamat Lengkap
                                 </div>
                                 <div>
-                                    Jalan Lor Karangwaru, Tegalrejo, Yogyakarta City, Special Region of Yogyakarta
+                                    {house.address.full_address}
                                 </div>
                             </Col>
                             <Col data-aos="fade-up" data-aos-duration="800">
@@ -113,10 +127,10 @@ export default function index() {
                                 </div>
                                 <div>
                                     <div className="mb-2">
-                                        Jenis Sertifikat: <span>SHM</span>
+                                        Jenis Sertifikat: <span>{house.certificate.certificate_type.type}</span>
                                     </div>
                                     <div className="mb-2">
-                                        <Link to='' className='text-decoration-none text-black'><FaRegFile /></Link> <Link to='' className='text-decoration-none text-black ms-2'>sertifikat_03072025_aDs23Fsa.pdf</Link>
+                                        <Link target='_blank' to={`/certificateFile/${house.certificate.certificate_file}`} className='text-decoration-none text-black'><FaRegFile /><span className='ms-2'>{house.certificate.certificate_file}</span></Link>
                                     </div>
                                 </div>
                                 <div className="fw-bold mb-2 fs-5 mt-4">
@@ -124,7 +138,7 @@ export default function index() {
                                 </div>
                                 <div>
                                     <div className="mb-2">
-                                        <Link to='' className='text-decoration-none text-black'><FaRegMap /></Link> <Link to='' className='text-decoration-none text-black ms-2'>https://maps.app.goo.gl/79XSrN3Nyr8QVKuV8</Link>
+                                        <Link target='_blank' to={house.link_maps} className='text-decoration-none text-black'><FaRegMap /> <span className='ms-2'>{house.link_maps}</span></Link>
                                     </div>
                                 </div>
                                 <div className="fw-bold mb-2 fs-5 mt-4">
@@ -134,17 +148,17 @@ export default function index() {
                                     <Row className='mb-2'>
                                         <Col className=''>Nama</Col>
                                         <Col className='' xs={1}>:</Col>
-                                        <Col className='p-0'>Lukman Hafidz</Col>
+                                        <Col className='p-0'>{house.user.username}</Col>
                                     </Row>
                                     <Row className='mb-2'>
                                         <Col className=''>Email</Col>
                                         <Col className='' xs={1}>:</Col>
-                                        <Col className='p-0'>lukman@gmail.com</Col>
+                                        <Col className='p-0'>{house.user.email}</Col>
                                     </Row>
                                     <Row className='mb-2'>
                                         <Col className=''>No. Whatsapp</Col>
                                         <Col className='' xs={1}>:</Col>
-                                        <Col className='p-0'>+628xxxxxxx</Col>
+                                        <Col className='p-0'>+62{house.no_telp}</Col>
                                     </Row>
                                 </div>
                             </Col>
@@ -153,88 +167,134 @@ export default function index() {
                 </Row>
                 <Row className="mt-5 mb-4" data-aos="fade-up" data-aos-duration="800">
                     <Col className="p-0">
-                        <div className="fw-bold mb-2 fs-5">
-                            DETAIL REQUEST
-                        </div>
-                        <div>
-                            <Table bordered>
-                                <thead>
-                                    <tr className='text-center'>
-                                        <th className='custom-table-header'>Username</th>
-                                        <th className='custom-table-header'>Email</th>
-                                        <th className='custom-table-header'>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody className='align-middle'>
-                                    <tr>
-                                        <td>John Doe</td>
-                                        <td>johndoe@gmail.com</td>
-                                        <td className="align-middle">
-                                            <div className='d-flex justify-content-center align-items-center gap-3'>
-                                                <div>
-                                                    <Button
-                                                        variant="danger"
-                                                        className='py-2 px-4'
-                                                        onClick={() => {
-                                                            Swal.fire({
-                                                                title: 'Apakah Anda yakin?',
-                                                                text: 'Anda akan menolak pengajuan ini.',
-                                                                icon: 'warning',
-                                                                showCancelButton: true,
-                                                                confirmButtonColor: '#d33',
-                                                                cancelButtonColor: '#3085d6',
-                                                                confirmButtonText: 'Tolak!',
-                                                                cancelButtonText: 'Batal'
-                                                            }).then((result) => {
-                                                                if (result.isConfirmed) {
-                                                                    Swal.fire(
-                                                                        'Ditolak!',
-                                                                        'Pengajuan telah ditolak.',
-                                                                        'success'
-                                                                    )
-                                                                    // action
-                                                                }
-                                                            })
-                                                        }}
-                                                    >
-                                                        Reject
-                                                    </Button>
-                                                </div>
-                                                <div>
-                                                    <Button
-                                                        variant="success"
-                                                        className='py-2 px-4'
-                                                        onClick={() => {
-                                                            Swal.fire({
-                                                                title: 'Setujui Pengajuan?',
-                                                                text: 'Apakah Anda yakin ingin menyetujui pengajuan ini?',
-                                                                icon: 'question',
-                                                                showCancelButton: true,
-                                                                confirmButtonColor: '#28a745',
-                                                                cancelButtonColor: '#6c757d',
-                                                                confirmButtonText: 'Lanjutkan',
-                                                                cancelButtonText: 'Batal'
-                                                            }).then((result) => {
-                                                                if (result.isConfirmed) {
-                                                                    Swal.fire(
-                                                                        'Diproses!',
-                                                                        'Pengajuan akan dilanjutkan.',
-                                                                        'success'
-                                                                    )
-                                                                    // action
-                                                                }
-                                                            })
-                                                        }}
-                                                    >
-                                                        Approve
-                                                    </Button>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </Table>
-                        </div>
+                        {house?.design_request && house.design_request.request_status !== 'approved' && house.design_request.request_status !== 'rejected' ? (
+                            <>
+                                <div className="fw-bold mb-2 fs-5">
+                                    DETAIL REQUEST
+                                </div>
+                                <div>
+                                    <Table bordered>
+                                        <thead>
+                                            <tr className='text-center'>
+                                                <th className='custom-table-header'>Username</th>
+                                                <th className='custom-table-header'>Email</th>
+                                                <th className='custom-table-header'>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className='align-middle'>
+                                            {house?.design_request ? (
+                                                <tr>
+                                                    <td>{house.design_request.user?.username}</td>
+                                                    <td>{house.design_request.user?.email}</td>
+                                                    <td className="align-middle">
+                                                        <div className='d-flex justify-content-center align-items-center gap-3'>
+                                                            <div>
+                                                                <Button
+                                                                    variant="danger"
+                                                                    className='py-2 px-4'
+                                                                    onClick={() => {
+                                                                        Swal.fire({
+                                                                            title: 'Apakah Anda yakin?',
+                                                                            text: 'Anda akan menolak pengajuan ini.',
+                                                                            icon: 'warning',
+                                                                            showCancelButton: true,
+                                                                            confirmButtonColor: '#d33',
+                                                                            cancelButtonColor: '#3085d6',
+                                                                            confirmButtonText: 'Tolak!',
+                                                                            cancelButtonText: 'Batal'
+                                                                        }).then(async (result) => {
+                                                                            if (result.isConfirmed) {
+                                                                                try {
+                                                                                    const res = await axios.patch(
+                                                                                        `http://localhost:5773/api/admin/request/reject-design-request/${id}`,
+                                                                                        { withCredentials: true }
+                                                                                    );
+
+                                                                                    Swal.fire(
+                                                                                        'Ditolak!',
+                                                                                        res.data.message || 'Pengajuan telah ditolak.',
+                                                                                        'success'
+                                                                                    ).then(() => {
+                                                                                        navigate('/admin/request-design-approval');
+                                                                                    });
+
+                                                                                    setHouse((prev) => ({ ...prev, status: 'rejected' }));
+
+                                                                                } catch (err) {
+                                                                                    Swal.fire(
+                                                                                        'Gagal!',
+                                                                                        err.response?.data?.message || 'Terjadi kesalahan.',
+                                                                                        'error'
+                                                                                    );
+                                                                                }
+                                                                            }
+                                                                        });
+                                                                    }}
+                                                                >
+                                                                    Reject
+                                                                </Button>
+                                                            </div>
+                                                            <div>
+                                                                <Button
+                                                                    variant="success"
+                                                                    className='py-2 px-4'
+                                                                    onClick={() => {
+                                                                        Swal.fire({
+                                                                            title: 'Setujui Pengajuan?',
+                                                                            text: 'Apakah Anda yakin ingin menyetujui pengajuan ini?',
+                                                                            icon: 'question',
+                                                                            showCancelButton: true,
+                                                                            confirmButtonColor: '#28a745',
+                                                                            cancelButtonColor: '#6c757d',
+                                                                            confirmButtonText: 'Lanjutkan',
+                                                                            cancelButtonText: 'Batal'
+                                                                        }).then(async (result) => {
+                                                                            if (result.isConfirmed) {
+                                                                                try {
+                                                                                    const res = await axios.patch(
+                                                                                        `http://localhost:5773/api/admin/request/approve-design-request/${id}`,
+                                                                                        { withCredentials: true }
+                                                                                    );
+
+                                                                                    Swal.fire(
+                                                                                        'Diproses!',
+                                                                                        res.data.message || 'Pengajuan telah disetujui.',
+                                                                                        'success'
+                                                                                    ).then(() => {
+                                                                                        navigate('/admin/request-design-approval');
+                                                                                    });
+
+                                                                                    setHouse((prev) => ({ ...prev, status: 'approved' }));
+
+                                                                                } catch (err) {
+                                                                                    Swal.fire(
+                                                                                        'Gagal!',
+                                                                                        err.response?.data?.message || 'Terjadi kesalahan.',
+                                                                                        'error'
+                                                                                    );
+                                                                                }
+                                                                            }
+                                                                        });
+                                                                    }}
+                                                                >
+                                                                    Approve
+                                                                </Button>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ) : (
+                                                <tr>
+                                                    <td colSpan="3" className="text-center">Tidak ada data</td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    </Table>
+                                </div>
+                            </>
+                        ) : (
+                            <></>
+                        )};
                     </Col>
                 </Row>
             </Container >

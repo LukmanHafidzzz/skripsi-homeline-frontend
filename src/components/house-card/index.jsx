@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { Link } from 'react-router-dom';
+
 import './style.css'
 
 import { Container, Card, Button } from 'react-bootstrap'
@@ -26,7 +28,9 @@ export default function index() {
                         <div className='fw-bold fs-5 mb-2'>
                             Rp 550.000.000
                         </div>
-                        <Button className='w-100 detail-btn'>Detail</Button>
+                        <Link to='/detail'>
+                            <Button className='w-100 detail-btn'>Detail</Button>
+                        </Link>
                     </Card.Text>
                 </Card.Body>
             </Card>

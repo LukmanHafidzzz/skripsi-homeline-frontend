@@ -3,10 +3,11 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls, useGLTF, Bounds } from '@react-three/drei';
 
 import { Breadcrumb, Col, Container, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
 import './style.css';
 import '@splidejs/react-splide/css';
+import axios from 'axios';
 
 function Model({ fileName }) {
     const { scene } = useGLTF(`/models/${fileName}`);
@@ -31,7 +32,7 @@ function ThreeDViewer({ fileName }) {
     );
 }
 
-export default function DetailModelPage() {
+export default function index() {
     const [loading, setLoading] = useState(true);
 
     const modelFileName = 'test 10.glb';
@@ -40,6 +41,26 @@ export default function DetailModelPage() {
         const timer = setTimeout(() => setLoading(false), 2000);
         return () => clearTimeout(timer);
     }, []);
+
+    const { id } = useParams();
+    const [house, setHouse] = useState(null);
+
+    useEffect(() => {
+        const fetchHouseDetail = async () => {
+            try {
+                const res = await axios.get(`http://localhost:5773/api/user/search/detail/model/${id}`, {
+                    withCredentials: true
+                });
+                setHouse(res.data);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        fetchHouseDetail();
+    }, [id]);
+
+    if (!house) return <div>Loading...</div>;
 
     return (
         <Container className='fluid'>
@@ -50,7 +71,7 @@ export default function DetailModelPage() {
                             <Link to='/search' className='breadcrumb-link'>Pencarian</Link>
                         </Breadcrumb.Item>
                         <Breadcrumb.Item>
-                            <Link to='/detail' className='breadcrumb-link'>Detail (Judul Rumah)</Link>
+                            <Link to={`../search/detail/${house.id}`} className='breadcrumb-link'>{house.title}</Link>
                         </Breadcrumb.Item>
                         <Breadcrumb.Item active>Detail (nama model)</Breadcrumb.Item>
                     </Breadcrumb>
@@ -61,7 +82,7 @@ export default function DetailModelPage() {
                     {loading ? (
                         <Skeleton height={500} width='100%' />
                     ) : (
-                        <ThreeDViewer fileName={modelFileName} />
+                        <ThreeDViewer fileName={house.house_design.design_file} />
                     )}
                 </Col>
             </Row>

@@ -3,12 +3,45 @@ import './style.css'
 import { DropdownButton, Form, Dropdown, Table, Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom';
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
+import axios from 'axios';
 
 export default function index() {
     const [selected, setSelected] = useState('Semua');
 
     const handleSelect = (value) => {
         setSelected(value);
+    };
+
+    const [houseProcesses, setHouseProcesses] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchHouses = async () => {
+            try {
+                const res = await axios.get('http://localhost:5773/api/surveyor/house-list', {
+                    withCredentials: true
+                });
+                setHouseProcesses(res.data);
+            } catch (err) {
+                console.error(err.response?.data?.message || err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchHouses();
+    }, []);
+
+    if (loading) {
+        return <div className="mt-5 pt-5 text-center">Loading...</div>;
+    };
+
+    if (houseProcesses.length === 0) {
+        return (
+            <div className="mt-5 pt-5 text-center">
+                Tidak ada data rumah...
+            </div>
+        );
     };
 
     return (
@@ -21,6 +54,7 @@ export default function index() {
                         <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Semua')}>Semua</Dropdown.Item>
                         <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Perlu Survey')}>Perlu Survey</Dropdown.Item>
                         <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Sedang Survey')}>Sedang Survey</Dropdown.Item>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Pengecekan Hasil')}>Pengecekan Hasil</Dropdown.Item>
                         <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Survey Selesai')}>Survey Selesai</Dropdown.Item>
                     </DropdownButton>
                 </div>
@@ -37,21 +71,23 @@ export default function index() {
                     </tr>
                 </thead>
                 <tbody className='align-middle'>
-                    <tr>
-                        <td>1.</td>
-                        <td>H00001</td>
-                        <td>Rumah daerah Jakarta Selatan</td>
-                        <td className=''>Perlu Survey</td>
-                        <td className="align-middle">
-                            <div className="d-flex justify-content-center">
-                                <Link to='./detail' className='text-decoration-none'>
-                                    <Button className="d-flex align-items-center gap-1" variant="outline-success">
-                                        <MdOutlineRemoveRedEye /> view
-                                    </Button>
-                                </Link>
-                            </div>
-                        </td>
-                    </tr>
+                    {houseProcesses.map((houseProcess, index) => (
+                        <tr key={index}>
+                            <td className='text-center'>{index + 1}.</td>
+                            <td>{houseProcess.house.id}</td>
+                            <td>{houseProcess.house.title}</td>
+                            <td className=''>{houseProcess.survey_process}</td>
+                            <td className="align-middle">
+                                <div className="d-flex justify-content-center">
+                                    <Link to={`./detail/${houseProcess.house.id}`} className='text-decoration-none'>
+                                        <Button className="d-flex align-items-center gap-1" variant="outline-success">
+                                            <MdOutlineRemoveRedEye /> view
+                                        </Button>
+                                    </Link>
+                                </div>
+                            </td>
+                        </tr>
+                    ))}
                 </tbody>
             </Table>
         </>

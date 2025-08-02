@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios';
 import { Button } from 'react-bootstrap';
 
 import Table from 'react-bootstrap/Table';
@@ -10,28 +11,29 @@ import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
 export default function index() {
-    const handleDelete = () => {
-        Swal.fire({
-            title: 'Apakah anda yakin ingin menghapus iklan ini?',
-            text: "Iklan akan dihapus secara permanen!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            cancelButtonText: 'Batal',
-            confirmButtonText: 'Hapus!',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire(
-                    'Terhapus!',
-                    'Data berhasil dihapus.',
-                    'success'
-                )
-                // delete action
-            }
-        })
-    };
+    const [houses, setHouses] = useState([]);
+    const [loading, setLoading] = useState(true);
 
+    useEffect(() => {
+        const fetchHouses = async () => {
+            try {
+                const res = await axios.get('http://localhost:5773/api/user/advertisement/delete', {
+                    withCredentials: true
+                });
+                setHouses(res.data);
+            } catch (err) {
+                console.error(err.response?.data?.message || err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchHouses();
+    }, []);
+
+    if (loading) {
+        return <div className="mt-5 pt-5 text-center">Loading...</div>;
+    };
     return (
         <>
             <Table striped bordered hover>
@@ -45,22 +47,48 @@ export default function index() {
                     </tr>
                 </thead>
                 <tbody className='align-middle'>
-                    <tr>
-                        <td>1.</td>
-                        <td>Rumah daerah Jakarta Selatan</td>
-                        <td className='text-end'>550.000.000</td>
-                        <td className='text-center'>rejected</td>
-                        <td className="align-middle">
-                            <div className="d-flex justify-content-center gap-2">
-                                <Link to='./detail' className='text-decoration-none'><Button className="d-flex align-items-center gap-1" variant="outline-success">
-                                    <MdOutlineRemoveRedEye /> view
-                                </Button></Link>
-                                <Link className='text-decoration-none' onClick={handleDelete}><Button className="d-flex align-items-center gap-1" variant="outline-danger">
-                                    <IoTrashOutline /> hapus
-                                </Button></Link>
-                            </div>
-                        </td>
-                    </tr>
+                    {houses.map((house, index) => (
+                        <tr key={house.id}>
+                            <td className='text-center'>{index + 1}.</td>
+                            <td>{house.title}</td>
+                            <td className='text-end'>{Number(house.price).toLocaleString('id-ID')}</td>
+                            <td className='text-center'>{house.status}</td>
+                            <td className="align-middle">
+                                <div className="d-flex justify-content-center gap-2">
+                                    <Link to={`./detail/${house.id}`} className='text-decoration-none'><Button className="d-flex align-items-center gap-1" variant="outline-success">
+                                        <MdOutlineRemoveRedEye /> view
+                                    </Button></Link>
+                                    <Button
+                                        className="d-flex align-items-center gap-1"
+                                        variant="outline-danger"
+                                        onClick={() => {
+                                            Swal.fire({
+                                                title: 'Apakah anda yakin ingin menghapus iklan ini?',
+                                                text: "Iklan akan dihapus secara permanen!",
+                                                icon: 'warning',
+                                                showCancelButton: true,
+                                                confirmButtonColor: '#d33',
+                                                cancelButtonColor: '#3085d6',
+                                                cancelButtonText: 'Batal',
+                                                confirmButtonText: 'Hapus!',
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    Swal.fire(
+                                                        'Terhapus!',
+                                                        'Data berhasil dihapus.',
+                                                        'success'
+                                                    )
+                                                    // delete action
+                                                }
+                                            })
+                                        }}
+                                    >
+                                        <IoTrashOutline /> hapus
+                                    </Button>
+                                </div>
+                            </td>
+                        </tr>
+                    ))}
                 </tbody>
             </Table>
         </>

@@ -15,7 +15,27 @@ export default function index() {
     return (
         <>
             <div className="mb-4">
+                <div className='text-secondary fw-medium mb-2'>Beranda</div>
+                <NavLink
+                    to='/admin'
+                    end
+                    className={({ isActive }) =>
+                        `text-decoration-none px-4 py-3 mb-1 text-black rounded-2 sub-menu gap-2 d-flex align-items-center ${isActive ? 'active-menu' : ''}`
+                    }
+                >
+                    <IoHomeOutline /> Beranda
+                </NavLink>
+            </div>
+            <div className="mb-4">
                 <div className='text-secondary fw-medium mb-2'>Rumah</div>
+                <NavLink
+                    to='house-list'
+                    className={({ isActive }) =>
+                        `text-decoration-none px-4 py-3 mb-1 text-black rounded-2 sub-menu gap-2 d-flex align-items-center ${isActive ? 'active-menu' : ''}`
+                    }
+                >
+                    <BsHouses /> List Rumah
+                </NavLink>
                 <NavLink
                     to='checking'
                     className={({ isActive }) =>
@@ -25,20 +45,20 @@ export default function index() {
                     <IoHomeOutline /> Checking Awal
                 </NavLink>
                 <NavLink
-                    to='status-change'
-                    className={({ isActive }) =>
-                        `text-decoration-none px-4 py-3 mb-1 text-black rounded-2 sub-menu gap-2 d-flex align-items-center ${isActive ? 'active-menu' : ''}`
-                    }
-                >
-                    <FaRegEdit /> Ubah Status
-                </NavLink>
-                <NavLink
                     to='input-qr'
                     className={({ isActive }) =>
                         `text-decoration-none px-4 py-3 mb-1 text-black rounded-2 sub-menu gap-2 d-flex align-items-center ${isActive ? 'active-menu' : ''}`
                     }
                 >
                     <IoQrCodeOutline /> Input QR
+                </NavLink>
+                <NavLink
+                    to='payment-confirm'
+                    className={({ isActive }) =>
+                        `text-decoration-none px-4 py-3 mb-1 text-black rounded-2 sub-menu gap-2 d-flex align-items-center ${isActive ? 'active-menu' : ''}`
+                    }
+                >
+                    <FaRegEdit /> Konfirmasi Pembayaran
                 </NavLink>
                 <NavLink
                     to='embed-map'

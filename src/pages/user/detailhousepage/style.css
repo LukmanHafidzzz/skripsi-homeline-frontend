@@ -41,6 +41,7 @@
     align-items: center !important;
     justify-content: center !important;
     transition: .2s;
+    color: #fff !important;
 }
 
 .btn-wa:hover, .btn-wa:active {

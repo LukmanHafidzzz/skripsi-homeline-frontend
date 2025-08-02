@@ -8,6 +8,8 @@ import { MdLockOutline } from "react-icons/md";
 import { FaRegClock } from 'react-icons/fa';
 import { PiCubeBold } from 'react-icons/pi';
 
+import { Link } from 'react-router-dom';
+
 export default function index() {
     return (
         <>
@@ -17,7 +19,9 @@ export default function index() {
                         <Col className=''>
                             <div className='fs-1 fw-bold lh-sm mb-4'>Temukan <span className='clr-primary'>Rumah</span> Impian Anda Dengan <span className='clr-primary'>Mudah</span></div>
                             <div className='mb-4'>Homeline hadir untuk membantu Anda menjual, membeli, atau mencari rumah dengan fitur lengkap termasuk visualisasi model 3D.</div>
-                            <Button className='btn-explore fw-semibold'>Jelajahi Sekarang</Button>
+                            <Link to='/search'>
+                                <Button className='btn-explore fw-semibold'>Jelajahi Sekarang</Button>
+                            </Link>
                         </Col>
                         <Col className='d-flex justify-content-end'>
                             <img src="/assets/about-photo-2.png" alt="about-photo-1" className='photo-about' />
@@ -31,7 +35,9 @@ export default function index() {
                             <div className=''>Telusuri rumah di berbagai kota dan area favorit Anda.</div>
                         </Col>
                         <Col className='d-flex justify-content-end'>
-                            <Button className='btn-explore-2 rounded-5 fw-semibold'>Telusuri</Button>
+                            <Link to='/search'>
+                                <Button className='btn-explore-2 rounded-5 fw-semibold'>Telusuri</Button>
+                            </Link>
                         </Col>
                     </Row>
                 </div>
@@ -120,7 +126,9 @@ export default function index() {
                         </Col>
                     </Row>
                     <div className="d-flex justify-content-center mt-5">
-                        <Button className='btn-explore fw-semibold'>Mulai </Button>
+                        <Link to='/advertisement'>
+                            <Button className='btn-explore fw-semibold'>Mulai</Button>
+                        </Link>
                     </div>
                 </div>
             </Container>
