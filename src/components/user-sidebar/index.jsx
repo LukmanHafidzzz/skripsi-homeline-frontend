@@ -1,10 +1,7 @@
 import React from 'react'
 import { Card } from 'react-bootstrap'
-
 import { Link, NavLink } from 'react-router-dom'
-
 import './style.css'
-
 import { MdOutlinePendingActions } from 'react-icons/md'
 import { FaRegPenToSquare } from 'react-icons/fa6'
 import { IoAdd, IoHomeOutline, IoTrashOutline } from 'react-icons/io5'

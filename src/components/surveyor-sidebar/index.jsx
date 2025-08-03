@@ -1,10 +1,6 @@
 import React from 'react'
-import { Card } from 'react-bootstrap'
-
-import { Link, NavLink } from 'react-router-dom'
-
+import { NavLink } from 'react-router-dom'
 import './style.css'
-
 import { BsHouses } from 'react-icons/bs'
 import { LuClipboardPen, LuFileInput } from 'react-icons/lu'
 import { IoHomeOutline } from 'react-icons/io5'

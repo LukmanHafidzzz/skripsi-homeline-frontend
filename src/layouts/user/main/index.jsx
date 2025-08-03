@@ -2,16 +2,12 @@ import React, { useState, useEffect } from 'react'
 import NavbarHomeUser from '../../../components/navbar-home-user/index'
 import Searchpage from '../../../pages/user/searchpage/index'
 import FooterGeneral from '../../../components/footer-general/index'
-
 import { Container, Row, Col, InputGroup, Form, Dropdown, DropdownButton } from 'react-bootstrap'
-
 import { Outlet } from 'react-router-dom'
-
 import './style.css'
 
 export default function index() {
     const [selected, setSelected] = useState('Terbaru');
-
     const handleSelect = (value) => {
         setSelected(value);
     };

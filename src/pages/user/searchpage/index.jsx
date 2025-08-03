@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react'
-
 import { Container, Row, Col } from 'react-bootstrap'
 import axios from 'axios';
-
-import HouseCard from '../../../components/house-card-skeleton/index'
+import HouseCard from '../../../components/house-card/index'
 
 export default function index() {
     const [houses, setHouses] = useState([]);

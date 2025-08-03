@@ -34,12 +34,14 @@
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+    color: #7A5B46 !important;
     transition: color 0.2s ease !important;
     cursor: pointer !important;
 }
 
 .profile.scrolled {
     border: solid 3px #fff !important;
+    color: #fff !important;
     transition: color 0.2s ease !important;
 }
 
@@ -53,3 +55,7 @@
 .custom-toggle::after {
     display: none !important;
 }
+
+/* .custom-toggle {
+    color: #7A5B46 !important;
+} */

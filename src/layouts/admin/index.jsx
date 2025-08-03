@@ -2,17 +2,13 @@ import React from 'react'
 import { Col, Container, Dropdown, Image, Row } from 'react-bootstrap'
 import { Outlet } from 'react-router-dom'
 import AdminSidebar from '../../components/admin-sidebar/index'
-
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
 import './style.css'
 import { FaUser } from "react-icons/fa";
 
 export default function index() {
-
     const navigate = useNavigate();
-
     const handleLogout = async () => {
         try {
             await axios.delete('http://localhost:5773/api/auth/logout', {

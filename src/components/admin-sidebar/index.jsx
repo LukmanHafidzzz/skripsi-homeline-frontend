@@ -1,10 +1,6 @@
 import React from 'react'
-import { Card } from 'react-bootstrap'
-
-import { Link, NavLink } from 'react-router-dom'
-
+import { NavLink } from 'react-router-dom'
 import './style.css'
-
 import { IoHomeOutline, IoQrCodeOutline } from 'react-icons/io5'
 import { BsHouses } from 'react-icons/bs'
 import { LiaMapSolid } from 'react-icons/lia'

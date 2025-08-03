@@ -1,9 +1,8 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, useGLTF, Bounds } from '@react-three/drei';
-
-import { Breadcrumb, Col, Container, Row } from 'react-bootstrap';
-import { Link, useParams } from 'react-router-dom';
+import { Col, Container, Row } from 'react-bootstrap';
+import { useParams } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
 import './style.css';
 import '@splidejs/react-splide/css';

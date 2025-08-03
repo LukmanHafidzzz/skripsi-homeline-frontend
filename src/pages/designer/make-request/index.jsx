@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import './style.css'
-import { DropdownButton, Form, Dropdown, Table, Button } from 'react-bootstrap'
+import { Form, Table, Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom';
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import axios from 'axios';
 
 export default function index() {
-    const [selected, setSelected] = useState('Terbaru');
-
-    const handleSelect = (value) => {
-        setSelected(value);
-    };
-
     const [houseProcesses, setHouseProcesses] = useState([]);
     const [loading, setLoading] = useState(true);
 

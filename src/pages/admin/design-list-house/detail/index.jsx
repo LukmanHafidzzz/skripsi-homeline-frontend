@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Col, Container, Image, Row } from 'react-bootstrap'
+import { Col, Container, Image, Row } from 'react-bootstrap'
 import './style.css'
 import '@splidejs/react-splide/css';
 
@@ -10,8 +10,6 @@ import { Splide, SplideSlide } from '@splidejs/react-splide';
 import Skeleton from 'react-loading-skeleton';
 import { FaRegFile } from 'react-icons/fa6';
 import { FaRegMap } from 'react-icons/fa';
-
-import Swal from 'sweetalert2';
 import axios from 'axios';
 
 export default function index() {

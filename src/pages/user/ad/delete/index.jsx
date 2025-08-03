@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import { Button } from 'react-bootstrap';
-
 import Table from 'react-bootstrap/Table';
 import { IoTrashOutline } from 'react-icons/io5';
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
-
 import { Link } from 'react-router-dom';
-
 import Swal from 'sweetalert2';
 
 export default function index() {

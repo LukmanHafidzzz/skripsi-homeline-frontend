@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from 'react'
-
 import { Link, useNavigate } from 'react-router-dom';
-
 import axios from 'axios';
-
-import { Container, Nav, Navbar, Row, Col, Image, Dropdown, DropdownButton } from 'react-bootstrap'
+import { Container, Nav, Navbar, Dropdown } from 'react-bootstrap'
 import LoginLandingpage from '../btn-login-landingpage/index';
-
-import { FaRegUser } from "react-icons/fa6";
-
+import { FaUser } from "react-icons/fa6";
 import './style.css'
 
 export default function index() {
@@ -55,9 +50,7 @@ export default function index() {
             <Navbar expand="lg" fixed="top" className={`px-4 py-2 custom-navbar ${isScrolled ? 'scrolled' : ''}`}>
                 <Container fluid>
                     <Navbar.Brand href="#home">
-                        {/* <div className='fw-bold fs-4'><span className='clr-primary'>H</span>omeline</div> */}
                         <div className={`fw-bold fs-4 scroll-text ${isScrolled ? 'scrolled' : ''}`}><span className='clr-primary'>H</span>omeline</div>
-                        {/* <img src="/assets/logo.png" alt="logo" width={120} /> */}
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
@@ -75,7 +68,7 @@ export default function index() {
                             {user ? (
                                 <Dropdown align="end">
                                     <Dropdown.Toggle bsPrefix="custom-toggle" className={`profile ${isScrolled ? 'scrolled' : ''}`}>
-                                        <Image src='/userphoto/user.jpg' />
+                                        <FaUser className='fs-5' />
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu>
                                         <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>

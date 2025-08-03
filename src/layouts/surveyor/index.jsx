@@ -3,7 +3,6 @@ import axios from 'axios';
 import { Col, Container, Dropdown, Image, Row } from 'react-bootstrap'
 import { Outlet, useNavigate } from 'react-router-dom'
 import SurveyorSidebar from '../../components/surveyor-sidebar/index'
-
 import './style.css'
 import { FaUser } from "react-icons/fa";
 
@@ -37,7 +36,6 @@ export default function index() {
                                 <div>
                                     <Dropdown align="end">
                                         <Dropdown.Toggle bsPrefix="custom-toggle" className="logout">
-                                            {/* <Image src='/userphoto/user.jpg' /> */}
                                             <FaUser />
                                         </Dropdown.Toggle>
                                         <Dropdown.Menu>

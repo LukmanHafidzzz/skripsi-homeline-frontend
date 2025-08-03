@@ -36,7 +36,6 @@ export default function index() {
                                 <div>
                                     <Dropdown align="end">
                                         <Dropdown.Toggle bsPrefix="custom-toggle" className="logout">
-                                            {/* <Image src='/userphoto/user.jpg' /> */}
                                             <FaUser />
                                         </Dropdown.Toggle>
                                         <Dropdown.Menu>

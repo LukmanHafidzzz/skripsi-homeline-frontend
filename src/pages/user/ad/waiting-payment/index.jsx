@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button, Image, Modal } from 'react-bootstrap';
-
 import Table from 'react-bootstrap/Table';
 import { MdOutlineQrCode2, MdOutlineRemoveRedEye } from 'react-icons/md';
-
 import { Link } from 'react-router-dom';
 
 export default function index() {

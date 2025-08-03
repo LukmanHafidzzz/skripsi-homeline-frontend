@@ -2,11 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Col, Container, Image, Row, Breadcrumb, Card, Button } from 'react-bootstrap'
 import './style.css'
 import '@splidejs/react-splide/css';
-
 import { Link, useParams } from 'react-router-dom';
-
 import { Splide, SplideSlide } from '@splidejs/react-splide';
-
 import Skeleton from 'react-loading-skeleton';
 import { FaRegFile } from 'react-icons/fa6';
 import axios from 'axios';

@@ -1,9 +1,6 @@
 import React from 'react'
-
 import './style.css'
-
 import { Col, Container, Row } from 'react-bootstrap'
-
 import { FaInstagram, FaWhatsapp } from "react-icons/fa";
 import { MdOutlineEmail } from "react-icons/md";
 

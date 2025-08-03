@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Button, Container, Form } from 'react-bootstrap'
 import Swal from 'sweetalert2';
-
 import './style.css'
-
 import { Link } from 'react-router-dom';
 
 export default function index() {
