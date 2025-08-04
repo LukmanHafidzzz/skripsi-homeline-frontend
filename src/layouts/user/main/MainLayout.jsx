@@ -21,7 +21,7 @@ export default function MainLayout() {
 
     return (
         <>
-            <Suspense fallback={<div>Loading Sidebar...</div>}>
+            <Suspense fallback={<div>Loading...</div>}>
                 <NavbarHomeUser />
             </Suspense>
             <Container fluid className="mt-21 px-4">
@@ -94,7 +94,7 @@ export default function MainLayout() {
                 </Row>
             </Container>
 
-            <Suspense fallback={<div>Loading Sidebar...</div>}>
+            <Suspense fallback={<div>Loading...</div>}>
                 <FooterGeneral />
             </Suspense>
         </>

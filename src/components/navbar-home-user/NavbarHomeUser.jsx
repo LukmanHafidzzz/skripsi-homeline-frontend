@@ -75,7 +75,7 @@ export default function NavbarHomeUser() {
                                     </Dropdown.Menu>
                                 </Dropdown>
                             ) : (
-                                <Suspense fallback={<div>Loading Sidebar...</div>}>
+                                <Suspense fallback={<div>Loading...</div>}>
                                     <LoginLandingpage />
                                 </Suspense>
                             )}

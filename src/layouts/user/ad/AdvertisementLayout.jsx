@@ -10,13 +10,13 @@ export default function AdvertisementLayout() {
 
     return (
         <>
-            <Suspense fallback={<div>Loading Sidebar...</div>}>
+            <Suspense fallback={<div>Loading...</div>}>
                 <NavbarHomeUser />
             </Suspense>
             <Container fluid className="mt-21 px-4">
                 <Row className=''>
                     <Col xs={3} className="">
-                        <Suspense fallback={<div>Loading Sidebar...</div>}>
+                        <Suspense fallback={<div>Loading...</div>}>
                             <UserSidebar />
                         </Suspense>
                     </Col>
@@ -25,7 +25,7 @@ export default function AdvertisementLayout() {
                     </Col>
                 </Row>
             </Container>
-            <Suspense fallback={<div>Loading Sidebar...</div>}>
+            <Suspense fallback={<div>Loading...</div>}>
                 <FooterGeneral />
             </Suspense>
         </>

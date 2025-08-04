@@ -14,6 +14,7 @@ export default function QrInput() {
     const handleShowQR = (qr) => {
         setSelectedQR(qr);
         setShow(true);
+        
     };
 
     const [selected, setSelected] = useState('Semua');
@@ -112,7 +113,7 @@ export default function QrInput() {
             <Modal show={show} onHide={handleClose} centered contentClassName="p-0 border-0 bg-transparent">
                 <Modal.Body className="p-0 position-relative d-flex justify-content-center align-items-center">
                     {selectedQR && (
-                        <Image src={`/qris/${selectedQR}`} className="w-50 rounded" />
+                        <Image src={selectedQR} className="w-50 rounded" />
                     )}
 
                     <Button

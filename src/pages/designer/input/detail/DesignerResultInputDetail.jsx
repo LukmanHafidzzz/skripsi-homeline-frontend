@@ -98,7 +98,7 @@ export default function DesignerResultInputDetail() {
                             >
                                 {house.house_photos.map((item, index) => (
                                     <SplideSlide className="h-100" key={index}>
-                                        <Image src={`/housephotos/${item.photo}`} className="img-fill rounded-2" />
+                                        <Image src={item.photo} className="img-fill rounded-2" />
                                     </SplideSlide>
                                 ))}
                             </Splide>
@@ -166,7 +166,7 @@ export default function DesignerResultInputDetail() {
                                     <div className="mb-2">
                                         <Link
                                             target='_blank'
-                                            to={`/surveyFile/${house.house_survey.notes_file}`}
+                                            to={house.house_survey.notes_file}
                                             className='text-decoration-none text-black'
                                         >
                                             <FaRegFile /> <span className="ms-2">{house.house_survey.notes_file}</span>

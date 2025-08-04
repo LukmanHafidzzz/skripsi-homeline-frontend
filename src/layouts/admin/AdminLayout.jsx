@@ -24,7 +24,7 @@ export default function AdminLayout() {
             <Container fluid className="min-vh-100 d-flex">
                 <Row className="flex-grow-1 w-100">
                     <Col xs={3} className="border-end p-4">
-                        <Suspense fallback={<div>Loading Sidebar...</div>}>
+                        <Suspense fallback={<div>Loading...</div>}>
                             <AdminSidebar />
                         </Suspense>
                     </Col>

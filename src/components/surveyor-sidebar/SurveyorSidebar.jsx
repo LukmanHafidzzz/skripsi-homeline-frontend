@@ -1,10 +1,9 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import './style.css'
-import BsHouses from 'react-icons/bs/BsHouses'
-import LuClipboardPen from 'react-icons/lu/LuClipboardPen'
-import LuFileInput from 'react-icons/lu/LuFileInput'
-import IoHomeOutline from 'react-icons/io5/IoHomeOutline'
+import { BsHouses } from 'react-icons/bs'
+import { LuClipboardPen, LuFileInput } from 'react-icons/lu'
+import { IoHomeOutline } from 'react-icons/io5'
 
 export default function SurveyorSidebar() {
     return (

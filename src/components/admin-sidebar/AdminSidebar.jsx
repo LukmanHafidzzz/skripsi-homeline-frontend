@@ -1,14 +1,11 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import './style.css'
-import IoHomeOutline from 'react-icons/io5/IoHomeOutline'
-import IoQrCodeOutline from 'react-icons/io5/IoQrCodeOutline'
-import BsHouses from 'react-icons/bs/BsHouses'
-import LiaMapSolid from 'react-icons/lia/LiaMapSolid'
-import LuClipboardList from 'react-icons/lu/LuClipboardList'
-import LuFileInput from 'react-icons/lu/LuFileInput'
-import LuPaintbrush from 'react-icons/lu/LuPaintbrush'
-import FaRegEdit from 'react-icons/fa/FaRegEdit'
+import { IoHomeOutline, IoQrCodeOutline } from 'react-icons/io5'
+import { BsHouses } from 'react-icons/bs'
+import { LiaMapSolid } from 'react-icons/lia'
+import { LuClipboardList, LuFileInput, LuPaintbrush } from 'react-icons/lu'
+import { FaRegEdit } from 'react-icons/fa'
 
 export default function AdminSidebar() {
     return (

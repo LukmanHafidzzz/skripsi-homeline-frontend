@@ -10,14 +10,14 @@ import './style.css'
 export default function SecondaryLayout() {
     return (
         <>
-            <Suspense fallback={<div>Loading Sidebar...</div>}>
+            <Suspense fallback={<div>Loading...</div>}>
                 <NavbarHomeUser />
             </Suspense>
             <Container fluid className="mt-21 px-4">
                 <Outlet />
             </Container>
 
-            <Suspense fallback={<div>Loading Sidebar...</div>}>
+            <Suspense fallback={<div>Loading...</div>}>
                 <FooterGeneral />
             </Suspense>
         </>

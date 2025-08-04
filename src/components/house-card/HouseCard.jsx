@@ -28,7 +28,7 @@ export default function HouseCard({ house }) {
                     <>
                         <Card.Img
                             variant="top"
-                            src={`/housephotos/${house.house_photos[0].photo}`}
+                            src={house.house_photos[0].photo}
                         />
                         {house.use_3d === "yes" && (
                             <div className="badge-3d fs-2 text-white">

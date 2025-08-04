@@ -8,7 +8,7 @@ import './style.css';
 import '@splidejs/react-splide/css';
 import axios from 'axios';
 function Model({ fileName }) {
-    const { scene } = useGLTF(`/models/${fileName}`);
+    const { scene } = useGLTF(fileName);
     return <primitive object={scene} />;
 }
 

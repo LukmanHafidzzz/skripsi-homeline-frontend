@@ -24,7 +24,7 @@ export default function Searchpage() {
                 <Row className='d-flex flex-wrap'>
                     {houses.map((house) => (
                         <Col xl={4} className='mb-3 d-flex justify-content-center' key={house.id}>
-                            <Suspense fallback={<div>Loading Sidebar...</div>}>
+                            <Suspense fallback={<div>Loading...</div>}>
                                 <HouseCard house={house} />
                             </Suspense>
                         </Col>

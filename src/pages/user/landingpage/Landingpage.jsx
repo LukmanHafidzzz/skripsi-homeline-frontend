@@ -1,9 +1,9 @@
 import React from 'react'
 import './style.css'
 import { Button, Col, Container, Row, Card } from 'react-bootstrap'
-import MdLockOutline from "react-icons/md/MdLockOutline";
-import FaRegClock from 'react-icons/fa/FaRegClock';
-import PiCubeBold from 'react-icons/pi/PiCubeBold';
+import { MdLockOutline } from "react-icons/md";
+import { FaRegClock } from 'react-icons/fa';
+import { PiCubeBold } from 'react-icons/pi';
 import { Link } from 'react-router-dom';
 
 export default function Landingpage() {

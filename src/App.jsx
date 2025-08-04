@@ -18,7 +18,7 @@ import DesignerLayout from './layouts/designer/DesignerLayout.jsx';
 
 // Lazy loader
 const Loadable = (Component) => (props) => (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div className='vh-100 d-flex justify-content-center align-items-center'>Loading...</div>}>
         <Component {...props} />
     </Suspense>
 );

@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Button, Image, Modal } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 import './style.css'
 import Table from 'react-bootstrap/Table';
 import { MdOutlineLocalOffer, MdOutlineRemoveRedEye } from 'react-icons/md';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function AdNeedApproval() {
+    const navigate = useNavigate();
     const [houses, setHouses] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -73,23 +74,57 @@ export default function AdNeedApproval() {
                                                 html: `<small><i>*Note: Dikenakan biaya sebesar <b>Rp 150.000</b> dengan metode QRIS</i></small>`,
                                                 icon: 'question',
                                                 showCancelButton: true,
-                                                confirmButtonColor: '#28a745', // Hijau
-                                                cancelButtonColor: '#dc3545',  // Merah
+                                                confirmButtonColor: '#28a745',
+                                                cancelButtonColor: '#dc3545',
                                                 confirmButtonText: 'Gunakan',
                                                 cancelButtonText: 'Tidak',
-                                                reverseButtons: true, // Membalik posisi tombol agar "Tidak" di kiri
+                                                reverseButtons: true,
                                                 customClass: {
                                                     popup: 'swal2-custom-popup',
                                                     title: 'swal2-title-custom',
                                                     htmlContainer: 'swal2-html-custom',
                                                 },
-                                            }).then((result) => {
+                                            }).then(async (result) => {
                                                 if (result.isConfirmed) {
-                                                    Swal.fire('Pilihan berhasil dibuat!', 'Anda memilih menggunakan fitur 3D.', 'success');
-                                                    // Aksi jika memilih Gunakan
+                                                    try {
+                                                        const res = await axios.patch(
+                                                            `http://localhost:5773/api/user/advertisement/approve-3d-offering/${house.id}`,
+                                                            { withCredentials: true }
+                                                        );
+                                                        Swal.fire(
+                                                            'Pilihan berhasil dibuat!',
+                                                            res.data.message || 'Anda memilih menggunakan fitur 3D.',
+                                                            'success'
+                                                        ).then(() => {
+                                                            navigate('/advertisement/need-approval');
+                                                        });
+                                                    } catch (err) {
+                                                        Swal.fire(
+                                                            'Gagal!',
+                                                            err.response?.data?.message || 'Terjadi kesalahan.',
+                                                            'error'
+                                                        );
+                                                    };
                                                 } else if (result.dismiss === Swal.DismissReason.cancel) {
-                                                    Swal.fire('Pilihan berhasil dibuat!', 'Anda memilih untuk tidak menggunakan fitur 3D.', 'success');
-                                                    // Aksi jika memilih Tidak
+                                                    try {
+                                                        const res = await axios.patch(
+                                                            `http://localhost:5773/api/user/advertisement/reject-3d-offering/${house.id}`,
+                                                            { withCredentials: true }
+                                                        );
+                                                        Swal.fire(
+                                                            'Pilihan berhasil dibuat!',
+                                                            res.data.message || 'Anda memilih untuk tidak menggunakan fitur 3D.',
+                                                            'success'
+                                                        ).then(() => {
+                                                            navigate('/advertisement/need-approval');
+                                                        });
+                                                    } catch (err) {
+                                                        Swal.fire(
+                                                            'Gagal!',
+                                                            err.response?.data?.message || 'Terjadi kesalahan.',
+                                                            'error'
+                                                        );
+                                                    }
                                                 }
                                             });
                                         }}

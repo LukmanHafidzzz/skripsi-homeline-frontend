@@ -85,10 +85,13 @@ export default function AdWaitingPayment() {
 
             <Modal show={show} onHide={handleClose} centered contentClassName="p-0 border-0 bg-transparent">
                 <Modal.Body className="p-0 position-relative d-flex justify-content-center align-items-center">
-                    {selectedQR && (
-                        <Image src={`/qris/${selectedQR}`} className="w-50 rounded" />
+                    {selectedQR ? (
+                        <Image src={selectedQR} className="w-50 rounded" />
+                    ) : (
+                        <div className="bg-white text-center p-4 rounded shadow">
+                            <p className="mb-0">QR belum tersedia. Mohon tunggu sebentar..</p>
+                        </div>
                     )}
-
                     <Button
                         variant="light"
                         onClick={handleClose}

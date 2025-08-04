@@ -57,7 +57,6 @@ export default function QrInputDetail() {
                 withCredentials: true,
             });
 
-            console.log('Success response:', res.data);
             Swal.fire({
                 icon: 'success',
                 title: 'Berhasil!',
@@ -95,7 +94,7 @@ export default function QrInputDetail() {
                             >
                                 {house.house_photos.map((item, index) => (
                                     <SplideSlide className="h-100" key={index}>
-                                        <Image src={`/housephotos/${item.photo}`} className="img-fill rounded-2" />
+                                        <Image src={item.photo} className="img-fill rounded-2" />
                                     </SplideSlide>
                                 ))}
                             </Splide>
@@ -164,7 +163,7 @@ export default function QrInputDetail() {
                                         Jenis Sertifikat: <span>{house.certificate.certificate_type.type}</span>
                                     </div>
                                     <div className="mb-2">
-                                        <Link target='_blank' to={`/certificateFile/${house.certificate.certificate_file}`} className='text-decoration-none text-black'><FaRegFile /><span className='ms-2'>{house.certificate.certificate_file}</span></Link>
+                                        <Link target='_blank' to={house.certificate.certificate_file} className='text-decoration-none text-black'><FaRegFile /><span className='ms-2'>{house.certificate.certificate_file}</span></Link>
                                     </div>
                                 </div>
                                 <div className="fw-bold mb-2 fs-5 mt-4">

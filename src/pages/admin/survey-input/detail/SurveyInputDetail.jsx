@@ -56,7 +56,7 @@ export default function SurveyInputDetail() {
                             >
                                 {house.house_photos.map((item, index) => (
                                     <SplideSlide className="h-100" key={index}>
-                                        <Image src={`/housephotos/${item.photo}`} className="img-fill rounded-2" />
+                                        <Image src={item.photo} className="img-fill rounded-2" />
                                     </SplideSlide>
                                 ))}
                             </Splide>
@@ -125,7 +125,7 @@ export default function SurveyInputDetail() {
                                         Jenis Sertifikat: <span>{house.certificate.certificate_type.type}</span>
                                     </div>
                                     <div className="mb-2">
-                                        <Link target='_blank' to={`/certificateFile/${house.certificate.certificate_file}`} className='text-decoration-none text-black'><FaRegFile /><span className='ms-2'>{house.certificate.certificate_file}</span></Link>
+                                        <Link target='_blank' to={house.certificate.certificate_file} className='text-decoration-none text-black'><FaRegFile /><span className='ms-2'>{house.certificate.certificate_file}</span></Link>
                                     </div>
                                 </div>
                                 <div className="fw-bold mb-2 fs-5 mt-4">
@@ -188,7 +188,7 @@ export default function SurveyInputDetail() {
                                         </td>
                                         <td>
                                             <Link
-                                                to={`/surveyFile/${house.house_survey.notes_file}`}
+                                                to={house.house_survey.notes_file}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className='text-decoration-none'
@@ -215,7 +215,7 @@ export default function SurveyInputDetail() {
                                                             if (result.isConfirmed) {
                                                                 try {
                                                                     const res = await axios.patch(
-                                                                        `http://localhost:5773/api/admin/request/survey-input/${id}`,
+                                                                        `http://localhost:5773/api/admin/survey/survey-input/${id}`,
                                                                         { withCredentials: true }
                                                                     );
 

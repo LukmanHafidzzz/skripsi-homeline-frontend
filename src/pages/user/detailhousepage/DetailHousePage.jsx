@@ -57,7 +57,7 @@ export default function DetailHousePage() {
                         {loading ? (
                             <Skeleton height='100%' width='100%' />
                         ) : (
-                            <Image src={`/housephotos/${house.house_photos[0].photo}`} className="w-100 h-100 object-fit-cover rounded-2" alt="img1" />
+                            <Image src={house.house_photos[0].photo} className="w-100 h-100 object-fit-cover rounded-2" alt="img1" />
                         )}
                     </Col>
 
@@ -67,7 +67,7 @@ export default function DetailHousePage() {
                                 {loading ? (
                                     <Skeleton height='100%' width='100%' />
                                 ) : (
-                                    <Image src={`/housephotos/${house.house_photos[1].photo}`} className="w-100 h-100 object-fit-cover rounded-2" alt="img2" />
+                                    <Image src={house.house_photos[1].photo} className="w-100 h-100 object-fit-cover rounded-2" alt="img2" />
                                 )}
                             </Col>
                             <Col className="p-0">
@@ -75,7 +75,7 @@ export default function DetailHousePage() {
                                     <Skeleton height={144} width='100%' />
                                 ) : (
                                     <Card className="bg-dark text-white border-0 frame h-100" onClick={handleShow}>
-                                        <Card.Img src={`/housephotos/${house.house_photos[2].photo}`} alt="img-bottom" className="w-100 h-100 object-fit-cover rounded-2" />
+                                        <Card.Img src={house.house_photos[2].photo} alt="img-bottom" className="w-100 h-100 object-fit-cover rounded-2" />
                                         <Card.ImgOverlay className='d-flex justify-content-center align-items-center'>
                                             <Card.Title>Lihat Semua</Card.Title>
                                         </Card.ImgOverlay>
@@ -88,7 +88,7 @@ export default function DetailHousePage() {
                                 <Skeleton height={300} width='100%' />
                             ) : (
                                 <Link to={`./model/${house.id}`}><Card className="bg-dark text-white border-0 frame">
-                                    <Card.Img src={`/housephotos/${house.house_photos[0].photo}`} alt="img-bottom" className="w-100 h-100 object-fit-cover rounded-2" />
+                                    <Card.Img src={house.house_photos[0].photo} alt="img-bottom" className="w-100 h-100 object-fit-cover rounded-2" />
                                     <Card.ImgOverlay className='d-flex justify-content-center align-items-center'>
                                         <Card.Title>Lihat 3D Model</Card.Title>
                                     </Card.ImgOverlay>
@@ -157,7 +157,7 @@ export default function DetailHousePage() {
                                     INFORMASI HASIL SURVEY
                                 </div>
                                 <div>
-                                    <Link target='_blank' to={`/surveyFile/${house.house_survey.notes_file}`} className='text-decoration-none text-black'><FaRegFile /> <span className='ms-2'>{house.house_survey.notes_file}</span></Link>
+                                    <Link target='_blank' to={house.house_survey.notes_file} className='text-decoration-none text-black'><FaRegFile /> <span className='ms-2'>{house.house_survey.notes_file}</span></Link>
                                 </div>
                             </Col>
                         </Row>
@@ -222,7 +222,7 @@ export default function DetailHousePage() {
                         >
                             {house.house_photos.map((item, index) => (
                                 <SplideSlide className="h-100">
-                                    <Image src={`/housephotos/${item.photo}`} className="w-100" alt="img1" />
+                                    <Image src={item.photo} className="w-100" alt="img1" />
                                 </SplideSlide>
                             ))}
                         </Splide>
