@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 
 import { Routes, Route } from "react-router-dom";
 import 'react-loading-skeleton/dist/skeleton.css';
@@ -6,115 +6,95 @@ import 'aos/dist/aos.css';
 import AOS from 'aos';
 
 // Protect
-import ProtectedRoute from "./components/protected-route/index";
-import ProtectedRouteWithRoles from "./components/protected-route-roles/index"
+import ProtectedRoute from "./components/protected-route/ProtectedRoute.jsx";
 
 // Layouts
-import MainLayout from "./layouts/user/main/index";
-import SecondaryLayout from "./layouts/user/secondary/index";
-import Advertisement from "./layouts/user/ad/index"
-import Adminlayout from './layouts/admin/index';
-import SurveyorLayout from './layouts/surveyor/index'
-import DesignerLayout from './layouts/designer/index'
+import MainLayout from "./layouts/user/main/MainLayout";
+import SecondaryLayout from "./layouts/user/secondary/SecondaryLayout";
+import AdvertisementLayout from "./layouts/user/ad/AdvertisementLayout.jsx";
+import AdminLayout from './layouts/admin/AdminLayout.jsx';
+import SurveyorLayout from './layouts/surveyor/SurveyorLayout.jsx';
+import DesignerLayout from './layouts/designer/DesignerLayout.jsx';
+
+// Lazy loader
+const Loadable = (Component) => (props) => (
+    <Suspense fallback={<div>Loading...</div>}>
+        <Component {...props} />
+    </Suspense>
+);
 
 // Pages
-import Unauthorize from "./pages/unauthorized/index"
-import Searchpage from "./pages/user/searchpage/index";
-import Landingpage from "./pages/user/landingpage/index";
-import DetailHousePage from "./pages/user/detailhousepage/index";
-import Model from "./pages/user/3dmodel/index";
+const Unauthorize = Loadable(lazy(() => import("./pages/unauthorized/Unauthorize.jsx")));
+const Searchpage = Loadable(lazy(() => import("./pages/user/searchpage/Searchpage.jsx")));
+const Landingpage = Loadable(lazy(() => import("./pages/user/landingpage/Landingpage.jsx")));
+const DetailHousePage = Loadable(lazy(() => import("./pages/user/detailhousepage/DetailHousePage.jsx")));
+const User3dModel = Loadable(lazy(() => import("./pages/user/3dmodel/User3dModel.jsx")));
 
-import AdvertisementHome from "./pages/user/ad/home/index"
+const AdvertisementHome = Loadable(lazy(() => import("./pages/user/ad/home/AdvertisementHome.jsx")));
+const AdWaiting = Loadable(lazy(() => import("./pages/user/ad/waiting/AdWaiting.jsx")));
+const AdWaitingDetail = Loadable(lazy(() => import("./pages/user/ad/waiting/detail/AdWaitingDetail.jsx")));
+const AdWaitingPayment = Loadable(lazy(() => import("./pages/user/ad/waiting-payment/AdWaitingPayment.jsx")));
+const AdWaitingPaymentDetail = Loadable(lazy(() => import("./pages/user/ad/waiting-payment/detail/AdWaitingPaymentDetail.jsx")));
+const AdNeedApproval = Loadable(lazy(() => import("./pages/user/ad/need-approval/AdNeedApproval.jsx")));
+const AdNeedApprovalDetail = Loadable(lazy(() => import("./pages/user/ad/need-approval/detail/AdNeedApprovalDetail.jsx")));
+const AdProcess = Loadable(lazy(() => import("./pages/user/ad/processing/AdProcess.jsx")));
+const AdProcessDetail = Loadable(lazy(() => import("./pages/user/ad/processing/detail/AdProcessDetail.jsx")));
+const AdProcessDetailModel = Loadable(lazy(() => import("./pages/user/ad/processing/model/AdProcessDetailModel.jsx")));
+const AdRejected = Loadable(lazy(() => import("./pages/user/ad/rejected/AdRejected.jsx")));
+const AdRejectedDetail = Loadable(lazy(() => import("./pages/user/ad/rejected/detail/AdRejectedDetail.jsx")));
+const AdApproved = Loadable(lazy(() => import("./pages/user/ad/approved/AdApproved.jsx")));
+const AdApprovedDetail = Loadable(lazy(() => import("./pages/user/ad/approved/detail/AdApprovedDetail.jsx")));
+const AdApprovedDetailModel = Loadable(lazy(() => import("./pages/user/ad/approved/model/AdApprovedDetailModel.jsx")));
+const AdDelete = Loadable(lazy(() => import("./pages/user/ad/delete/AdDelete.jsx")));
+const AdDeleteDetail = Loadable(lazy(() => import("./pages/user/ad/delete/detail/AdDeleteDetail.jsx")));
+const AdDeleteDetailModel = Loadable(lazy(() => import("./pages/user/ad/delete/model/AdDeleteDetailModel.jsx")));
+const AdAdd = Loadable(lazy(() => import("./pages/user/ad/add/AdAdd.jsx")));
 
-import AdWaiting from "./pages/user/ad/waiting/index"
-import AdWaitingDetail from "./pages/user/ad/waiting/detail/index"
+const AdminHome = Loadable(lazy(() => import("./pages/admin/home/AdminHome.jsx")));
+const HouseList = Loadable(lazy(() => import('./pages/admin/house-list/HouseList')));
+const HouseListDetail = Loadable(lazy(() => import('./pages/admin/house-list/detail/HouseListDetail')));
+const HouseListModel = Loadable(lazy(() => import('./pages/admin/house-list/model/HouseListModel')));
+const CheckingAwal = Loadable(lazy(() => import('./pages/admin/checking-awal/CheckingAwal')));
+const CheckingAwalDetail = Loadable(lazy(() => import('./pages/admin/checking-awal/detail/CheckingAwalDetail')));
+const PaymentConfirm = Loadable(lazy(() => import('./pages/admin/payment-confirm/PaymentConfirm')));
+const PaymentConfirmDetail = Loadable(lazy(() => import('./pages/admin/payment-confirm/detail/PaymentConfirmDetail')));
+const QrInput = Loadable(lazy(() => import('./pages/admin/input-qr/QrInput')));
+const QrInputDetail = Loadable(lazy(() => import('./pages/admin/input-qr/detail/QrInputDetail')));
+const EmbedMap = Loadable(lazy(() => import('./pages/admin/embed-map/EmbedMap')));
+const EmbedMapDetail = Loadable(lazy(() => import('./pages/admin/embed-map/detail/EmbedMapDetail')));
+const ReqDesignApproval = Loadable(lazy(() => import('./pages/admin/request-desain-approval/ReqDesignApproval')));
+const ReqDesignApprovalDetail = Loadable(lazy(() => import('./pages/admin/request-desain-approval/detail/ReqDesignApprovalDetail')));
+const ReqSurveyApproval = Loadable(lazy(() => import('./pages/admin/request-survey-approval/ReqSurveyApproval')));
+const ReqSurveyApprovalDetail = Loadable(lazy(() => import('./pages/admin/request-survey-approval/detail/ReqSurveyApprovalDetail')));
+const SurveyListHouse = Loadable(lazy(() => import('./pages/admin/survey-list-house/SurveyListHouse')));
+const SurveyListHouseDetail = Loadable(lazy(() => import('./pages/admin/survey-list-house/detail/SurveyListHouseDetail')));
+const SurveyInput = Loadable(lazy(() => import('./pages/admin/survey-input/SurveyInput')));
+const SurveyInputDetail = Loadable(lazy(() => import('./pages/admin/survey-input/detail/SurveyInputDetail')));
+const DesignListHouse = Loadable(lazy(() => import('./pages/admin/design-list-house/DesignListHouse')));
+const DesignListHouseDetail = Loadable(lazy(() => import('./pages/admin/design-list-house/detail/DesignListHouseDetail')));
+const DesignInput = Loadable(lazy(() => import('./pages/admin/design-input/DesignInput')));
+const DesignInputDetail = Loadable(lazy(() => import('./pages/admin/design-input/detail/DesignInputDetail')));
+const DesignInputModel = Loadable(lazy(() => import('./pages/admin/design-input/model/DesignInputModel')));
 
-import AdWaitingPayment from "./pages/user/ad/waiting-payment/index"
-import AdWaitingPaymentDetail from "./pages/user/ad/waiting-payment/detail/index"
+const SurveyorHome = Loadable(lazy(() => import("./pages/surveyor/home/SurveyorHome.jsx")));
+const SurveyorHouseList = Loadable(lazy(() => import('./pages/surveyor/house-list/SurveyorHouseList')));
+const SurveyorHouseListDetail = Loadable(lazy(() => import('./pages/surveyor/house-list/detail/SurveyorHouseListDetail')));
+const SurveyorResultInput = Loadable(lazy(() => import('./pages/surveyor/input/SurveyorResultInput')));
+const SurveyorResultInputDetail = Loadable(lazy(() => import('./pages/surveyor/input/detail/SurveyorResultInputDetail')));
+const SurveyorMakeReq = Loadable(lazy(() => import('./pages/surveyor/make-request/SurveyorMakeReq')));
+const SurveyorMakeReqDetail = Loadable(lazy(() => import('./pages/surveyor/make-request/detail/SurveyorMakeReqDetail')));
 
-import AdNeedApproval from "./pages/user/ad/need-approval/index"
-import AdNeedApprovalDetail from "./pages/user/ad/need-approval/detail/index"
+const DesignerHome = Loadable(lazy(() => import("./pages/designer/home/DesignerHome.jsx")));
+const DesignerHouseList = Loadable(lazy(() => import('./pages/designer/house-list/DesignerHouseList')));
+const DesignerHouseListDetail = Loadable(lazy(() => import('./pages/designer/house-list/detail/DesignerHouseListDetail')));
+const DesignerHouseListModel = Loadable(lazy(() => import('./pages/designer/house-list/model/DesignerHouseListModel')));
+const DesignerResultInput = Loadable(lazy(() => import('./pages/designer/input/DesignerResultInput')));
+const DesignerResultInputDetail = Loadable(lazy(() => import('./pages/designer/input/detail/DesignerResultInputDetail')));
+const DesignerMakeReq = Loadable(lazy(() => import('./pages/designer/make-request/DesignerMakeReq')));
+const DesignerMakeReqDetail = Loadable(lazy(() => import('./pages/designer/make-request/detail/DesignerMakeReqDetail')));
 
-import AdProcess from "./pages/user/ad/processing/index"
-import AdProcessDetail from "./pages/user/ad/processing/detail/index"
-import AdProcessDetailModel from "./pages/user/ad/processing/model/index"
-
-import AdRejected from "./pages/user/ad/rejected/index"
-import AdRejectedDetail from "./pages/user/ad/rejected/detail/index"
-
-import AdApproved from "./pages/user/ad/approved/index"
-import AdApprovedDetail from "./pages/user/ad/approved/detail/index"
-import AdApprovedDetailModel from "./pages/user/ad/approved/model/index"
-
-import AdDelete from "./pages/user/ad/delete/index"
-import AdDeleteDetail from "./pages/user/ad/delete/detail/index"
-import AdDeleteDetailModel from "./pages/user/ad/delete/model/index"
-
-import AdAdd from "./pages/user/ad/add/index"
-
-import AdminHome from "./pages/admin/home/index"
-
-import HouseList from './pages/admin/house-list/index'
-import HouseListDetail from './pages/admin/house-list/detail/index'
-import HouseListModel from './pages/admin/house-list/model/index'
-
-import CheckingAwal from './pages/admin/checking-awal/index'
-import CheckingAwalDetail from './pages/admin/checking-awal/detail/index'
-
-import PaymentConfirm from './pages/admin/payment-confirm/index'
-import PaymentConfirmDetail from './pages/admin/payment-confirm/detail/index'
-
-import QrInput from './pages/admin/input-qr/index'
-import QrInputDetail from './pages/admin/input-qr/detail/index'
-
-import EmbedMap from './pages/admin/embed-map/index'
-import EmbedMapDetail from './pages/admin/embed-map/detail/index'
-
-import ReqDesignApproval from './pages/admin/request-desain-approval/index'
-import ReqDesignApprovalDetail from './pages/admin/request-desain-approval/detail/index'
-
-import ReqSurveyApproval from './pages/admin/request-survey-approval/index'
-import ReqSurveyApprovalDetail from './pages/admin/request-survey-approval/detail/index'
-
-import SurveyListHouse from './pages/admin/survey-list-house/index'
-import SurveyListHouseDetail from './pages/admin/survey-list-house/detail/index'
-
-import SurveyInput from './pages/admin/survey-input/index'
-import SurveyInputDetail from './pages/admin/survey-input/detail/index'
-
-import DesignListHouse from './pages/admin/design-list-house/index'
-import DesignListHouseDetail from './pages/admin/design-list-house/detail/index'
-
-import DesignInput from './pages/admin/design-input/index'
-import DesignInputDetail from './pages/admin/design-input/detail/index'
-import DesignInputModel from './pages/admin/design-input/model/index'
-
-import SurveyorHome from "./pages/surveyor/home/index"
-
-import SurveyorHouseList from './pages/surveyor/house-list/index'
-import SurveyorHouseListDetail from './pages/surveyor/house-list/detail/index'
-
-import SurveyorResultInput from './pages/surveyor/input/index'
-import SurveyorResultInputDetail from './pages/surveyor/input/detail/index'
-
-import SurveyorMakeReq from './pages/surveyor/make-request/index'
-import SurveyorMakeReqDetail from './pages/surveyor/make-request/detail/index'
-
-import DesignerHome from "./pages/designer/home/index"
-
-import DesignerHouseList from './pages/designer/house-list/index'
-import DesignerHouseListDetail from './pages/designer/house-list/detail/index'
-import DesignerHouseListModel from './pages/designer/house-list/model/index'
-
-import DesignerResultInput from './pages/designer/input/index'
-import DesignerResultInputDetail from './pages/designer/input/detail/index'
-
-import DesignerMakeReq from './pages/designer/make-request/index'
-import DesignerMakeReqDetail from './pages/designer/make-request/detail/index'
-
-
-import Login from "./pages/auth/login/index";
-import Register from "./pages/auth/register/index";
+const Login = Loadable(lazy(() => import("./pages/auth/login/LoginPage.jsx")));
+const Register = Loadable(lazy(() => import("./pages/auth/register/Register.jsx")));
 
 function App() {
     useEffect(() => {
@@ -142,14 +122,14 @@ function App() {
                     </ProtectedRoute>
                 }>
                 <Route path="search/detail/:id" element={<DetailHousePage />} />
-                <Route path="search/detail/:id/model/:id" element={<Model />} />
+                <Route path="search/detail/:id/model/:id" element={<User3dModel />} />
             </Route>
 
             <Route
                 path="/advertisement"
                 element={
                     <ProtectedRoute allowedLevels={[4]}>
-                        <Advertisement />
+                        <AdvertisementLayout />
                     </ProtectedRoute>
                 }
             >
@@ -178,7 +158,7 @@ function App() {
                 path="/admin"
                 element={
                     <ProtectedRoute allowedLevels={[1]}>
-                        <Adminlayout />
+                        <AdminLayout />
                     </ProtectedRoute>
                 }
             >
