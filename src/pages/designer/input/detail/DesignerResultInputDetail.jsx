@@ -34,9 +34,6 @@ export default function DesignerResultInputDetail() {
             try {
                 const res = await axios.get(`https://skripsi-homeline-backend.vercel.app/api/designer/house-detail/${id}`, {
                     withCredentials: true,
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
                 });
                 setHouse(res.data);
             } catch (err) {
@@ -66,7 +63,7 @@ export default function DesignerResultInputDetail() {
             const res = await axios.post('https://skripsi-homeline-backend.vercel.app/api/designer/input-house-model', formData, {
                 withCredentials: true,
                 headers: {
-                    'Content-Type': 'multipart/form-data',
+                    "Content-Type": "multipart/form-data",
                 },
             });
             Swal.fire(
