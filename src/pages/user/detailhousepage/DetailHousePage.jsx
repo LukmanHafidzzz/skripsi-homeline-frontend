@@ -169,6 +169,7 @@ export default function DetailHousePage() {
                             </Col>
                             <Col className='d-flex justify-content-end'>
                                 <Link target='_blank' to={house.link_maps} className='fs-7 btn-visit fw-semibold'>Kunjungi</Link>
+                                {house.embed_maps}
                             </Col>
                         </Row>
                         <Row>
