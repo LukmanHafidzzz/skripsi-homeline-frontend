@@ -54,61 +54,45 @@ export default function DetailHousePage() {
 
                 <Row className="h-100 gap-3">
                     <Col xs={7} className="p-0">
-                        <div style={{ aspectRatio: '3 / 2', width: '100%' }}>
-                            {loading ? (
-                                <Skeleton height="100%" width="100%" />
-                            ) : (
-                                <Image
-                                    src={house.house_photos[0].photo}
-                                    alt="img1"
-                                    className="w-100 h-100 object-fit-cover rounded-2"
-                                />
-                            )}
-                        </div>
+                        {loading ? (
+                            <Skeleton height='100%' width='100%' />
+                        ) : (
+                            <Image src={house.house_photos[0].photo} className="w-100 h-100 object-fit-cover rounded-2" alt="img1" />
+                        )}
                     </Col>
 
                     <Col className="p-0 d-flex flex-column">
                         <Row className="g-0 gap-3 mb-3">
                             <Col className="p-0">
-                                <div style={{ aspectRatio: '3 / 2', width: '100%' }}>
-                                    {loading ? (
-                                        <Skeleton height='100%' width='100%' />
-                                    ) : (
-                                        <Image src={house.house_photos[1].photo} className="w-100 h-100 object-fit-cover rounded-2" alt="img2" />
-                                    )}
-                                </div>
+                                {loading ? (
+                                    <Skeleton height='100%' width='100%' />
+                                ) : (
+                                    <Image src={house.house_photos[1].photo} className="w-100 h-100 object-fit-cover rounded-2" alt="img2" />
+                                )}
                             </Col>
                             <Col className="p-0">
-                                <div style={{ aspectRatio: '3 / 2', width: '100%' }}>
-                                    {loading ? (
-                                        <Skeleton height={144} width='100%' />
-                                    ) : (
-                                        <Card className="bg-dark text-white border-0 frame h-100" onClick={handleShow}>
-                                            <Card.Img src={house.house_photos[2].photo} alt="img-bottom" className="w-100 h-100 object-fit-cover rounded-2" />
-                                            <Card.ImgOverlay className='d-flex justify-content-center align-items-center'>
-                                                <Card.Title>Lihat Semua</Card.Title>
-                                            </Card.ImgOverlay>
-                                        </Card>
-                                    )}
-                                </div>
-                            </Col>
-                        </Row>
-                        <div style={{ aspectRatio: '3 / 2', height: '59%' }} className="rounded-2">
-                            {loading ? (
-                                <Skeleton height="100%" width="100%" />
-                            ) : (
-                                <Link to={`./model/${house.id}`}>
-                                    <Card className="bg-dark text-white border-0 frame h-100">
-                                        <Card.Img
-                                            src={house.house_photos[0].photo}
-                                            alt="img-bottom"
-                                            className="w-100 h-100 object-fit-cover rounded-2"
-                                        />
-                                        <Card.ImgOverlay className="d-flex justify-content-center align-items-center">
-                                            <Card.Title>Lihat 3D Model</Card.Title>
+                                {loading ? (
+                                    <Skeleton height={144} width='100%' />
+                                ) : (
+                                    <Card className="bg-dark text-white border-0 frame h-100" onClick={handleShow}>
+                                        <Card.Img src={house.house_photos[2].photo} alt="img-bottom" className="w-100 h-100 object-fit-cover rounded-2" />
+                                        <Card.ImgOverlay className='d-flex justify-content-center align-items-center'>
+                                            <Card.Title>Lihat Semua</Card.Title>
                                         </Card.ImgOverlay>
                                     </Card>
-                                </Link>
+                                )}
+                            </Col>
+                        </Row>
+                        <div className="flex-grow-1 rounded-2">
+                            {loading ? (
+                                <Skeleton height={300} width='100%' />
+                            ) : (
+                                <Link to={`./model/${house.id}`}><Card className="bg-dark text-white border-0 frame">
+                                    <Card.Img src={house.house_photos[0].photo} alt="img-bottom" className="w-100 h-100 object-fit-cover rounded-2" />
+                                    <Card.ImgOverlay className='d-flex justify-content-center align-items-center'>
+                                        <Card.Title>Lihat 3D Model</Card.Title>
+                                    </Card.ImgOverlay>
+                                </Card></Link>
                             )}
                         </div>
                     </Col>

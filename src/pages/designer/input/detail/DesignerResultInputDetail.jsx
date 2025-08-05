@@ -33,7 +33,10 @@ export default function DesignerResultInputDetail() {
         const fetchHouseDetail = async () => {
             try {
                 const res = await axios.get(`https://skripsi-homeline-backend.vercel.app/api/designer/house-detail/${id}`, {
-                    withCredentials: true
+                    withCredentials: true,
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
                 });
                 setHouse(res.data);
             } catch (err) {
