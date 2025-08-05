@@ -26,7 +26,7 @@ export default function ReqSurveyApprovalDetail() {
     useEffect(() => {
         const fetchHouseDetail = async () => {
             try {
-                const res = await axios.get(`http://localhost:5773/api/admin/house/detail/${id}`, {
+                const res = await axios.get(`https://skripsi-homeline-backend.vercel.app/api/admin/house/detail/${id}`, {
                     withCredentials: true
                 });
                 setHouse(res.data);
@@ -202,7 +202,7 @@ export default function ReqSurveyApprovalDetail() {
                                                                             if (result.isConfirmed) {
                                                                                 try {
                                                                                     const res = await axios.patch(
-                                                                                        `http://localhost:5773/api/admin/request/reject-survey-request/${id}`,
+                                                                                        `https://skripsi-homeline-backend.vercel.app/api/admin/request/reject-survey-request/${id}`,
                                                                                         { withCredentials: true }
                                                                                     );
 
@@ -248,7 +248,7 @@ export default function ReqSurveyApprovalDetail() {
                                                                             if (result.isConfirmed) {
                                                                                 try {
                                                                                     const res = await axios.patch(
-                                                                                        `http://localhost:5773/api/admin/request/approve-survey-request/${id}`,
+                                                                                        `https://skripsi-homeline-backend.vercel.app/api/admin/request/approve-survey-request/${id}`,
                                                                                         { withCredentials: true }
                                                                                     );
 

@@ -15,7 +15,7 @@ export default function AdNeedApproval() {
     useEffect(() => {
         const fetchHouses = async () => {
             try {
-                const res = await axios.get('http://localhost:5773/api/user/advertisement/3d-offering', {
+                const res = await axios.get('https://skripsi-homeline-backend.vercel.app/api/user/advertisement/3d-offering', {
                     withCredentials: true
                 });
                 setHouses(res.data);
@@ -88,7 +88,7 @@ export default function AdNeedApproval() {
                                                 if (result.isConfirmed) {
                                                     try {
                                                         const res = await axios.patch(
-                                                            `http://localhost:5773/api/user/advertisement/approve-3d-offering/${house.id}`,
+                                                            `https://skripsi-homeline-backend.vercel.app/api/user/advertisement/approve-3d-offering/${house.id}`,
                                                             { withCredentials: true }
                                                         );
                                                         Swal.fire(
@@ -108,7 +108,7 @@ export default function AdNeedApproval() {
                                                 } else if (result.dismiss === Swal.DismissReason.cancel) {
                                                     try {
                                                         const res = await axios.patch(
-                                                            `http://localhost:5773/api/user/advertisement/reject-3d-offering/${house.id}`,
+                                                            `https://skripsi-homeline-backend.vercel.app/api/user/advertisement/reject-3d-offering/${house.id}`,
                                                             { withCredentials: true }
                                                         );
                                                         Swal.fire(

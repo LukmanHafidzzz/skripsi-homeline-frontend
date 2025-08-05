@@ -9,7 +9,7 @@ export default function Searchpage() {
     useEffect(() => {
         const fetchHouses = async () => {
             try {
-                const response = await axios.get("http://localhost:5773/api/user/search");
+                const response = await axios.get("https://skripsi-homeline-backend.vercel.app/api/user/search");
                 setHouses(response.data);
             } catch (err) {
                 console.error("Failed to fetch houses:", err);

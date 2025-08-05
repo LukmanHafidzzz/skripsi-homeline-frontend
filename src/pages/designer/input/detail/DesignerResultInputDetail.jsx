@@ -32,7 +32,7 @@ export default function DesignerResultInputDetail() {
     useEffect(() => {
         const fetchHouseDetail = async () => {
             try {
-                const res = await axios.get(`http://localhost:5773/api/designer/house-detail/${id}`, {
+                const res = await axios.get(`https://skripsi-homeline-backend.vercel.app/api/designer/house-detail/${id}`, {
                     withCredentials: true
                 });
                 setHouse(res.data);
@@ -60,7 +60,7 @@ export default function DesignerResultInputDetail() {
         formData.append('house_id', house.id);
 
         try {
-            const res = await axios.post('http://localhost:5773/api/designer/input-house-model', formData, {
+            const res = await axios.post('https://skripsi-homeline-backend.vercel.app/api/designer/input-house-model', formData, {
                 withCredentials: true,
                 headers: {
                     'Content-Type': 'multipart/form-data',

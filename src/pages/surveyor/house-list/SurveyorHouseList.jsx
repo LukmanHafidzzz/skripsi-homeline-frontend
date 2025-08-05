@@ -18,7 +18,7 @@ export default function SurveyorHouseList() {
     useEffect(() => {
         const fetchHouses = async () => {
             try {
-                const res = await axios.get('http://localhost:5773/api/surveyor/house-list', {
+                const res = await axios.get('https://skripsi-homeline-backend.vercel.app/api/surveyor/house-list', {
                     withCredentials: true
                 });
                 setHouseProcesses(res.data);

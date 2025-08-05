@@ -12,7 +12,7 @@ export default function SurveyorResultInput() {
     useEffect(() => {
         const fetchHouseProcesses = async () => {
             try {
-                const res = await axios.get('http://localhost:5773/api/surveyor/result-input', {
+                const res = await axios.get('https://skripsi-homeline-backend.vercel.app/api/surveyor/result-input', {
                     withCredentials: true
                 });
                 setHouseProcesses(res.data);

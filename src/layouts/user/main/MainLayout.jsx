@@ -5,24 +5,52 @@ import { Container, Row, Col, InputGroup, Form, Dropdown, DropdownButton } from 
 import Skeleton from 'react-loading-skeleton';
 import { Outlet } from 'react-router-dom'
 import './style.css'
+import axios from 'axios';
 
 export default function MainLayout() {
+    const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState(null);
+
     const [selected, setSelected] = useState('Terbaru');
     const handleSelect = (value) => {
         setSelected(value);
     };
-
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const timer = setTimeout(() => setLoading(false), 1000);
         return () => clearTimeout(timer);
     }, []);
 
+    const [provinsiList, setProvinsiList] = useState([]);
+    const [selectedProvinsi, setSelectedProvinsi] = useState([]);
+
+    useEffect(() => {
+        fetch('https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json')
+            .then(res => res.json())
+            .then(data => setProvinsiList(data));
+    }, []);
+
+    const fetchUser = async () => {
+        try {
+            const res = await axios.get('https://skripsi-homeline-backend.vercel.app/api/auth/me', {
+                withCredentials: true
+            });
+            setUser(res.data);
+        } catch (error) {
+            setUser(null);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchUser();
+    }, []);
+
     return (
         <>
             <Suspense fallback={<div>Loading...</div>}>
-                <NavbarHomeUser />
+                <NavbarHomeUser user={user} setUser={setUser} />
             </Suspense>
             <Container fluid className="mt-21 px-4">
                 <Row>
@@ -44,17 +72,17 @@ export default function MainLayout() {
                         <Container className="border p-3 rounded-2 box-filter">
                             <div className='fw-bold mb-3'>Lokasi</div>
                             <div className="d-flex flex-column gap-2 mb-4 loc-container">
-                                <Form.Check className='checkbox-ellipsis' type='checkbox' id='' label='DKI Jakarta' />
-                                <Form.Check className='checkbox-ellipsis' type='checkbox' id='' label='Bandung' />
-                                <Form.Check className='checkbox-ellipsis' type='checkbox' id='' label='DI Yogyakarta' />
-                                <Form.Check className='checkbox-ellipsis' type='checkbox' id='' label='Surabaya' />
-                                <Form.Check className='checkbox-ellipsis' type='checkbox' id='' label='Semarang' />
-                                <Form.Check className='checkbox-ellipsis' type='checkbox' id='' label='Medan' />
-                                <Form.Check className='checkbox-ellipsis' type='checkbox' id='' label='Makassar' />
-                                <Form.Check className='checkbox-ellipsis' type='checkbox' id='' label='Palembang' />
-                                <Form.Check className='checkbox-ellipsis' type='checkbox' id='' label='Batam' />
-                                <Form.Check className='checkbox-ellipsis' type='checkbox' id='' label='Malang' />
-                                <Form.Check className='checkbox-ellipsis' type='checkbox' id='' label='Bali' />
+                                {provinsiList.map((prov) => (
+                                    <Form.Check
+                                        key={prov.id}
+                                        className="checkbox-ellipsis"
+                                        type="checkbox"
+                                        id={`provinsi-${prov.id}`}
+                                        label={prov.name}
+                                        checked={selectedProvinsi.includes(prov.id)}
+                                        onChange={() => handleCheckboxChange(prov.id)}
+                                    />
+                                ))}
                             </div>
                         </Container>
                     </Col>
@@ -64,7 +92,6 @@ export default function MainLayout() {
                         </div>
                         {loading ? (
                             <>
-                                {/* Skeletons for search bar and sorting */}
                                 <div className='mb-3'>
                                     <Skeleton height={50} width="100%" className="mb-3" />
                                     <div className='d-flex justify-content-end align-items-center text-black gap-3'>

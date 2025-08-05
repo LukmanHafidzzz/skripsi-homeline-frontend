@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { Button, Container, Form } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2';
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
 import axios from 'axios'
 import './style.css'
 
@@ -9,19 +11,22 @@ export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        setLoading(true);
+        NProgress.start();
         try {
-            await axios.post('http://localhost:5773/api/auth/login', {
+            await axios.post(`https://skripsi-homeline-backend.vercel.app/api/auth/login`, {
                 email,
                 password
             }, {
                 withCredentials: true
             });
 
-            const response = await axios.get('http://localhost:5773/api/auth/me', {
+            const response = await axios.get(`https://skripsi-homeline-backend.vercel.app/api/auth/me`, {
                 withCredentials: true
             });
 
@@ -52,6 +57,9 @@ export default function LoginPage() {
                 title: 'Login Gagal',
                 text: errorMessage,
             });
+        } finally {
+            setLoading(false);
+            NProgress.done();
         }
     };
 
@@ -90,7 +98,12 @@ export default function LoginPage() {
                     </Form.Group>
                     <div className='d-flex justify-content-center align-items-center'>
                         <Button type="submit" className='btn-auth fw-semibold'>
-                            Login
+                            {loading ? (
+                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            ) : (
+                                'Login'
+                            )}
+
                         </Button>
                     </div>
                     <div className='text-center mt-1 fs-7'>

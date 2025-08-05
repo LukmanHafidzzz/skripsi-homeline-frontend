@@ -26,7 +26,7 @@ export default function QrInputDetail() {
     useEffect(() => {
         const fetchHouseDetail = async () => {
             try {
-                const res = await axios.get(`http://localhost:5773/api/admin/house/detail/${id}`, {
+                const res = await axios.get(`https://skripsi-homeline-backend.vercel.app/api/admin/house/detail/${id}`, {
                     withCredentials: true,
                 });
                 setHouse(res.data);
@@ -50,7 +50,7 @@ export default function QrInputDetail() {
         formData.append("house_id", house.id);
 
         try {
-            const res = await axios.post("http://localhost:5773/api/admin/house/input-qr", formData, {
+            const res = await axios.post("https://skripsi-homeline-backend.vercel.app/api/admin/house/input-qr", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },

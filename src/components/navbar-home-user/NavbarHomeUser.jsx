@@ -1,48 +1,41 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthProvider.jsx';
 import axios from 'axios';
 import { Container, Nav, Navbar, Dropdown } from 'react-bootstrap'
 const LoginLandingpage = lazy(() => import('../btn-login-landingpage/BtnLoginLandingpage.jsx'));
 import { FaUser } from "react-icons/fa6";
+import NProgress from 'nprogress';
 import './style.css'
 
 export default function NavbarHomeUser() {
     const [isScrolled, setIsScrolled] = useState(false);
-    const [user, setUser] = useState(null);
+    const navigate = useNavigate();
+    const { user } = useAuth();
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 0);
         };
-
-        const fetchUser = async () => {
-            try {
-                const res = await axios.get('http://localhost:5773/api/auth/me', {
-                    withCredentials: true
-                });
-                setUser(res.data);
-            } catch (error) {
-                setUser(null);
-            }
-        };
-
         handleScroll();
         window.addEventListener('scroll', handleScroll);
-        fetchUser();
-
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    const navigate = useNavigate();
-
     const handleLogout = async () => {
+        setLoading(true);
+        NProgress.start();
         try {
-            await axios.delete('http://localhost:5773/api/auth/logout', {
+            await axios.delete('https://skripsi-homeline-backend.vercel.app/api/auth/logout', {
                 withCredentials: true
             });
             navigate('/');
         } catch (error) {
             console.error('Logout gagal:', error);
+        } finally {
+            setLoading(false);
+            NProgress.done();
         }
     };
     return (

@@ -14,7 +14,7 @@ export default function AdDelete() {
     useEffect(() => {
         const fetchHouses = async () => {
             try {
-                const res = await axios.get('http://localhost:5773/api/user/advertisement/delete', {
+                const res = await axios.get('https://skripsi-homeline-backend.vercel.app/api/user/advertisement/delete', {
                     withCredentials: true
                 });
                 setHouses(res.data);

@@ -4,8 +4,10 @@ import { Button, Container, Form } from 'react-bootstrap'
 import Swal from 'sweetalert2';
 import './style.css'
 import { Link } from 'react-router-dom';
+import NProgress from 'nprogress';
 
 export default function Register() {
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         username: '',
         email: '',
@@ -24,6 +26,8 @@ export default function Register() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
+        NProgress.start();
         if (!formData.email || !formData.password || !formData.confirmPassword) {
             return Swal.fire({
                 icon: 'warning',
@@ -42,7 +46,7 @@ export default function Register() {
         }
 
         try {
-            const res = await axios.post('http://localhost:5773/api/auth/register', formData, {
+            const res = await axios.post('https://skripsi-homeline-backend.vercel.app/api/auth/register', formData, {
                 withCredentials: true
             });
 
@@ -64,7 +68,9 @@ export default function Register() {
                     confirmButtonColor: '#d33'
                 });
             }
-
+        } finally {
+            setLoading(false);
+            NProgress.done();
         }
     };
 
@@ -123,7 +129,11 @@ export default function Register() {
                         </Form.Group>
                         <div className='d-flex justify-content-center align-items-center'>
                             <Button type="submit" className='btn-auth fw-semibold'>
-                                Daftar
+                                {loading ? (
+                                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                ) : (
+                                    'Daftar'
+                                )}
                             </Button>
                         </div>
                         <div className='text-center mt-1 fs-7'>

@@ -12,7 +12,7 @@ export default function CheckingAwal() {
     useEffect(() => {
         const fetchHouses = async () => {
             try {
-                const res = await axios.get('http://localhost:5773/api/admin/house/pending', {
+                const res = await axios.get('https://skripsi-homeline-backend.vercel.app/api/admin/house/pending', {
                     withCredentials: true
                 });
                 setHouses(res.data);

@@ -14,7 +14,7 @@ export default function QrInput() {
     const handleShowQR = (qr) => {
         setSelectedQR(qr);
         setShow(true);
-        
+
     };
 
     const [selected, setSelected] = useState('Semua');
@@ -29,7 +29,7 @@ export default function QrInput() {
     useEffect(() => {
         const fetchHouses = async () => {
             try {
-                const res = await axios.get('http://localhost:5773/api/admin/house/input-qr', {
+                const res = await axios.get('https://skripsi-homeline-backend.vercel.app/api/admin/house/input-qr', {
                     withCredentials: true
                 });
                 setHouses(res.data);

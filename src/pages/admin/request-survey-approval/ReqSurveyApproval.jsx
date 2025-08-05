@@ -18,7 +18,7 @@ export default function ReqSurveyApproval() {
     useEffect(() => {
         const fetchSurveyRequest = async () => {
             try {
-                const res = await axios.get('http://localhost:5773/api/admin/request/survey-request', {
+                const res = await axios.get('https://skripsi-homeline-backend.vercel.app/api/admin/request/survey-request', {
                     withCredentials: true
                 });
                 setSurveyRequests(res.data);
@@ -31,7 +31,7 @@ export default function ReqSurveyApproval() {
 
         fetchSurveyRequest();
     }, []);
-    
+
 
     if (loading) {
         return <div className="mt-5 pt-5 text-center">Loading...</div>;

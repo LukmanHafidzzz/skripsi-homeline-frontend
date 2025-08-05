@@ -28,3 +28,11 @@
     border: solid #7A5B46 1px !important;
     transition: .2s !important;
 }
+
+#nprogress .bar {
+    background: #CDA274;
+}
+
+#nprogress .peg {
+    box-shadow: 0 0 10px #CDA274, 0 0 10px #CDA274;
+}

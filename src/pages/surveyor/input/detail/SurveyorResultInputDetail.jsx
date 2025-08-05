@@ -31,7 +31,7 @@ export default function SurveyorResultInputDetail() {
     useEffect(() => {
         const fetchHouseDetail = async () => {
             try {
-                const res = await axios.get(`http://localhost:5773/api/surveyor/house-detail/${id}`, {
+                const res = await axios.get(`https://skripsi-homeline-backend.vercel.app/api/surveyor/house-detail/${id}`, {
                     withCredentials: true
                 });
                 setHouse(res.data);
@@ -65,7 +65,7 @@ export default function SurveyorResultInputDetail() {
         formData.append('house_id', house.id);
 
         try {
-            const res = await axios.post('http://localhost:5773/api/surveyor/input-house-survey', formData, {
+            const res = await axios.post('https://skripsi-homeline-backend.vercel.app/api/surveyor/input-house-survey', formData, {
                 withCredentials: true,
                 headers: {
                     'Content-Type': 'multipart/form-data',
