@@ -11,15 +11,18 @@ import Swal from 'sweetalert2';
 import axios from 'axios';
 import { RiDriveLine } from 'react-icons/ri';
 
-export default function DesignerResultInputDetail() {
+export default function DesignerResultInputDetail({ house }) {
+    const [file, setFile] = useState(null);
+    const [uploading, setUploading] = useState(false);
+    const [uploadProgress, setUploadProgress] = useState(0);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const timer = setTimeout(() => setLoading(false), 3000);
         return () => clearTimeout(timer);
     }, []);
 
-    const navigate = useNavigate();
 
     useEffect(() => {
         const timer = setTimeout(() => setLoading(false), 3000);
@@ -33,7 +36,7 @@ export default function DesignerResultInputDetail() {
         const fetchHouseDetail = async () => {
             try {
                 const res = await axios.get(`https://skripsi-homeline-backend.vercel.app/api/designer/house-detail/${id}`, {
-                    withCredentials: true,
+                    withCredentials: true
                 });
                 setHouse(res.data);
             } catch (err) {
@@ -44,47 +47,97 @@ export default function DesignerResultInputDetail() {
         fetchHouseDetail();
     }, [id]);
 
-    const [file, setFile] = useState(null);
-
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
+        setUploadProgress(0);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!file) return;
+        if (!file) {
+            Swal.fire('Error', 'Pilih file terlebih dahulu', 'error');
+            return;
+        }
 
-        const filename = `design_${Date.now()}_${file.name}`;
-        const filetype = file.type;
+        const maxSize = 50 * 1024 * 1024;
+        if (file.size > maxSize) {
+            Swal.fire('Error', 'File terlalu besar (maksimal 50MB)', 'error');
+            return;
+        }
+
+        setUploading(true);
+        setUploadProgress(0);
 
         try {
-            const presignedRes = await axios.get('https://skripsi-homeline-backend.vercel.app/api/upload-url', {
-                params: { filename, filetype },
-                withCredentials: true
-            });
+            const presignedResponse = await axios.post(
+                'https://skripsi-homeline-backend.vercel.app/api/designer/get-presigned-url',
+                {
+                    fileName: file.name,
+                    contentType: file.type
+                },
+                {
+                    withCredentials: true,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
 
-            const { signedUrl, publicUrl } = presignedRes.data;
+            const { presignedUrl, fileUrl, fileName } = presignedResponse.data;
 
-            await axios.put(signedUrl, file, {
+            await axios.put(presignedUrl, file, {
                 headers: {
-                    'Content-Type': filetype
+                    'Content-Type': file.type
+                },
+                onUploadProgress: (progressEvent) => {
+                    const percentCompleted = Math.round(
+                        (progressEvent.loaded * 100) / progressEvent.total
+                    );
+                    setUploadProgress(percentCompleted);
                 }
             });
 
-            const res = await axios.post('https://skripsi-homeline-backend.vercel.app/api/designer/input-house-model', {
-                house_id: house.id,
-                design_file_url: publicUrl
-            }, {
-                withCredentials: true
+            const saveResponse = await axios.post(
+                'https://skripsi-homeline-backend.vercel.app/api/designer/save-design-file',
+                {
+                    house_id: house.id,
+                    fileUrl: fileUrl,
+                    fileName: fileName
+                },
+                {
+                    withCredentials: true,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+
+            Swal.fire(
+                'Sukses',
+                saveResponse.data.message,
+                'success'
+            ).then(() => {
+                navigate('/designer/input-house-model');
             });
 
-            Swal.fire('Sukses', res.data.message, 'success')
-                .then(() => navigate('/designer/input-house-model'));
+        } catch (error) {
+            console.error('Upload error:', error);
 
-        } catch (err) {
-            console.error(err);
-            Swal.fire('Error', err.response?.data?.message || 'Gagal upload', 'error');
+            let errorMessage = 'Gagal upload file';
+
+            if (error.response?.status === 413) {
+                errorMessage = 'File terlalu besar untuk diproses server';
+            } else if (error.response?.data?.message) {
+                errorMessage = error.response.data.message;
+            } else if (error.message.includes('Network Error')) {
+                errorMessage = 'Koneksi bermasalah, coba lagi';
+            }
+
+            Swal.fire('Error', errorMessage, 'error');
+        } finally {
+            setUploading(false);
+            setUploadProgress(0);
         }
     };
 
@@ -232,11 +285,39 @@ export default function DesignerResultInputDetail() {
                                     INPUT FILE HASIL DESIGN
                                 </div>
                                 <Form.Group controlId="formFile" className="mb-3">
-                                    <Form.Control type="file" onChange={handleFileChange} />
+                                    <Form.Control
+                                        type="file"
+                                        onChange={handleFileChange}
+                                        disabled={uploading}
+                                        accept=".glb"
+                                    />
                                 </Form.Group>
+                                {uploading && (
+                                    <div className="mb-3">
+                                        <div className="progress">
+                                            <div
+                                                className="progress-bar progress-bar-striped progress-bar-animated"
+                                                role="progressbar"
+                                                style={{ width: `${uploadProgress}%` }}
+                                                aria-valuenow={uploadProgress}
+                                                aria-valuemin="0"
+                                                aria-valuemax="100"
+                                            >
+                                                {uploadProgress}%
+                                            </div>
+                                        </div>
+                                        <small className="text-muted">Uploading file...</small>
+                                    </div>
+                                )}
+
                                 <div className="mb-4 d-flex justify-content-end align-items-center">
-                                    <Button type='submit' variant="success" className='fw-semibold px-5 py-2'>
-                                        Input
+                                    <Button
+                                        type='submit'
+                                        variant="success"
+                                        className='fw-semibold px-5 py-2'
+                                        disabled={uploading || !file}
+                                    >
+                                        {uploading ? 'Uploading...' : 'Input'}
                                     </Button>
                                 </div>
                             </div>
