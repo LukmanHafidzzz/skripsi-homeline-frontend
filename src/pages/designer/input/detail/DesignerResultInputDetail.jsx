@@ -55,25 +55,35 @@ export default function DesignerResultInputDetail() {
 
         if (!file) return;
 
-        const formData = new FormData();
-        formData.append('design_file', file);
-        formData.append('house_id', house.id);
+        const filename = `design_${Date.now()}_${file.name}`;
+        const filetype = file.type;
 
         try {
-            const res = await axios.post('https://skripsi-homeline-backend.vercel.app/api/designer/input-house-model', formData, {
-                withCredentials: true,
+            const presignedRes = await axios.get('https://skripsi-homeline-backend.vercel.app/api/upload-url', {
+                params: { filename, filetype },
+                withCredentials: true
+            });
+
+            const { signedUrl, publicUrl } = presignedRes.data;
+
+            await axios.put(signedUrl, file, {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
+                    'Content-Type': filetype
+                }
             });
-            Swal.fire(
-                'Sukses',
-                res.data.message,
-                'success'
-            ).then(() => {
-                navigate('/designer/input-house-model');
+
+            const res = await axios.post('https://skripsi-homeline-backend.vercel.app/api/designer/input-house-model', {
+                house_id: house.id,
+                design_file_url: publicUrl
+            }, {
+                withCredentials: true
             });
+
+            Swal.fire('Sukses', res.data.message, 'success')
+                .then(() => navigate('/designer/input-house-model'));
+
         } catch (err) {
+            console.error(err);
             Swal.fire('Error', err.response?.data?.message || 'Gagal upload', 'error');
         }
     };
