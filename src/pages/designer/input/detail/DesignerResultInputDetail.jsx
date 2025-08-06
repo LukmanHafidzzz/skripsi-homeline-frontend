@@ -144,12 +144,6 @@ export default function DesignerResultInputDetail() {
                 }
             );
 
-            console.log("Kirim ke backend:", {
-                house_id: house.id,
-                fileUrl,
-                fileName
-            });
-
             console.log('Database save completed:', saveResponse.data);
 
             Swal.fire(
