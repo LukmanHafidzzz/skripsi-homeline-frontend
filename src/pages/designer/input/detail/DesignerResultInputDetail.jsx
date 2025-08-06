@@ -13,12 +13,13 @@ import { RiDriveLine } from 'react-icons/ri';
 
 export default function DesignerResultInputDetail() {
     const [loading, setLoading] = useState(true);
-    const navigate = useNavigate();
 
     useEffect(() => {
         const timer = setTimeout(() => setLoading(false), 3000);
         return () => clearTimeout(timer);
     }, []);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const timer = setTimeout(() => setLoading(false), 3000);
@@ -39,48 +40,41 @@ export default function DesignerResultInputDetail() {
                 console.error(err);
             }
         };
+
         fetchHouseDetail();
     }, [id]);
 
     const [file, setFile] = useState(null);
+
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
     };
 
-    const handleUpload = async () => {
-        if (!file) {
-            Swal.fire("Error", "Silakan pilih file terlebih dahulu", "error");
-            return;
-        }
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('design_file', file);
+        formData.append('house_id', house.id);
+
         try {
-            const formData = new FormData();
-            formData.append("file", file);
-
-            const uploadRes = await axios.post(
-                "https://skripsi-homeline-backend.vercel.app/api/upload/s3",
-                formData,
-                {
-                    headers: {
-                        "Content-Type": "multipart/form-data"
-                    }
-                }
-            );
-
-            const fileUrl = uploadRes.data.url;
-            const res = await axios.post(
-                "https://skripsi-homeline-backend.vercel.app/api/designer/input-house-model",
-                {
-                    house_id: id,
-                    design_file: fileUrl
+            const res = await axios.post('https://skripsi-homeline-backend.vercel.app/api/designer/input-house-model', formData, {
+                withCredentials: true,
+                headers: {
+                    'Content-Type': 'multipart/form-data',
                 },
-                { withCredentials: true }
-            );
-
-            Swal.fire("Sukses", res.data.message, "success").then(() => {
-                navigate("/designer/input-house-model");
+            });
+            Swal.fire(
+                'Sukses',
+                res.data.message,
+                'success'
+            ).then(() => {
+                navigate('/designer/input-house-model');
             });
         } catch (err) {
-            Swal.fire("Error", err.response?.data?.message || "Gagal upload", "error");
+            Swal.fire('Error', err.response?.data?.message || 'Gagal upload', 'error');
         }
     };
 
@@ -222,7 +216,7 @@ export default function DesignerResultInputDetail() {
                 </Row>
                 <Row className="mt-4">
                     <Col className='p-0 pe-2'>
-                        <Form>
+                        <Form onSubmit={handleSubmit}>
                             <div className=''>
                                 <div className="fw-bold mb-2 fs-5 p-0">
                                     INPUT FILE HASIL DESIGN
@@ -231,7 +225,7 @@ export default function DesignerResultInputDetail() {
                                     <Form.Control type="file" onChange={handleFileChange} />
                                 </Form.Group>
                                 <div className="mb-4 d-flex justify-content-end align-items-center">
-                                    <Button onClick={handleUpload} variant="success" className='fw-semibold px-5 py-2'>
+                                    <Button type='submit' variant="success" className='fw-semibold px-5 py-2'>
                                         Input
                                     </Button>
                                 </div>
