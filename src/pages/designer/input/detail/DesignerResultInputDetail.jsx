@@ -53,13 +53,15 @@ export default function DesignerResultInputDetail() {
             return;
         }
         try {
+            const formData = new FormData();
+            formData.append("file", file);
+
             const uploadRes = await axios.post(
                 "https://skripsi-homeline-backend.vercel.app/api/upload/s3",
-                file,
+                formData,
                 {
                     headers: {
-                        "Content-Type": file.type,
-                        "x-filename": file.name
+                        "Content-Type": "multipart/form-data"
                     }
                 }
             );
