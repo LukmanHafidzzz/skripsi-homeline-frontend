@@ -60,12 +60,6 @@ export default function DesignerResultInputDetail() {
             return;
         }
 
-        // Debug logging
-        console.log('Selected file:', file);
-        console.log('File name:', file.name);
-        console.log('File type:', file.type);
-        console.log('File size:', file.size);
-
         const maxSize = 50 * 1024 * 1024;
         if (file.size > maxSize) {
             Swal.fire('Error', 'File terlalu besar (maksimal 50MB)', 'error');
@@ -76,7 +70,6 @@ export default function DesignerResultInputDetail() {
         setUploadProgress(0);
 
         try {
-            // Pastikan ada fallback untuk contentType jika kosong
             const contentType = file.type || 'application/octet-stream';
 
             const requestData = {
@@ -86,6 +79,7 @@ export default function DesignerResultInputDetail() {
 
             console.log('Request data being sent:', requestData);
 
+            // Step 1: Get presigned URL
             const presignedResponse = await axios.post(
                 'https://skripsi-homeline-backend.vercel.app/api/designer/get-presigned-url',
                 requestData,
@@ -101,12 +95,14 @@ export default function DesignerResultInputDetail() {
 
             const { presignedUrl, fileUrl, fileName } = presignedResponse.data;
 
-            // Upload ke S3
+            // Step 2: Upload ke S3 (TANPA withCredentials!)
             console.log('Starting S3 upload...');
             await axios.put(presignedUrl, file, {
                 headers: {
                     'Content-Type': contentType
                 },
+                // JANGAN gunakan withCredentials untuk upload ke S3!
+                // withCredentials: false, // explicitly set to false
                 onUploadProgress: (progressEvent) => {
                     const percentCompleted = Math.round(
                         (progressEvent.loaded * 100) / progressEvent.total
@@ -118,7 +114,7 @@ export default function DesignerResultInputDetail() {
 
             console.log('S3 upload completed, saving to database...');
 
-            // Simpan ke database
+            // Step 3: Save to database (DENGAN withCredentials)
             const saveResponse = await axios.post(
                 'https://skripsi-homeline-backend.vercel.app/api/designer/save-design-file',
                 {
@@ -148,7 +144,6 @@ export default function DesignerResultInputDetail() {
             console.error('Full upload error:', error);
             console.error('Error response:', error.response?.data);
             console.error('Error status:', error.response?.status);
-            console.error('Error config:', error.config);
 
             let errorMessage = 'Gagal upload file';
 
@@ -159,7 +154,7 @@ export default function DesignerResultInputDetail() {
             } else if (error.response?.data?.message) {
                 errorMessage = error.response.data.message;
             } else if (error.message.includes('Network Error')) {
-                errorMessage = 'Koneksi bermasalah, coba lagi';
+                errorMessage = 'Koneksi bermasalah atau CORS error. Pastikan S3 CORS sudah dikonfigurasi';
             }
 
             Swal.fire('Error', errorMessage, 'error');
