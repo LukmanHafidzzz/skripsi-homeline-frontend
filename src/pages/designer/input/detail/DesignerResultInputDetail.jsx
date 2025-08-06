@@ -11,7 +11,7 @@ import Swal from 'sweetalert2';
 import axios from 'axios';
 import { RiDriveLine } from 'react-icons/ri';
 
-export default function DesignerResultInputDetail({ house }) {
+export default function DesignerResultInputDetail() {
     const [file, setFile] = useState(null);
     const [uploading, setUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
