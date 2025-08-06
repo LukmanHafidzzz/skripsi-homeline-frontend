@@ -52,6 +52,7 @@ export default function DesignerResultInputDetail() {
         setUploadProgress(0);
     };
 
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -72,17 +73,14 @@ export default function DesignerResultInputDetail() {
         try {
             const contentType = file.type || 'application/octet-stream';
 
-            const requestData = {
-                fileName: file.name,
-                contentType: contentType
-            };
-
-            console.log('Request data being sent:', requestData);
-
-            // Step 1: Get presigned URL
+            // Step 1: Get presigned URL dari backend (dengan credentials)
+            console.log('Getting presigned URL...');
             const presignedResponse = await axios.post(
                 'https://skripsi-homeline-backend.vercel.app/api/designer/get-presigned-url',
-                requestData,
+                {
+                    fileName: file.name,
+                    contentType: contentType
+                },
                 {
                     withCredentials: true,
                     headers: {
@@ -91,30 +89,46 @@ export default function DesignerResultInputDetail() {
                 }
             );
 
-            console.log('Presigned response:', presignedResponse.data);
-
             const { presignedUrl, fileUrl, fileName } = presignedResponse.data;
+            console.log('Got presigned URL:', presignedUrl);
 
-            // Step 2: Upload ke S3 (TANPA withCredentials!)
-            console.log('Starting S3 upload...');
-            await axios.put(presignedUrl, file, {
+            // Step 2: Upload ke S3 menggunakan Fetch (TANPA credentials)
+            console.log('Starting S3 upload with fetch...');
+
+            // Simulate progress karena fetch tidak punya onUploadProgress
+            const progressInterval = setInterval(() => {
+                setUploadProgress(prev => {
+                    if (prev < 90) return prev + 10;
+                    return prev;
+                });
+            }, 200);
+
+            const uploadResponse = await fetch(presignedUrl, {
+                method: 'PUT',
                 headers: {
                     'Content-Type': contentType
                 },
-                // JANGAN gunakan withCredentials untuk upload ke S3!
-                // withCredentials: false, // explicitly set to false
-                onUploadProgress: (progressEvent) => {
-                    const percentCompleted = Math.round(
-                        (progressEvent.loaded * 100) / progressEvent.total
-                    );
-                    setUploadProgress(percentCompleted);
-                    console.log('Upload progress:', percentCompleted + '%');
-                }
+                body: file,
+                // Explicitly set credentials to omit
+                credentials: 'omit'
             });
 
-            console.log('S3 upload completed, saving to database...');
+            clearInterval(progressInterval);
+            setUploadProgress(100);
 
-            // Step 3: Save to database (DENGAN withCredentials)
+            console.log('S3 Upload response status:', uploadResponse.status);
+            console.log('S3 Upload response headers:', [...uploadResponse.headers.entries()]);
+
+            if (!uploadResponse.ok) {
+                const responseText = await uploadResponse.text();
+                console.error('S3 upload failed:', responseText);
+                throw new Error(`S3 upload failed: ${uploadResponse.status} ${uploadResponse.statusText}`);
+            }
+
+            console.log('S3 upload completed successfully!');
+
+            // Step 3: Save info to database (dengan credentials)
+            console.log('Saving file info to database...');
             const saveResponse = await axios.post(
                 'https://skripsi-homeline-backend.vercel.app/api/designer/save-design-file',
                 {
@@ -130,7 +144,7 @@ export default function DesignerResultInputDetail() {
                 }
             );
 
-            console.log('Database save response:', saveResponse.data);
+            console.log('Database save completed:', saveResponse.data);
 
             Swal.fire(
                 'Sukses',
@@ -142,19 +156,22 @@ export default function DesignerResultInputDetail() {
 
         } catch (error) {
             console.error('Full upload error:', error);
-            console.error('Error response:', error.response?.data);
-            console.error('Error status:', error.response?.status);
 
             let errorMessage = 'Gagal upload file';
 
-            if (error.response?.status === 400) {
-                errorMessage = error.response?.data?.message || 'Bad request - periksa data yang dikirim';
-            } else if (error.response?.status === 413) {
-                errorMessage = 'File terlalu besar untuk diproses server';
+            // Handle different error types
+            if (error.message.includes('S3 upload failed')) {
+                if (error.message.includes('403')) {
+                    errorMessage = 'Akses ditolak ke S3. Periksa konfigurasi bucket dan credentials';
+                } else if (error.message.includes('CORS')) {
+                    errorMessage = 'CORS error. Periksa konfigurasi CORS di S3 bucket';
+                } else {
+                    errorMessage = `Upload ke S3 gagal: ${error.message}`;
+                }
             } else if (error.response?.data?.message) {
                 errorMessage = error.response.data.message;
-            } else if (error.message.includes('Network Error')) {
-                errorMessage = 'Koneksi bermasalah atau CORS error. Pastikan S3 CORS sudah dikonfigurasi';
+            } else if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                errorMessage = 'Tidak bisa terhubung ke S3. Periksa koneksi internet atau konfigurasi CORS';
             }
 
             Swal.fire('Error', errorMessage, 'error');
