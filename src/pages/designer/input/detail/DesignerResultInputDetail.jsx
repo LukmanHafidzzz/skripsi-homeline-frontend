@@ -60,6 +60,12 @@ export default function DesignerResultInputDetail() {
             return;
         }
 
+        // Debug logging
+        console.log('Selected file:', file);
+        console.log('File name:', file.name);
+        console.log('File type:', file.type);
+        console.log('File size:', file.size);
+
         const maxSize = 50 * 1024 * 1024;
         if (file.size > maxSize) {
             Swal.fire('Error', 'File terlalu besar (maksimal 50MB)', 'error');
@@ -70,12 +76,19 @@ export default function DesignerResultInputDetail() {
         setUploadProgress(0);
 
         try {
+            // Pastikan ada fallback untuk contentType jika kosong
+            const contentType = file.type || 'application/octet-stream';
+
+            const requestData = {
+                fileName: file.name,
+                contentType: contentType
+            };
+
+            console.log('Request data being sent:', requestData);
+
             const presignedResponse = await axios.post(
                 'https://skripsi-homeline-backend.vercel.app/api/designer/get-presigned-url',
-                {
-                    fileName: file.name,
-                    contentType: file.type
-                },
+                requestData,
                 {
                     withCredentials: true,
                     headers: {
@@ -84,20 +97,28 @@ export default function DesignerResultInputDetail() {
                 }
             );
 
+            console.log('Presigned response:', presignedResponse.data);
+
             const { presignedUrl, fileUrl, fileName } = presignedResponse.data;
 
+            // Upload ke S3
+            console.log('Starting S3 upload...');
             await axios.put(presignedUrl, file, {
                 headers: {
-                    'Content-Type': file.type
+                    'Content-Type': contentType
                 },
                 onUploadProgress: (progressEvent) => {
                     const percentCompleted = Math.round(
                         (progressEvent.loaded * 100) / progressEvent.total
                     );
                     setUploadProgress(percentCompleted);
+                    console.log('Upload progress:', percentCompleted + '%');
                 }
             });
 
+            console.log('S3 upload completed, saving to database...');
+
+            // Simpan ke database
             const saveResponse = await axios.post(
                 'https://skripsi-homeline-backend.vercel.app/api/designer/save-design-file',
                 {
@@ -113,6 +134,8 @@ export default function DesignerResultInputDetail() {
                 }
             );
 
+            console.log('Database save response:', saveResponse.data);
+
             Swal.fire(
                 'Sukses',
                 saveResponse.data.message,
@@ -122,11 +145,16 @@ export default function DesignerResultInputDetail() {
             });
 
         } catch (error) {
-            console.error('Upload error:', error);
+            console.error('Full upload error:', error);
+            console.error('Error response:', error.response?.data);
+            console.error('Error status:', error.response?.status);
+            console.error('Error config:', error.config);
 
             let errorMessage = 'Gagal upload file';
 
-            if (error.response?.status === 413) {
+            if (error.response?.status === 400) {
+                errorMessage = error.response?.data?.message || 'Bad request - periksa data yang dikirim';
+            } else if (error.response?.status === 413) {
                 errorMessage = 'File terlalu besar untuk diproses server';
             } else if (error.response?.data?.message) {
                 errorMessage = error.response.data.message;
