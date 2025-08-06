@@ -50,31 +50,30 @@ export default function DesignerResultInputDetail() {
         setFile(e.target.files[0]);
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        if (!file) return;
-
-        const formData = new FormData();
-        formData.append('design_file', file);
-        formData.append('house_id', house.id);
+    const handleUpload = async () => {
+        if (!file) return Swal.fire("Oops!", "Pilih file terlebih dahulu.", "warning");
 
         try {
-            const res = await axios.post('https://skripsi-homeline-backend.vercel.app/api/designer/input-house-model', formData, {
-                withCredentials: true,
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
-            Swal.fire(
-                'Sukses',
-                res.data.message,
-                'success'
-            ).then(() => {
-                navigate('/designer/input-house-model');
+            setLoading(true);
+
+            const res = await axios.post(
+                "https://skripsi-homeline-backend.vercel.app/api/designer/input-house-model",
+                file,
+                {
+                    headers: {
+                        "Content-Type": file.type,
+                        "x-filename": file.name,
+                    },
+                }
+            );
+
+            Swal.fire("Sukses", res.data.message, "success").then(() => {
+                navigate("/designer/input-house-model");
             });
         } catch (err) {
-            Swal.fire('Error', err.response?.data?.message || 'Gagal upload', 'error');
+            Swal.fire("Error", err.response?.data?.message || "Gagal upload", "error");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -216,7 +215,7 @@ export default function DesignerResultInputDetail() {
                 </Row>
                 <Row className="mt-4">
                     <Col className='p-0 pe-2'>
-                        <Form onSubmit={handleSubmit}>
+                        <Form>
                             <div className=''>
                                 <div className="fw-bold mb-2 fs-5 p-0">
                                     INPUT FILE HASIL DESIGN
@@ -225,7 +224,7 @@ export default function DesignerResultInputDetail() {
                                     <Form.Control type="file" onChange={handleFileChange} />
                                 </Form.Group>
                                 <div className="mb-4 d-flex justify-content-end align-items-center">
-                                    <Button type='submit' variant="success" className='fw-semibold px-5 py-2'>
+                                    <Button onClick={handleUpload} variant="success" className='fw-semibold px-5 py-2'>
                                         Input
                                     </Button>
                                 </div>
