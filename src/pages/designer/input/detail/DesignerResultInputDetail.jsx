@@ -13,13 +13,12 @@ import { RiDriveLine } from 'react-icons/ri';
 
 export default function DesignerResultInputDetail() {
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const timer = setTimeout(() => setLoading(false), 3000);
         return () => clearTimeout(timer);
     }, []);
-
-    const navigate = useNavigate();
 
     useEffect(() => {
         const timer = setTimeout(() => setLoading(false), 3000);
@@ -40,31 +39,39 @@ export default function DesignerResultInputDetail() {
                 console.error(err);
             }
         };
-
         fetchHouseDetail();
     }, [id]);
 
     const [file, setFile] = useState(null);
-
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
     };
 
     const handleUpload = async () => {
-        if (!file) return Swal.fire("Oops!", "Pilih file terlebih dahulu.", "warning");
-
+        if (!file) {
+            Swal.fire("Error", "Silakan pilih file terlebih dahulu", "error");
+            return;
+        }
         try {
-            setLoading(true);
-
-            const res = await axios.post(
-                "https://skripsi-homeline-backend.vercel.app/api/designer/input-house-model",
+            const uploadRes = await axios.post(
+                "https://skripsi-homeline-backend.vercel.app/api/upload/s3",
                 file,
                 {
                     headers: {
                         "Content-Type": file.type,
-                        "x-filename": file.name,
-                    },
+                        "x-filename": file.name
+                    }
                 }
+            );
+
+            const fileUrl = uploadRes.data.url;
+            const res = await axios.post(
+                "https://skripsi-homeline-backend.vercel.app/api/designer/input-house-model",
+                {
+                    house_id: id,
+                    design_file: fileUrl
+                },
+                { withCredentials: true }
             );
 
             Swal.fire("Sukses", res.data.message, "success").then(() => {
@@ -72,8 +79,6 @@ export default function DesignerResultInputDetail() {
             });
         } catch (err) {
             Swal.fire("Error", err.response?.data?.message || "Gagal upload", "error");
-        } finally {
-            setLoading(false);
         }
     };
 
