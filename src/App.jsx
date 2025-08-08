@@ -4,7 +4,6 @@ import { Routes, Route } from "react-router-dom";
 import 'react-loading-skeleton/dist/skeleton.css';
 import 'aos/dist/aos.css';
 import AOS from 'aos';
-import { AuthProvider } from './context/AuthProvider.jsx';
 
 // Protect
 import ProtectedRoute from "./components/protected-route/ProtectedRoute.jsx";
@@ -102,135 +101,133 @@ function App() {
         AOS.init();
     }, []);
     return (
-        <AuthProvider>
-            <Routes>
-                <Route
-                    path='/unauthorized'
-                    element={<Unauthorize />}
-                />
-                <Route element={<MainLayout />}>
-                    <Route path="/search" element={<Searchpage />} />
-                </Route>
+        <Routes>
+            <Route
+                path='/unauthorized'
+                element={<Unauthorize />}
+            />
+            <Route element={<MainLayout />}>
+                <Route path="/search" element={<Searchpage />} />
+            </Route>
 
-                <Route element={<SecondaryLayout />}>
-                    <Route path="/" element={<Landingpage />} />
-                </Route>
+            <Route element={<SecondaryLayout />}>
+                <Route path="/" element={<Landingpage />} />
+            </Route>
 
-                <Route
-                    element={
-                        <ProtectedRoute allowedLevels={[4]}>
-                            <SecondaryLayout />
-                        </ProtectedRoute>
-                    }>
-                    <Route path="search/detail/:id" element={<DetailHousePage />} />
-                    <Route path="search/detail/:id/model/:id" element={<User3dModel />} />
-                </Route>
+            <Route
+                element={
+                    <ProtectedRoute allowedLevels={[4]}>
+                        <SecondaryLayout />
+                    </ProtectedRoute>
+                }>
+                <Route path="search/detail/:id" element={<DetailHousePage />} />
+                <Route path="search/detail/:id/model/:id" element={<User3dModel />} />
+            </Route>
 
-                <Route
-                    path="/advertisement"
-                    element={
-                        <ProtectedRoute allowedLevels={[4]}>
-                            <AdvertisementLayout />
-                        </ProtectedRoute>
-                    }
-                >
-                    <Route index element={<AdvertisementHome />} />
-                    <Route path="waiting" element={<AdWaiting />} />
-                    <Route path="waiting/detail/:id" element={<AdWaitingDetail />} />
-                    <Route path="waiting-payment" element={<AdWaitingPayment />} />
-                    <Route path="waiting-payment/detail/:id" element={<AdWaitingPaymentDetail />} />
-                    <Route path="need-approval" element={<AdNeedApproval />} />
-                    <Route path="need-approval/detail/:id" element={<AdNeedApprovalDetail />} />
-                    <Route path="processing" element={<AdProcess />} />
-                    <Route path="processing/detail/:id" element={<AdProcessDetail />} />
-                    <Route path="processing/detail/:id/model/:id" element={<AdProcessDetailModel />} />
-                    <Route path="rejected" element={<AdRejected />} />
-                    <Route path="rejected/detail/:id" element={<AdRejectedDetail />} />
-                    <Route path="approved" element={<AdApproved />} />
-                    <Route path="approved/detail/:id" element={<AdApprovedDetail />} />
-                    <Route path="approved/detail/:id/model/:id" element={<AdApprovedDetailModel />} />
-                    <Route path="delete" element={<AdDelete />} />
-                    <Route path="delete/detail/:id" element={<AdDeleteDetail />} />
-                    <Route path="delete/detail/:id/model/:id" element={<AdDeleteDetailModel />} />
-                    <Route path="add" element={<AdAdd />} />
-                </Route>
+            <Route
+                path="/advertisement"
+                element={
+                    <ProtectedRoute allowedLevels={[4]}>
+                        <AdvertisementLayout />
+                    </ProtectedRoute>
+                }
+            >
+                <Route index element={<AdvertisementHome />} />
+                <Route path="waiting" element={<AdWaiting />} />
+                <Route path="waiting/detail/:id" element={<AdWaitingDetail />} />
+                <Route path="waiting-payment" element={<AdWaitingPayment />} />
+                <Route path="waiting-payment/detail/:id" element={<AdWaitingPaymentDetail />} />
+                <Route path="need-approval" element={<AdNeedApproval />} />
+                <Route path="need-approval/detail/:id" element={<AdNeedApprovalDetail />} />
+                <Route path="processing" element={<AdProcess />} />
+                <Route path="processing/detail/:id" element={<AdProcessDetail />} />
+                <Route path="processing/detail/:id/model/:id" element={<AdProcessDetailModel />} />
+                <Route path="rejected" element={<AdRejected />} />
+                <Route path="rejected/detail/:id" element={<AdRejectedDetail />} />
+                <Route path="approved" element={<AdApproved />} />
+                <Route path="approved/detail/:id" element={<AdApprovedDetail />} />
+                <Route path="approved/detail/:id/model/:id" element={<AdApprovedDetailModel />} />
+                <Route path="delete" element={<AdDelete />} />
+                <Route path="delete/detail/:id" element={<AdDeleteDetail />} />
+                <Route path="delete/detail/:id/model/:id" element={<AdDeleteDetailModel />} />
+                <Route path="add" element={<AdAdd />} />
+            </Route>
 
-                <Route
-                    path="/admin"
-                    element={
-                        <ProtectedRoute allowedLevels={[1]}>
-                            <AdminLayout />
-                        </ProtectedRoute>
-                    }
-                >
-                    <Route index element={<AdminHome />} />
-                    <Route path='house-list' element={<HouseList />} />
-                    <Route path='house-list/detail/:id' element={<HouseListDetail />} />
-                    <Route path='house-list/detail/:id/model/:id' element={<HouseListModel />} />
-                    <Route path='checking' element={<CheckingAwal />} />
-                    <Route path='checking/detail/:id' element={<CheckingAwalDetail />} />
-                    <Route path='payment-confirm' element={<PaymentConfirm />} />
-                    <Route path='payment-confirm/detail/:id' element={<PaymentConfirmDetail />} />
-                    <Route path='input-qr' element={<QrInput />} />
-                    <Route path='input-qr/detail/:id' element={<QrInputDetail />} />
-                    <Route path='embed-map' element={<EmbedMap />} />
-                    <Route path='embed-map/detail/:id' element={<EmbedMapDetail />} />
-                    <Route path='request-desain-approval' element={<ReqDesignApproval />} />
-                    <Route path='request-desain-approval/detail/:id' element={<ReqDesignApprovalDetail />} />
-                    <Route path='request-survey-approval' element={<ReqSurveyApproval />} />
-                    <Route path='request-survey-approval/detail/:id' element={<ReqSurveyApprovalDetail />} />
-                    <Route path='survey-list-house' element={<SurveyListHouse />} />
-                    <Route path='survey-list-house/detail/:id' element={<SurveyListHouseDetail />} />
-                    <Route path='survey-input' element={<SurveyInput />} />
-                    <Route path='survey-input/detail/:id' element={<SurveyInputDetail />} />
-                    <Route path='design-list-house' element={<DesignListHouse />} />
-                    <Route path='design-list-house/detail/:id' element={<DesignListHouseDetail />} />
-                    <Route path='design-input' element={<DesignInput />} />
-                    <Route path='design-input/detail/:id' element={<DesignInputDetail />} />
-                    <Route path='design-input/detail/:id/model/:id' element={<DesignInputModel />} />
-                </Route>
+            <Route
+                path="/admin"
+                element={
+                    <ProtectedRoute allowedLevels={[1]}>
+                        <AdminLayout />
+                    </ProtectedRoute>
+                }
+            >
+                <Route index element={<AdminHome />} />
+                <Route path='house-list' element={<HouseList />} />
+                <Route path='house-list/detail/:id' element={<HouseListDetail />} />
+                <Route path='house-list/detail/:id/model/:id' element={<HouseListModel />} />
+                <Route path='checking' element={<CheckingAwal />} />
+                <Route path='checking/detail/:id' element={<CheckingAwalDetail />} />
+                <Route path='payment-confirm' element={<PaymentConfirm />} />
+                <Route path='payment-confirm/detail/:id' element={<PaymentConfirmDetail />} />
+                <Route path='input-qr' element={<QrInput />} />
+                <Route path='input-qr/detail/:id' element={<QrInputDetail />} />
+                <Route path='embed-map' element={<EmbedMap />} />
+                <Route path='embed-map/detail/:id' element={<EmbedMapDetail />} />
+                <Route path='request-desain-approval' element={<ReqDesignApproval />} />
+                <Route path='request-desain-approval/detail/:id' element={<ReqDesignApprovalDetail />} />
+                <Route path='request-survey-approval' element={<ReqSurveyApproval />} />
+                <Route path='request-survey-approval/detail/:id' element={<ReqSurveyApprovalDetail />} />
+                <Route path='survey-list-house' element={<SurveyListHouse />} />
+                <Route path='survey-list-house/detail/:id' element={<SurveyListHouseDetail />} />
+                <Route path='survey-input' element={<SurveyInput />} />
+                <Route path='survey-input/detail/:id' element={<SurveyInputDetail />} />
+                <Route path='design-list-house' element={<DesignListHouse />} />
+                <Route path='design-list-house/detail/:id' element={<DesignListHouseDetail />} />
+                <Route path='design-input' element={<DesignInput />} />
+                <Route path='design-input/detail/:id' element={<DesignInputDetail />} />
+                <Route path='design-input/detail/:id/model/:id' element={<DesignInputModel />} />
+            </Route>
 
-                <Route
-                    path='/surveyor'
-                    element={
-                        <ProtectedRoute allowedLevels={[2]}>
-                            <SurveyorLayout />
-                        </ProtectedRoute>
-                    }
-                >
-                    <Route index element={<SurveyorHome />} />
-                    <Route path='house-list' element={<SurveyorHouseList />} />
-                    <Route path='house-list/detail/:id' element={<SurveyorHouseListDetail />} />
-                    <Route path='input-house-survey' element={<SurveyorResultInput />} />
-                    <Route path='input-house-survey/detail/:id' element={<SurveyorResultInputDetail />} />
-                    <Route path='make-request' element={<SurveyorMakeReq />} />
-                    <Route path='make-request/detail/:id' element={<SurveyorMakeReqDetail />} />
-                </Route>
+            <Route
+                path='/surveyor'
+                element={
+                    <ProtectedRoute allowedLevels={[2]}>
+                        <SurveyorLayout />
+                    </ProtectedRoute>
+                }
+            >
+                <Route index element={<SurveyorHome />} />
+                <Route path='house-list' element={<SurveyorHouseList />} />
+                <Route path='house-list/detail/:id' element={<SurveyorHouseListDetail />} />
+                <Route path='input-house-survey' element={<SurveyorResultInput />} />
+                <Route path='input-house-survey/detail/:id' element={<SurveyorResultInputDetail />} />
+                <Route path='make-request' element={<SurveyorMakeReq />} />
+                <Route path='make-request/detail/:id' element={<SurveyorMakeReqDetail />} />
+            </Route>
 
-                <Route
-                    path='/designer'
-                    element={
-                        <ProtectedRoute allowedLevels={[3]}>
-                            <DesignerLayout />
-                        </ProtectedRoute>
-                    }
-                >
-                    <Route index element={<DesignerHome />} />
-                    <Route path='house-list' element={<DesignerHouseList />} />
-                    <Route path='house-list/detail/:id' element={<DesignerHouseListDetail />} />
-                    <Route path='house-list/detail/:id/model/:id' element={<DesignerHouseListModel />} />
-                    <Route path='input-house-model' element={<DesignerResultInput />} />
-                    <Route path='input-house-model/detail/:id' element={<DesignerResultInputDetail />} />
-                    <Route path='make-request' element={<DesignerMakeReq />} />
-                    <Route path='make-request/detail/:id' element={<DesignerMakeReqDetail />} />
-                </Route>
+            <Route
+                path='/designer'
+                element={
+                    <ProtectedRoute allowedLevels={[3]}>
+                        <DesignerLayout />
+                    </ProtectedRoute>
+                }
+            >
+                <Route index element={<DesignerHome />} />
+                <Route path='house-list' element={<DesignerHouseList />} />
+                <Route path='house-list/detail/:id' element={<DesignerHouseListDetail />} />
+                <Route path='house-list/detail/:id/model/:id' element={<DesignerHouseListModel />} />
+                <Route path='input-house-model' element={<DesignerResultInput />} />
+                <Route path='input-house-model/detail/:id' element={<DesignerResultInputDetail />} />
+                <Route path='make-request' element={<DesignerMakeReq />} />
+                <Route path='make-request/detail/:id' element={<DesignerMakeReqDetail />} />
+            </Route>
 
-                <Route path="/auth">
-                    <Route path="login" element={<Login />} />
-                    <Route path="register" element={<Register />} />
-                </Route>
-            </Routes>
-        </AuthProvider>
+            <Route path="/auth">
+                <Route path="login" element={<Login />} />
+                <Route path="register" element={<Register />} />
+            </Route>
+        </Routes>
     );
 }
 

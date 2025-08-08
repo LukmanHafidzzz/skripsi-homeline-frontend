@@ -12,8 +12,9 @@ import axios from 'axios';
 
 export default function PaymentConfirmDetail() {
     const [loading, setLoading] = useState(true);
+    const [buttonLoading, setButtonLoading] = useState(false);
     const navigate = useNavigate();
-
+    
     useEffect(() => {
         const timer = setTimeout(() => setLoading(false), 3000);
         return () => clearTimeout(timer);
@@ -193,6 +194,7 @@ export default function PaymentConfirmDetail() {
                                                             cancelButtonText: 'Batal'
                                                         }).then(async (result) => {
                                                             if (result.isConfirmed) {
+                                                                setButtonloading(true);
                                                                 try {
                                                                     const res = await axios.patch(
                                                                         `https://skripsi-homeline-backend.vercel.app/api/admin/house/payment-confirm/${id}`,
@@ -213,12 +215,18 @@ export default function PaymentConfirmDetail() {
                                                                         err.response?.data?.message || 'Terjadi kesalahan.',
                                                                         'error'
                                                                     );
+                                                                } finally {
+                                                                    setButtonloading(false);
                                                                 }
                                                             }
                                                         })
                                                     }}
                                                 >
-                                                    Konfirmasi Pembayaran
+                                                    {buttonLoading ? (
+                                                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                    ) : (
+                                                        'Konfirmasi Pembayaran'
+                                                    )}
                                                 </Button>
                                             </div>
                                         </td>

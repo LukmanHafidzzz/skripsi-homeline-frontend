@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 export default function AdDelete() {
     const [houses, setHouses] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [deletingId, setDeletingId] = useState(null);
 
     useEffect(() => {
         const fetchHouses = async () => {
@@ -68,19 +69,37 @@ export default function AdDelete() {
                                                 cancelButtonColor: '#3085d6',
                                                 cancelButtonText: 'Batal',
                                                 confirmButtonText: 'Hapus!',
-                                            }).then((result) => {
+                                            }).then(async (result) => {
                                                 if (result.isConfirmed) {
-                                                    Swal.fire(
-                                                        'Terhapus!',
-                                                        'Data berhasil dihapus.',
-                                                        'success'
-                                                    )
-                                                    // delete action
+                                                    setDeletingId(house.id);
+                                                    try {
+                                                        const res = await axios.delete(`https://skripsi-homeline-backend.vercel.app/api/user/advertisement/delete/${house.id}`, {
+                                                            withCredentials: true
+                                                        });
+
+                                                        Swal.fire('Terhapus!', res.data.message, 'success');
+
+                                                        setHouses((prev) => prev.filter((h) => h.id !== house.id));
+                                                    } catch (err) {
+                                                        Swal.fire(
+                                                            'Gagal!',
+                                                            err.response?.data?.message || 'Terjadi kesalahan.',
+                                                            'error'
+                                                        );
+                                                    } finally {
+                                                        setDeletingId(null);
+                                                    }
                                                 }
-                                            })
+                                            });
                                         }}
                                     >
-                                        <IoTrashOutline /> hapus
+                                        {deletingId === house.id ? (
+                                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                        ) : (
+                                            <>
+                                                <IoTrashOutline /> hapus
+                                            </>
+                                        )}
                                     </Button>
                                 </div>
                             </td>

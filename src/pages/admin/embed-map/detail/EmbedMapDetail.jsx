@@ -13,6 +13,7 @@ import axios from 'axios';
 export default function EmbedMapDetail() {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+    const [buttonLoading, setButtonLoading] = useState(false);
     const [embedMap, setEmbedMap] = useState("");
 
     useEffect(() => {
@@ -40,6 +41,7 @@ export default function EmbedMapDetail() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setButtonLoading(true);
 
         if (!embedMap.trim()) {
             return Swal.fire("Gagal", "Embed map tidak boleh kosong.", "warning");
@@ -74,6 +76,8 @@ export default function EmbedMapDetail() {
         } catch (err) {
             console.error('Error:', err.response || err);
             Swal.fire("Gagal!", err.response?.data?.message || "Terjadi kesalahan.", "error");
+        } finally {
+            setButtonLoading(false);
         }
     };
 
@@ -219,7 +223,11 @@ export default function EmbedMapDetail() {
                                 </Form.Group>
                                 <div className="d-flex justify-content-end align-items-center">
                                     <Button variant="success" className='fw-semibold px-5 py-2' type='submit'>
-                                        Input
+                                        {buttonLoading ? (
+                                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                        ) : (
+                                            'Input'
+                                        )}
                                     </Button>
                                 </div>
                             </Form>

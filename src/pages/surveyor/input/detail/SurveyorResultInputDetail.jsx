@@ -12,6 +12,7 @@ import axios from 'axios';
 
 export default function SurveyorResultInputDetail() {
     const [loading, setLoading] = useState(true);
+    const [buttonLoading, setButtonLoading] = useState(false);
 
     useEffect(() => {
         const timer = setTimeout(() => setLoading(false), 3000);
@@ -56,6 +57,7 @@ export default function SurveyorResultInputDetail() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setButtonLoading(true);
 
         if (!file) return;
 
@@ -80,7 +82,9 @@ export default function SurveyorResultInputDetail() {
             });
         } catch (err) {
             Swal.fire('Error', err.response?.data?.message || 'Gagal upload', 'error');
-        }
+        } finally {
+            setButtonLoading(false);
+        };
     };
 
     if (!house) return <div>Loading...</div>;
@@ -231,7 +235,11 @@ export default function SurveyorResultInputDetail() {
                     </Row>
                     <div className="mb-4 d-flex justify-content-end align-items-center">
                         <Button type="submit" variant="success" className='fw-semibold px-5 py-2'>
-                            Input
+                            {buttonLoading ? (
+                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            ) : (
+                                'Input'
+                            )}
                         </Button>
                     </div>
                 </Form>

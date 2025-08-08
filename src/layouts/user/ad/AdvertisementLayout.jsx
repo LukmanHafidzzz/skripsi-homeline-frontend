@@ -1,6 +1,5 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 const NavbarHomeUser = lazy(() => import('../../../components/navbar-home-user/NavbarHomeUser.jsx'));
-import { useAuth } from '../../../context/AuthProvider.jsx';
 const FooterGeneral = lazy(() => import('../../../components/footer-general/FooterGeneral.jsx'));
 const UserSidebar = lazy(() => import('../../../components/user-sidebar/UserSidebar.jsx'));
 import { Outlet } from 'react-router-dom'
@@ -9,12 +8,12 @@ import './style.css'
 import axios from 'axios';
 
 export default function AdvertisementLayout() {
-    const { user, loading: userLoading } = useAuth();
+    // const { user, loading: userLoading } = useAuth();
     return (
         <>
             <Suspense fallback={<div>Loading...</div>}>
                 <Suspense fallback={<div>Loading navbar...</div>}>
-                    <NavbarHomeUser user={user} />
+                    <NavbarHomeUser />
                 </Suspense>
             </Suspense>
             <Container fluid className="mt-21 px-4">

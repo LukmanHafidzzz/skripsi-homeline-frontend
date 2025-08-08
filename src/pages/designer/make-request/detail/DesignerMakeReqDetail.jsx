@@ -13,6 +13,7 @@ import { RiDriveLine } from 'react-icons/ri';
 
 export default function DesignerMakeReqDetail() {
     const [loading, setLoading] = useState(true);
+    const [buttonLoading, setButtonLoading] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -207,6 +208,7 @@ export default function DesignerMakeReqDetail() {
                                                             cancelButtonText: 'Batal'
                                                         }).then(async (result) => {
                                                             if (result.isConfirmed) {
+                                                                setButtonLoading(true);
                                                                 try {
                                                                     const res = await axios.post('https://skripsi-homeline-backend.vercel.app/api/designer/make-request', {
                                                                         house_id: house.id
@@ -226,12 +228,18 @@ export default function DesignerMakeReqDetail() {
                                                                         err.response?.data?.message || 'Terjadi kesalahan.',
                                                                         'error'
                                                                     );
-                                                                }
+                                                                } finally {
+                                                                    setButtonLoading(false);
+                                                                };
                                                             }
                                                         })
                                                     }}
-                                                >
-                                                    Ajukan Desain
+                                                    >
+                                                    {buttonLoading ? (
+                                                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                    ) : (
+                                                        'Ajukan Pembuatan'
+                                                    )}
                                                 </Button>
                                             </div>
                                         </td>

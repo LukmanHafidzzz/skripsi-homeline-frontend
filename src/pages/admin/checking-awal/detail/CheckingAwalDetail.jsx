@@ -17,6 +17,8 @@ import axios from 'axios';
 export default function CheckingAwalDetail() {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+    const [buttonLoading, setButtonLoading] = useState(false);
+    const [buttonLoadingReject, setButtonLoadingReject] = useState(false);
 
     useEffect(() => {
         const timer = setTimeout(() => setLoading(false), 3000);
@@ -29,7 +31,7 @@ export default function CheckingAwalDetail() {
     useEffect(() => {
         const fetchHouseDetail = async () => {
             try {
-                const res = await axios.get(`https://skripsi-homeline-backend.vercel.app/api/admin/house/detail/${id}`, {
+                const res = await axios.get(`http://localhost:5773/api/admin/house/detail/${id}`, {
                     withCredentials: true
                 });
                 setHouse(res.data);
@@ -183,9 +185,10 @@ export default function CheckingAwalDetail() {
                                             cancelButtonText: 'Batal'
                                         }).then(async (result) => {
                                             if (result.isConfirmed) {
+                                                setButtonLoadingReject(true);
                                                 try {
                                                     const res = await axios.patch(
-                                                        `https://skripsi-homeline-backend.vercel.app/api/admin/house/pending-to-reject/${id}`,
+                                                        `http://localhost:5773/api/admin/house/pending-to-reject/${id}`,
                                                         { withCredentials: true }
                                                     );
 
@@ -205,19 +208,25 @@ export default function CheckingAwalDetail() {
                                                         err.response?.data?.message || 'Terjadi kesalahan.',
                                                         'error'
                                                     );
+                                                } finally {
+                                                    setButtonLoadingReject(false);
                                                 }
                                             }
                                         })
                                     }}
                                 >
-                                    Tolak Pengajuan
+                                    {buttonLoadingReject ? (
+                                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    ) : (
+                                        'Tolak Pengajuan'
+                                    )}
                                 </Button>
                             </div>
                             <div>
                                 <Button
                                     variant="success"
                                     className='p-3'
-                                    onClick={() => {
+                                    onClick={async () => {
                                         Swal.fire({
                                             title: 'Lanjutkan Proses?',
                                             text: 'Apakah Anda yakin ingin melanjutkan proses pengajuan ini?',
@@ -229,6 +238,7 @@ export default function CheckingAwalDetail() {
                                             cancelButtonText: 'Batal'
                                         }).then(async (result) => {
                                             if (result.isConfirmed) {
+                                                setButtonLoading(true);
                                                 try {
                                                     const res = await axios.patch(
                                                         `https://skripsi-homeline-backend.vercel.app/api/admin/house/pending-to-offer/${id}`,
@@ -251,13 +261,20 @@ export default function CheckingAwalDetail() {
                                                         err.response?.data?.message || 'Terjadi kesalahan.',
                                                         'error'
                                                     );
+                                                } finally {
+                                                    setButtonLoading(false);
                                                 }
                                             }
                                         })
                                     }}
                                 >
-                                    Lanjutkan Proses
+                                    {buttonLoading ? (
+                                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    ) : (
+                                        'Lanjutkan Proses'
+                                    )}
                                 </Button>
+
                             </div>
                         </div>
                     </Col>

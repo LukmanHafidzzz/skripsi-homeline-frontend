@@ -19,14 +19,14 @@ export default function LoginPage() {
         setLoading(true);
         NProgress.start();
         try {
-            await axios.post(`https://skripsi-homeline-backend.vercel.app/api/auth/login`, {
+            await axios.post('https://skripsi-homeline-backend.vercel.app/api/auth/login', {
                 email,
                 password
             }, {
                 withCredentials: true
             });
 
-            const response = await axios.get(`https://skripsi-homeline-backend.vercel.app/api/auth/me`, {
+            const response = await axios.get('https://skripsi-homeline-backend.vercel.app/api/auth/me', {
                 withCredentials: true
             });
 

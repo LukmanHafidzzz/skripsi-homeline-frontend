@@ -13,6 +13,8 @@ import axios from 'axios';
 export default function ReqDesignApprovalDetail() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
+    const [buttonLoading, setButtonLoading] = useState(false);
+    const [buttonLoadingReject, setButtonLoadingReject] = useState(false);
 
     useEffect(() => {
         const timer = setTimeout(() => setLoading(false), 3000);
@@ -200,6 +202,7 @@ export default function ReqDesignApprovalDetail() {
                                                                             cancelButtonText: 'Batal'
                                                                         }).then(async (result) => {
                                                                             if (result.isConfirmed) {
+                                                                                setButtonLoadingReject(true);
                                                                                 try {
                                                                                     const res = await axios.patch(
                                                                                         `https://skripsi-homeline-backend.vercel.app/api/admin/request/reject-design-request/${id}`,
@@ -222,12 +225,18 @@ export default function ReqDesignApprovalDetail() {
                                                                                         err.response?.data?.message || 'Terjadi kesalahan.',
                                                                                         'error'
                                                                                     );
+                                                                                } finally {
+                                                                                    setButtonLoadingReject(false);
                                                                                 }
                                                                             }
                                                                         });
                                                                     }}
-                                                                >
-                                                                    Reject
+                                                                    >
+                                                                    {setButtonLoadingReject ? (
+                                                                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                                    ) : (
+                                                                        'Reject'
+                                                                    )}
                                                                 </Button>
                                                             </div>
                                                             <div>
@@ -246,12 +255,13 @@ export default function ReqDesignApprovalDetail() {
                                                                             cancelButtonText: 'Batal'
                                                                         }).then(async (result) => {
                                                                             if (result.isConfirmed) {
+                                                                                setButtonLoading(true);
                                                                                 try {
                                                                                     const res = await axios.patch(
                                                                                         `https://skripsi-homeline-backend.vercel.app/api/admin/request/approve-design-request/${id}`,
                                                                                         { withCredentials: true }
                                                                                     );
-
+                                                                                    
                                                                                     Swal.fire(
                                                                                         'Diproses!',
                                                                                         res.data.message || 'Pengajuan telah disetujui.',
@@ -261,19 +271,25 @@ export default function ReqDesignApprovalDetail() {
                                                                                     });
 
                                                                                     setHouse((prev) => ({ ...prev, status: 'approved' }));
-
+                                                                                    
                                                                                 } catch (err) {
                                                                                     Swal.fire(
                                                                                         'Gagal!',
                                                                                         err.response?.data?.message || 'Terjadi kesalahan.',
                                                                                         'error'
                                                                                     );
+                                                                                } finally {
+                                                                                    setButtonLoading(false);
                                                                                 }
                                                                             }
                                                                         });
                                                                     }}
-                                                                >
-                                                                    Approve
+                                                                    >
+                                                                    {buttonLoading ? (
+                                                                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                                    ) : (
+                                                                        'Approve'
+                                                                    )}
                                                                 </Button>
                                                             </div>
                                                         </div>

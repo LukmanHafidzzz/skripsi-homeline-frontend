@@ -13,6 +13,7 @@ import axios from 'axios';
 export default function DesignInputDetail() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
+    const [buttonLoading, setButtonLoading] = useState(false);
 
     useEffect(() => {
         const timer = setTimeout(() => setLoading(false), 3000);
@@ -213,6 +214,7 @@ export default function DesignInputDetail() {
                                                             cancelButtonText: 'Batal'
                                                         }).then(async (result) => {
                                                             if (result.isConfirmed) {
+                                                                setButtonLoading(true);
                                                                 try {
                                                                     const res = await axios.patch(
                                                                         `https://skripsi-homeline-backend.vercel.app/api/admin/design/design-input/${id}`,
@@ -235,12 +237,18 @@ export default function DesignInputDetail() {
                                                                         err.response?.data?.message || 'Terjadi kesalahan.',
                                                                         'error'
                                                                     );
+                                                                } finally {
+                                                                    setButtonLoading(false);
                                                                 }
                                                             }
                                                         })
                                                     }}
                                                 >
-                                                    Tandai Selesai
+                                                    {buttonLoading ? (
+                                                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                    ) : (
+                                                        'Tandai Selesai'
+                                                    )}
                                                 </Button>
                                             </div>
                                         </td>

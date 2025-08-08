@@ -6,6 +6,7 @@ import './style.css'
 import { useNavigate } from 'react-router-dom'
 
 export default function AdAdd() {
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const [provinsiList, setProvinsiList] = useState([]);
@@ -103,6 +104,8 @@ export default function AdAdd() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
+        NProgress.start();
 
         const requiredFacilities = formData.facilities.filter(f =>
             (f.facility_id === 1 || f.facility_id === 2) && (!f.quantity || f.quantity <= 0)
@@ -157,9 +160,10 @@ export default function AdAdd() {
                 confirmButtonColor: '#28a745',
                 timer: 2000,
                 timerProgressBar: true,
-                showConfirmButton: false
-            }).then(() => {
-                navigate('/advertisement/waiting');
+                showConfirmButton: false,
+                didClose: () => {
+                    navigate('/advertisement/waiting');
+                }
             });
 
         } catch (err) {
@@ -189,6 +193,9 @@ export default function AdAdd() {
                 confirmButtonColor: '#dc3545',
                 footer: err.response?.status ? `Error Code: ${err.response.status}` : null
             });
+        } finally {
+            setLoading(false);
+            NProgress.done();
         }
     };
 
@@ -438,8 +445,12 @@ export default function AdAdd() {
                         Note: tanda (<span className='text-danger'>*</span>) wajib diisi
                     </div>
                     <div className='d-flex justify-content-end'>
-                        <Button type='submit' variant="primary" className='btn-input fw-semibold'>
-                            Input
+                        <Button type='submit' variant="primary" className='btn-input fw-semibold' disabled={loading}>
+                            {loading ? (
+                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            ) : (
+                                'Input'
+                            )}
                         </Button>
                     </div>
                 </Form>

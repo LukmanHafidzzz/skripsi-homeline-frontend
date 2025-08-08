@@ -12,6 +12,7 @@ import axios from 'axios';
 
 export default function SurveyorMakeReqDetail() {
     const [loading, setLoading] = useState(true);
+    const [buttonLoading, setButtonLoading] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -194,6 +195,7 @@ export default function SurveyorMakeReqDetail() {
                                                             confirmButtonText: 'Ya!',
                                                             cancelButtonText: 'Batal'
                                                         }).then(async (result) => {
+                                                            setButtonLoading(true);
                                                             if (result.isConfirmed) {
                                                                 try {
                                                                     const res = await axios.post('https://skripsi-homeline-backend.vercel.app/api/surveyor/make-request', {
@@ -214,12 +216,18 @@ export default function SurveyorMakeReqDetail() {
                                                                         err.response?.data?.message || 'Terjadi kesalahan.',
                                                                         'error'
                                                                     );
+                                                                } finally {
+                                                                    setButtonLoading(false);
                                                                 }
                                                             }
                                                         })
                                                     }}
                                                 >
-                                                    Ajukan Survey
+                                                    {buttonLoading ? (
+                                                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                    ) : (
+                                                        'Ajukan Survey'
+                                                    )}
                                                 </Button>
                                             </div>
                                         </td>

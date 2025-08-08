@@ -5,7 +5,7 @@ import '@splidejs/react-splide/css';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import Skeleton from 'react-loading-skeleton';
-import { FaRegFile } from 'react-icons/fa6';
+import { FaLandMineOn, FaRegFile } from 'react-icons/fa6';
 import { FaRegMap } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import axios from 'axios';
@@ -13,6 +13,8 @@ import axios from 'axios';
 export default function ReqSurveyApprovalDetail() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
+    const [buttonLoading, setButtonLoading] = useState(false);
+    const [buttonLoadingReject, setButtonLoadingReject] = useState(false);
 
     useEffect(() => {
         const timer = setTimeout(() => setLoading(false), 3000);
@@ -200,6 +202,7 @@ export default function ReqSurveyApprovalDetail() {
                                                                             cancelButtonText: 'Batal'
                                                                         }).then(async (result) => {
                                                                             if (result.isConfirmed) {
+                                                                                setButtonLoadingReject(true);
                                                                                 try {
                                                                                     const res = await axios.patch(
                                                                                         `https://skripsi-homeline-backend.vercel.app/api/admin/request/reject-survey-request/${id}`,
@@ -222,12 +225,18 @@ export default function ReqSurveyApprovalDetail() {
                                                                                         err.response?.data?.message || 'Terjadi kesalahan.',
                                                                                         'error'
                                                                                     );
+                                                                                } finally {
+                                                                                    setButtonLoadingReject(false);
                                                                                 }
                                                                             }
                                                                         });
                                                                     }}
                                                                 >
-                                                                    Reject
+                                                                    {buttonLoadingReject ? (
+                                                                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                                    ) : (
+                                                                        'Konfirmasi Pembayaran'
+                                                                    )}
                                                                 </Button>
                                                             </div>
                                                             <div>
@@ -246,6 +255,7 @@ export default function ReqSurveyApprovalDetail() {
                                                                             cancelButtonText: 'Batal'
                                                                         }).then(async (result) => {
                                                                             if (result.isConfirmed) {
+                                                                                setButtonLoading(true);
                                                                                 try {
                                                                                     const res = await axios.patch(
                                                                                         `https://skripsi-homeline-backend.vercel.app/api/admin/request/approve-survey-request/${id}`,
@@ -268,12 +278,18 @@ export default function ReqSurveyApprovalDetail() {
                                                                                         err.response?.data?.message || 'Terjadi kesalahan.',
                                                                                         'error'
                                                                                     );
+                                                                                } finally {
+                                                                                    setButtonLoading(false);
                                                                                 }
                                                                             }
                                                                         });
                                                                     }}
                                                                 >
-                                                                    Approve
+                                                                    {buttonLoading ? (
+                                                                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                                    ) : (
+                                                                        'Approve'
+                                                                    )}
                                                                 </Button>
                                                             </div>
                                                         </div>

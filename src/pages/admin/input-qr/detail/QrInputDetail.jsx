@@ -12,6 +12,7 @@ import axios from 'axios';
 
 export default function QrInputDetail() {
     const [loading, setLoading] = useState(true);
+    const [buttonLoading, setButtonLoading] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -40,15 +41,16 @@ export default function QrInputDetail() {
 
     const handleQrSubmit = async (e) => {
         e.preventDefault();
-
+        setButtonLoading(true);
+        
         if (!qrFile) {
             return Swal.fire("Gagal", "Silakan pilih file QR terlebih dahulu.", "warning");
         }
-
+        
         const formData = new FormData();
         formData.append("qr", qrFile);
         formData.append("house_id", house.id);
-
+        
         try {
             const res = await axios.post("https://skripsi-homeline-backend.vercel.app/api/admin/house/input-qr", formData, {
                 headers: {
@@ -56,7 +58,7 @@ export default function QrInputDetail() {
                 },
                 withCredentials: true,
             });
-
+            
             Swal.fire({
                 icon: 'success',
                 title: 'Berhasil!',
@@ -71,11 +73,13 @@ export default function QrInputDetail() {
         } catch (err) {
             console.error('Error:', err.response || err);
             Swal.fire("Gagal!", err.response?.data?.message || "Terjadi kesalahan.", "error");
+        } finally {
+            setButtonLoading(false);
         }
     };
-
+    
     if (!house) return <div>Loading...</div>;
-
+    
     return (
         <>
             <Container>
@@ -210,7 +214,11 @@ export default function QrInputDetail() {
                                 </Form.Group>
                                 <div className="d-flex justify-content-end align-items-center">
                                     <Button variant="success" className='fw-semibold px-5 py-2' type="submit">
-                                        Input
+                                        {buttonLoading ? (
+                                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                        ) : (
+                                            'Input'
+                                        )}
                                     </Button>
                                 </div>
                             </Form>
