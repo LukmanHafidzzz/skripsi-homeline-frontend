@@ -6,8 +6,8 @@ import './style.css'
 import { useNavigate } from 'react-router-dom'
 
 export default function AdAdd() {
-    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
 
     const [provinsiList, setProvinsiList] = useState([]);
     const [kotaList, setKotaList] = useState([]);
@@ -105,53 +105,59 @@ export default function AdAdd() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        NProgress.start();
-
-        const requiredFacilities = formData.facilities.filter(f =>
-            (f.facility_id === 1 || f.facility_id === 2) && (!f.quantity || f.quantity <= 0)
-        );
-
-        if (requiredFacilities.length > 0) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Data Tidak Lengkap',
-                text: 'Kamar Mandi dan Kamar Tidur wajib diisi',
-                confirmButtonColor: '#f39c12'
-            });
-            return;
-        }
-
-        const data = new FormData();
-
-        Object.entries(formData).forEach(([key, val]) => {
-            if (key !== 'facilities') {
-                data.append(key, val);
-            }
-        });
-
-        data.append('province', getNameById(provinsiList, selectedProvinsi));
-        data.append('city', getNameById(kotaList, selectedKota));
-        data.append('subdistrict', getNameById(kecamatanList, selectedKecamatan));
-        data.append('village', getNameById(kelurahanList, selectedKelurahan));
-        data.append('certificate_type_id', selectedType);
-
-        const validFacilities = formData.facilities.filter(f => f.quantity && f.quantity > 0);
-        data.append('facilities', JSON.stringify(validFacilities));
-
-        for (const file of photos) {
-            data.append('photos', file);
-        }
-        if (certificate) {
-            data.append('certificate', certificate);
-        }
 
         try {
-            const response = await axios.post('https://skripsi-homeline-backend.vercel.app/api/user/advertisement/add', data, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-                withCredentials: true,
+            const requiredFacilities = formData.facilities.filter(f =>
+                (f.facility_id === 1 || f.facility_id === 2) && (!f.quantity || f.quantity <= 0)
+            );
+
+            if (requiredFacilities.length > 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Data Tidak Lengkap',
+                    text: 'Kamar Mandi dan Kamar Tidur wajib diisi',
+                    confirmButtonColor: '#f39c12'
+                });
+                setLoading(false);
+                return;
+            }
+
+            const data = new FormData();
+
+            Object.entries(formData).forEach(([key, val]) => {
+                if (key !== 'facilities') {
+                    data.append(key, val);
+                }
             });
+
+            data.append('province', getNameById(provinsiList, selectedProvinsi));
+            data.append('city', getNameById(kotaList, selectedKota));
+            data.append('subdistrict', getNameById(kecamatanList, selectedKecamatan));
+            data.append('village', getNameById(kelurahanList, selectedKelurahan));
+            data.append('certificate_type_id', selectedType);
+
+            const validFacilities = formData.facilities.filter(f => f.quantity && f.quantity > 0);
+            data.append('facilities', JSON.stringify(validFacilities));
+
+            console.log("=== Files yang diupload ===");
+            console.log("Foto Rumah:", photos);
+            console.log("Sertifikat:", certificate);
+
+            for (const file of photos) {
+                data.append('photos', file);
+            }
+            if (certificate) {
+                data.append('certificate', certificate);
+            }
+            const response = await axios.post(
+                'https://skripsi-homeline-backend.vercel.app/api/user/advertisement/add',
+                data,
+                {
+                    headers: { 'Content-Type': 'multipart/form-data' },
+                    withCredentials: true,
+                    timeout: 60000,
+                }
+            );
 
             Swal.fire({
                 icon: 'success',
@@ -160,16 +166,12 @@ export default function AdAdd() {
                 confirmButtonColor: '#28a745',
                 timer: 2000,
                 timerProgressBar: true,
-                showConfirmButton: false,
-                didClose: () => {
-                    navigate('/advertisement/waiting');
-                }
+                showConfirmButton: false
+            }).then(() => {
+                navigate('/advertisement/waiting');
             });
 
         } catch (err) {
-            console.error('Full error:', err);
-            console.error('Error response:', err.response?.data);
-
             let errorTitle = 'Gagal Menyimpan';
             let errorMessage = 'Terjadi kesalahan saat menyimpan data rumah';
 
@@ -193,9 +195,9 @@ export default function AdAdd() {
                 confirmButtonColor: '#dc3545',
                 footer: err.response?.status ? `Error Code: ${err.response.status}` : null
             });
+
         } finally {
             setLoading(false);
-            NProgress.done();
         }
     };
 
@@ -446,6 +448,7 @@ export default function AdAdd() {
                     </div>
                     <div className='d-flex justify-content-end'>
                         <Button type='submit' variant="primary" className='btn-input fw-semibold' disabled={loading}>
+                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             {loading ? (
                                 <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             ) : (
