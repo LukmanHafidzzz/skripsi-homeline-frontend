@@ -12,7 +12,7 @@ import axios from 'axios';
 
 export default function QrInputDetail() {
     const [loading, setLoading] = useState(true);
-    const [buttonLoading, setButtonLoading] = useState(true);
+    const [buttonLoading, setButtonLoading] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
