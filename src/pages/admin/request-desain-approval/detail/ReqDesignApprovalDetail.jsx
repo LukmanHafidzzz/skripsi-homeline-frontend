@@ -232,7 +232,7 @@ export default function ReqDesignApprovalDetail() {
                                                                         });
                                                                     }}
                                                                     >
-                                                                    {setButtonLoadingReject ? (
+                                                                    {buttonLoadingReject ? (
                                                                         <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                                                     ) : (
                                                                         'Reject'
