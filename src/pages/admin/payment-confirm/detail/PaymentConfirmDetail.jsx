@@ -14,7 +14,7 @@ export default function PaymentConfirmDetail() {
     const [loading, setLoading] = useState(true);
     const [buttonLoading, setButtonLoading] = useState(false);
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         const timer = setTimeout(() => setLoading(false), 3000);
         return () => clearTimeout(timer);
@@ -57,7 +57,12 @@ export default function PaymentConfirmDetail() {
                             >
                                 {house.house_photos.map((item, index) => (
                                     <SplideSlide className="h-100" key={index}>
-                                        <Image src={item.photo} className="img-fill rounded-2" />
+                                        <Image
+                                            src={item.photo}
+                                            className="img-fill rounded-2"
+                                            fetchpriority="high"
+                                            decoding="async"
+                                        />
                                     </SplideSlide>
                                 ))}
                             </Splide>

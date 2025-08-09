@@ -42,15 +42,15 @@ export default function QrInputDetail() {
     const handleQrSubmit = async (e) => {
         e.preventDefault();
         setButtonLoading(true);
-        
+
         if (!qrFile) {
             return Swal.fire("Gagal", "Silakan pilih file QR terlebih dahulu.", "warning");
         }
-        
+
         const formData = new FormData();
         formData.append("qr", qrFile);
         formData.append("house_id", house.id);
-        
+
         try {
             const res = await axios.post("https://skripsi-homeline-backend.vercel.app/api/admin/house/input-qr", formData, {
                 headers: {
@@ -58,7 +58,7 @@ export default function QrInputDetail() {
                 },
                 withCredentials: true,
             });
-            
+
             Swal.fire({
                 icon: 'success',
                 title: 'Berhasil!',
@@ -77,9 +77,9 @@ export default function QrInputDetail() {
             setButtonLoading(false);
         }
     };
-    
+
     if (!house) return <div>Loading...</div>;
-    
+
     return (
         <>
             <Container>
@@ -98,7 +98,12 @@ export default function QrInputDetail() {
                             >
                                 {house.house_photos.map((item, index) => (
                                     <SplideSlide className="h-100" key={index}>
-                                        <Image src={item.photo} className="img-fill rounded-2" />
+                                        <Image
+                                            src={item.photo}
+                                            className="img-fill rounded-2"
+                                            fetchpriority="high"
+                                            decoding="async"
+                                        />
                                     </SplideSlide>
                                 ))}
                             </Splide>

@@ -57,7 +57,13 @@ export default function DetailHousePage() {
                         {loading ? (
                             <Skeleton height='100%' width='100%' />
                         ) : (
-                            <Image src={house.house_photos[0].photo} className="w-100 h-100 object-fit-cover rounded-2" alt="img1" />
+                            <Image
+                                src={house.house_photos[0].photo}
+                                className="w-100 h-100 object-fit-cover rounded-2"
+                                alt="img1"
+                                fetchpriority="high"
+                                decoding="async"
+                            />
                         )}
                     </Col>
 
@@ -67,7 +73,13 @@ export default function DetailHousePage() {
                                 {loading ? (
                                     <Skeleton height='100%' width='100%' />
                                 ) : (
-                                    <Image src={house.house_photos[1].photo} className="w-100 h-100 object-fit-cover rounded-2" alt="img2" />
+                                    <Image
+                                        src={house.house_photos[1].photo}
+                                        className="w-100 h-100 object-fit-cover rounded-2"
+                                        alt="img2"
+                                        fetchpriority="high"
+                                        decoding="async"
+                                    />
                                 )}
                             </Col>
                             <Col className="p-0">
@@ -75,7 +87,13 @@ export default function DetailHousePage() {
                                     <Skeleton height={144} width='100%' />
                                 ) : (
                                     <Card className="bg-dark text-white border-0 frame h-100" onClick={handleShow}>
-                                        <Card.Img src={house.house_photos[2].photo} alt="img-bottom" className="w-100 h-100 object-fit-cover rounded-2" />
+                                        <Card.Img
+                                            src={house.house_photos[2].photo}
+                                            alt="img-bottom"
+                                            className="w-100 h-100 object-fit-cover rounded-2"
+                                            fetchpriority="high"
+                                            decoding="async"
+                                        />
                                         <Card.ImgOverlay className='d-flex justify-content-center align-items-center'>
                                             <Card.Title>Lihat Semua</Card.Title>
                                         </Card.ImgOverlay>
@@ -88,7 +106,12 @@ export default function DetailHousePage() {
                                 <Skeleton height={300} width='100%' />
                             ) : (
                                 <Link to={`./model/${house.id}`}><Card className="bg-dark text-white border-0 frame">
-                                    <Card.Img src={house.house_photos[0].photo} alt="img-bottom" className="w-100 h-100 object-fit-cover rounded-2" />
+                                    <Card.Img
+                                        src={house.house_photos[0].photo}
+                                        alt="img-bottom" className="w-100 h-100 object-fit-cover rounded-2"
+                                        fetchpriority="high"
+                                        decoding="async"
+                                    />
                                     <Card.ImgOverlay className='d-flex justify-content-center align-items-center'>
                                         <Card.Title>Lihat 3D Model</Card.Title>
                                     </Card.ImgOverlay>

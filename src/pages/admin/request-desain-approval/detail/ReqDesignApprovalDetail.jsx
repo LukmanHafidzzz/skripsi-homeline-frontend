@@ -59,7 +59,12 @@ export default function ReqDesignApprovalDetail() {
                             >
                                 {house.house_photos.map((item, index) => (
                                     <SplideSlide className="h-100" key={index}>
-                                        <Image src={item.photo} className="img-fill rounded-2" />
+                                        <Image
+                                            src={item.photo}
+                                            className="img-fill rounded-2"
+                                            fetchpriority="high"
+                                            decoding="async"
+                                        />
                                     </SplideSlide>
                                 ))}
                             </Splide>
@@ -231,7 +236,7 @@ export default function ReqDesignApprovalDetail() {
                                                                             }
                                                                         });
                                                                     }}
-                                                                    >
+                                                                >
                                                                     {buttonLoadingReject ? (
                                                                         <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                                                     ) : (
@@ -261,7 +266,7 @@ export default function ReqDesignApprovalDetail() {
                                                                                         `https://skripsi-homeline-backend.vercel.app/api/admin/request/approve-design-request/${id}`,
                                                                                         { withCredentials: true }
                                                                                     );
-                                                                                    
+
                                                                                     Swal.fire(
                                                                                         'Diproses!',
                                                                                         res.data.message || 'Pengajuan telah disetujui.',
@@ -271,7 +276,7 @@ export default function ReqDesignApprovalDetail() {
                                                                                     });
 
                                                                                     setHouse((prev) => ({ ...prev, status: 'approved' }));
-                                                                                    
+
                                                                                 } catch (err) {
                                                                                     Swal.fire(
                                                                                         'Gagal!',
@@ -284,7 +289,7 @@ export default function ReqDesignApprovalDetail() {
                                                                             }
                                                                         });
                                                                     }}
-                                                                    >
+                                                                >
                                                                     {buttonLoading ? (
                                                                         <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                                                     ) : (

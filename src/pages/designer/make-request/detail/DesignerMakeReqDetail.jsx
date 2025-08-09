@@ -59,7 +59,12 @@ export default function DesignerMakeReqDetail() {
                             >
                                 {house.house_photos.map((item, index) => (
                                     <SplideSlide className="h-100" key={index}>
-                                        <Image src={item.photo} className="img-fill rounded-2" />
+                                        <Image
+                                            src={item.photo}
+                                            className="img-fill rounded-2"
+                                            fetchpriority="high"
+                                            decoding="async"
+                                        />
                                     </SplideSlide>
                                 ))}
                             </Splide>
@@ -234,7 +239,7 @@ export default function DesignerMakeReqDetail() {
                                                             }
                                                         })
                                                     }}
-                                                    >
+                                                >
                                                     {buttonLoading ? (
                                                         <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                                     ) : (
