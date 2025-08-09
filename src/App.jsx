@@ -116,9 +116,9 @@ function App() {
 
             <Route
                 element={
-                    // <ProtectedRoute allowedLevels={[4]}>
+                    <ProtectedRoute allowedLevels={[4]}>
                         <SecondaryLayout />
-                    // </ProtectedRoute>
+                    </ProtectedRoute>
                 }>
                 <Route path="search/detail/:id" element={<DetailHousePage />} />
                 <Route path="search/detail/:id/model/:id" element={<User3dModel />} />
@@ -127,9 +127,9 @@ function App() {
             <Route
                 path="/advertisement"
                 element={
-                    // <ProtectedRoute allowedLevels={[4]}>
+                    <ProtectedRoute allowedLevels={[4]}>
                         <AdvertisementLayout />
-                    // </ProtectedRoute>
+                    </ProtectedRoute>
                 }
             >
                 <Route index element={<AdvertisementHome />} />
@@ -156,9 +156,9 @@ function App() {
             <Route
                 path="/admin"
                 element={
-                    // <ProtectedRoute allowedLevels={[1]}>
+                    <ProtectedRoute allowedLevels={[1]}>
                         <AdminLayout />
-                    // </ProtectedRoute>
+                    </ProtectedRoute>
                 }
             >
                 <Route index element={<AdminHome />} />
@@ -191,9 +191,9 @@ function App() {
             <Route
                 path='/surveyor'
                 element={
-                    // <ProtectedRoute allowedLevels={[2]}>
+                    <ProtectedRoute allowedLevels={[2]}>
                         <SurveyorLayout />
-                    // </ProtectedRoute>
+                    </ProtectedRoute>
                 }
             >
                 <Route index element={<SurveyorHome />} />
@@ -208,9 +208,9 @@ function App() {
             <Route
                 path='/designer'
                 element={
-                    // <ProtectedRoute allowedLevels={[3]}>
+                    <ProtectedRoute allowedLevels={[3]}>
                         <DesignerLayout />
-                    // </ProtectedRoute>
+                    </ProtectedRoute>
                 }
             >
                 <Route index element={<DesignerHome />} />
