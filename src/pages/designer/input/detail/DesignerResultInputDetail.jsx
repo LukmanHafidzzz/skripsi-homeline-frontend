@@ -43,16 +43,12 @@ export default function DesignerResultInputDetail() {
                 console.error(err);
             }
         };
-
         fetchHouseDetail();
     }, [id]);
-
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
         setUploadProgress(0);
     };
-
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -72,9 +68,6 @@ export default function DesignerResultInputDetail() {
 
         try {
             const contentType = file.type || 'application/octet-stream';
-
-            // Step 1: Get presigned URL dari backend (dengan credentials)
-            console.log('Getting presigned URL...');
             const presignedResponse = await axios.post(
                 'https://skripsi-homeline-backend.vercel.app/api/designer/get-presigned-url',
                 {
@@ -88,14 +81,7 @@ export default function DesignerResultInputDetail() {
                     }
                 }
             );
-
             const { presignedUrl, fileUrl, fileName } = presignedResponse.data;
-            console.log('Got presigned URL:', presignedUrl);
-
-            // Step 2: Upload ke S3 menggunakan Fetch (TANPA credentials)
-            console.log('Starting S3 upload with fetch...');
-
-            // Simulate progress karena fetch tidak punya onUploadProgress
             const progressInterval = setInterval(() => {
                 setUploadProgress(prev => {
                     if (prev < 90) return prev + 10;
@@ -109,26 +95,15 @@ export default function DesignerResultInputDetail() {
                     'Content-Type': contentType
                 },
                 body: file,
-                // Explicitly set credentials to omit
                 credentials: 'omit'
             });
-
             clearInterval(progressInterval);
             setUploadProgress(100);
-
-            console.log('S3 Upload response status:', uploadResponse.status);
-            console.log('S3 Upload response headers:', [...uploadResponse.headers.entries()]);
-
             if (!uploadResponse.ok) {
                 const responseText = await uploadResponse.text();
                 console.error('S3 upload failed:', responseText);
                 throw new Error(`S3 upload failed: ${uploadResponse.status} ${uploadResponse.statusText}`);
             }
-
-            console.log('S3 upload completed successfully!');
-
-            // Step 3: Save info to database (dengan credentials)
-            console.log('Saving file info to database...');
             const saveResponse = await axios.post(
                 'https://skripsi-homeline-backend.vercel.app/api/designer/save-design-file',
                 {
@@ -143,9 +118,6 @@ export default function DesignerResultInputDetail() {
                     }
                 }
             );
-
-            console.log('Database save completed:', saveResponse.data);
-
             Swal.fire(
                 'Sukses',
                 saveResponse.data.message,
@@ -159,7 +131,6 @@ export default function DesignerResultInputDetail() {
 
             let errorMessage = 'Gagal upload file';
 
-            // Handle different error types
             if (error.message.includes('S3 upload failed')) {
                 if (error.message.includes('403')) {
                     errorMessage = 'Akses ditolak ke S3. Periksa konfigurasi bucket dan credentials';
