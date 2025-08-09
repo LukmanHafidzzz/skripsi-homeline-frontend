@@ -194,7 +194,7 @@ export default function PaymentConfirmDetail() {
                                                             cancelButtonText: 'Batal'
                                                         }).then(async (result) => {
                                                             if (result.isConfirmed) {
-                                                                setButtonloading(true);
+                                                                setButtonLoading(true);
                                                                 try {
                                                                     const res = await axios.patch(
                                                                         `https://skripsi-homeline-backend.vercel.app/api/admin/house/payment-confirm/${id}`,
@@ -216,7 +216,7 @@ export default function PaymentConfirmDetail() {
                                                                         'error'
                                                                     );
                                                                 } finally {
-                                                                    setButtonloading(false);
+                                                                    setButtonLoading(false);
                                                                 }
                                                             }
                                                         })
