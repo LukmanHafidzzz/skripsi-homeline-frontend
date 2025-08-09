@@ -87,13 +87,17 @@ export default function MainLayout() {
                         </Container>
                     </Col>
                     <Col xs={9} className="">
-                        <div className='fs-4 mb-2'>
-                            Cari rumah sesuai lokasi, harga, dan kebutuhan Anda di sini!
-                        </div>
+                        {loading ? (
+                            <Skeleton height={50} width="75%" />
+                        ) : (
+                            <div className='fs-4 mb-2'>
+                                Cari rumah sesuai lokasi, harga, dan kebutuhan Anda di sini!
+                            </div>
+                        )}
                         {loading ? (
                             <>
                                 <div className='mb-3'>
-                                    <Skeleton height={50} width="100%" className="mb-3" />
+                                    <Skeleton height={50} width="100%" className="mb-2" />
                                     <div className='d-flex justify-content-end align-items-center text-black gap-3'>
                                         <Skeleton height={40} width={200} />
                                     </div>

@@ -31,7 +31,7 @@ export default function CheckingAwalDetail() {
     useEffect(() => {
         const fetchHouseDetail = async () => {
             try {
-                const res = await axios.get(`http://localhost:5773/api/admin/house/detail/${id}`, {
+                const res = await axios.get(`https://skripsi-homeline-backend.vercel.app/api/admin/house/detail/${id}`, {
                     withCredentials: true
                 });
                 setHouse(res.data);
@@ -188,7 +188,7 @@ export default function CheckingAwalDetail() {
                                                 setButtonLoadingReject(true);
                                                 try {
                                                     const res = await axios.patch(
-                                                        `http://localhost:5773/api/admin/house/pending-to-reject/${id}`,
+                                                        `https://skripsi-homeline-backend.vercel.app/admin/house/pending-to-reject/${id}`,
                                                         { withCredentials: true }
                                                     );
 
