@@ -5,6 +5,7 @@ import { Container, Nav, Navbar, Dropdown } from 'react-bootstrap';
 import { FaUser } from "react-icons/fa6";
 import { useAuth } from '../../context/AuthProvider.jsx';
 import './style.css';
+import axios from 'axios';
 
 const LoginLandingpage = lazy(() => import('../btn-login-landingpage/BtnLoginLandingpage.jsx'));
 
