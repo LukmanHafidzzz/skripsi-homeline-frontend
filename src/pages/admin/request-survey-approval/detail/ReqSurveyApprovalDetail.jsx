@@ -240,7 +240,7 @@ export default function ReqSurveyApprovalDetail() {
                                                                     {buttonLoadingReject ? (
                                                                         <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                                                     ) : (
-                                                                        'Konfirmasi Pembayaran'
+                                                                        'Reject'
                                                                     )}
                                                                 </Button>
                                                             </div>
