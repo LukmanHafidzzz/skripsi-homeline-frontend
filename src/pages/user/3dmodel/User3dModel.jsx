@@ -69,7 +69,7 @@ export default function User3dModel() {
                         <Breadcrumb.Item>
                             <Link to={`../search/detail/${house.id}`} className='breadcrumb-link'>{house.title}</Link>
                         </Breadcrumb.Item>
-                        <Breadcrumb.Item active>Detail (nama model)</Breadcrumb.Item>
+                        <Breadcrumb.Item active>{house.house_design.design_file}</Breadcrumb.Item>
                     </Breadcrumb>
                 </Col>
             </Row>
