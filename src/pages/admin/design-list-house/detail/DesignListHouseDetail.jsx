@@ -60,7 +60,7 @@ export default function DesignListHouseDetail() {
                                         <Image
                                             src={item.photo}
                                             className="img-fill rounded-2"
-                                            fetchpriority="high"
+                                            fetchPriority="high"
                                             decoding="async"
                                         />
                                     </SplideSlide>

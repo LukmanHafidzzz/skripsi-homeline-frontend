@@ -61,7 +61,7 @@ export default function DetailHousePage() {
                                 src={house.house_photos[0].photo}
                                 className="w-100 h-100 object-fit-cover rounded-2"
                                 alt="img1"
-                                fetchpriority="high"
+                                fetchPriority="high"
                                 decoding="async"
                             />
                         )}
@@ -77,7 +77,7 @@ export default function DetailHousePage() {
                                         src={house.house_photos[1].photo}
                                         className="w-100 h-100 object-fit-cover rounded-2"
                                         alt="img2"
-                                        fetchpriority="high"
+                                        fetchPriority="high"
                                         decoding="async"
                                     />
                                 )}
@@ -91,7 +91,7 @@ export default function DetailHousePage() {
                                             src={house.house_photos[2].photo}
                                             alt="img-bottom"
                                             className="w-100 h-100 object-fit-cover rounded-2"
-                                            fetchpriority="high"
+                                            fetchPriority="high"
                                             decoding="async"
                                         />
                                         <Card.ImgOverlay className='d-flex justify-content-center align-items-center'>
@@ -109,7 +109,7 @@ export default function DetailHousePage() {
                                     <Card.Img
                                         src={house.house_photos[0].photo}
                                         alt="img-bottom" className="w-100 h-100 object-fit-cover rounded-2"
-                                        fetchpriority="high"
+                                        fetchPriority="high"
                                         decoding="async"
                                     />
                                     <Card.ImgOverlay className='d-flex justify-content-center align-items-center'>

@@ -6,14 +6,25 @@ import Skeleton from 'react-loading-skeleton';
 import { Outlet } from 'react-router-dom'
 import './style.css'
 import axios from 'axios';
+import Searchpage from '../../../pages/user/searchpage/Searchpage.jsx';
 
 export default function MainLayout() {
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState(null);
 
-    const [selected, setSelected] = useState('Terbaru');
-    const handleSelect = (value) => {
-        setSelected(value);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [minPrice, setMinPrice] = useState("");
+    const [maxPrice, setMaxPrice] = useState("");
+    const [sortOption, setSortOption] = useState("Terbaru");
+    const [provinsiList, setProvinsiList] = useState([]);
+    const [selectedProvinsi, setSelectedProvinsi] = useState([]);
+
+    const handleSelectSort = (value) => setSortOption(value);
+
+    const handleCheckboxChange = (provId) => {
+        setSelectedProvinsi(prev =>
+            prev.includes(provId) ? prev.filter(id => id !== provId) : [...prev, provId]
+        );
     };
 
     useEffect(() => {
@@ -21,9 +32,7 @@ export default function MainLayout() {
         return () => clearTimeout(timer);
     }, []);
 
-    const [provinsiList, setProvinsiList] = useState([]);
-    const [selectedProvinsi, setSelectedProvinsi] = useState([]);
-
+    // Get list provinsi
     useEffect(() => {
         fetch('https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json')
             .then(res => res.json())
@@ -47,6 +56,7 @@ export default function MainLayout() {
         fetchUser();
     }, []);
 
+
     return (
         <>
             <Suspense fallback={<div>Loading...</div>}>
@@ -61,11 +71,21 @@ export default function MainLayout() {
                             <div className="d-flex flex-column gap-2 mb-4">
                                 <InputGroup className="">
                                     <InputGroup.Text id="basic-addon1">Rp</InputGroup.Text>
-                                    <Form.Control placeholder="Harga minimum" aria-label="" aria-describedby="basic-addon1" className="form-maxmin" />
+                                    <Form.Control
+                                        placeholder="Harga minimum"
+                                        value={minPrice}
+                                        onChange={(e) => setMinPrice(e.target.value)}
+                                        className="form-maxmin"
+                                    />
                                 </InputGroup>
                                 <InputGroup className="">
                                     <InputGroup.Text id="basic-addon2">Rp</InputGroup.Text>
-                                    <Form.Control placeholder="Harga maksimum" aria-label="" aria-describedby="basic-addon2" className="form-maxmin" />
+                                    <Form.Control
+                                        placeholder="Harga maksimum"
+                                        value={maxPrice}
+                                        onChange={(e) => setMaxPrice(e.target.value)}
+                                        className="form-maxmin"
+                                    />
                                 </InputGroup>
                             </div>
                         </Container>
@@ -79,8 +99,8 @@ export default function MainLayout() {
                                         type="checkbox"
                                         id={`provinsi-${prov.id}`}
                                         label={prov.name}
-                                        checked={selectedProvinsi.includes(prov.id)}
-                                        onChange={() => handleCheckboxChange(prov.id)}
+                                        checked={selectedProvinsi.includes(prov.name)}
+                                        onChange={() => handleCheckboxChange(prov.name)}
                                     />
                                 ))}
                             </div>
@@ -106,20 +126,33 @@ export default function MainLayout() {
                         ) : (
                             <>
                                 <div className='mb-3'>
-                                    <Form.Control type="text" className='search-form rounded-5 p-3 mb-3' placeholder="Cari rumah..." />
+                                    <Form.Control
+                                        type="text"
+                                        className='search-form rounded-5 p-3 mb-3'
+                                        placeholder="Cari rumah..."
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                    />
                                     <div className='d-flex justify-content-end align-items-center text-black gap-3'>
                                         <div className='fw-semibold'>Urutkan:</div>
-                                        <DropdownButton id="dropdown-basic-button" title={`${selected}`}>
-                                            <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Harga Tertinggi')}>Harga Tertinggi</Dropdown.Item>
-                                            <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Harga Terendah')}>Harga Terendah</Dropdown.Item>
-                                            <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Terbaru')}>Terbaru</Dropdown.Item>
+                                        <DropdownButton id="dropdown-basic-button" title={sortOption}>
+                                            <Dropdown.Item onClick={() => handleSelectSort('Harga Tertinggi')}>Harga Tertinggi</Dropdown.Item>
+                                            <Dropdown.Item onClick={() => handleSelectSort('Harga Terendah')}>Harga Terendah</Dropdown.Item>
+                                            <Dropdown.Item onClick={() => handleSelectSort('Terbaru')}>Terbaru</Dropdown.Item>
                                         </DropdownButton>
                                     </div>
                                 </div>
                             </>
                         )}
                         <div>
-                            <Outlet />
+                            <Searchpage
+                                searchTerm={searchTerm}
+                                minPrice={minPrice}
+                                maxPrice={maxPrice}
+                                sortOption={sortOption}
+                                selectedProvinsi={selectedProvinsi}
+
+                            />
                         </div>
                     </Col>
                 </Row>

@@ -6,22 +6,20 @@ import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import axios from 'axios';
 
 export default function DesignInput() {
-    const [selected, setSelected] = useState('Terbaru');
-
-    const handleSelect = (value) => {
-        setSelected(value);
-    };
-
     const [houses, setHouses] = useState([]);
+    const [filteredHouses, setFilteredHouses] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchHouses = async () => {
             try {
-                const res = await axios.get('https://skripsi-homeline-backend.vercel.app/api/admin/design/design-input', {
-                    withCredentials: true
-                });
+                const res = await axios.get(
+                    'https://skripsi-homeline-backend.vercel.app/api/admin/design/design-input',
+                    { withCredentials: true }
+                );
                 setHouses(res.data);
+                setFilteredHouses(res.data);
             } catch (err) {
                 console.error(err.response?.data?.message || err.message);
             } finally {
@@ -32,22 +30,34 @@ export default function DesignInput() {
         fetchHouses();
     }, []);
 
+    useEffect(() => {
+        let filtered = [...houses];
+
+        if (searchTerm) {
+            filtered = filtered.filter(
+                (house) =>
+                    house.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    house.id.toString().includes(searchTerm)
+            );
+        }
+
+        setFilteredHouses(filtered);
+    }, [searchTerm, houses]);
+
     if (loading) {
         return <div className="mt-5 pt-5 text-center">Loading...</div>;
-    };
-
-    if (houses.length === 0) {
-        return (
-            <div className="mt-5 pt-5 text-center">
-                Tidak ada data rumah...
-            </div>
-        );
-    };
+    }
 
     return (
         <>
             <div className='mb-3'>
-                <Form.Control type="text" className='search-form rounded-5 p-3 mb-3' placeholder="Cari rumah..." />
+                <Form.Control
+                    type="text"
+                    className='search-form rounded-5 p-3 mb-3'
+                    placeholder="Cari rumah..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
             </div>
 
             <Table bordered>
@@ -61,23 +71,41 @@ export default function DesignInput() {
                     </tr>
                 </thead>
                 <tbody className='align-middle'>
-                    {houses.map((house, index) => (
-                        <tr key={index}>
-                            <td className='text-center'>{index + 1}.</td>
-                            <td>{house.id}</td>
-                            <td>{house.title}</td>
-                            <td className='text-end'>{Number(house.price).toLocaleString('id-ID')}</td>
-                            <td className="align-middle">
-                                <div className="d-flex justify-content-center">
-                                    <Link to={`./detail/${house.id}`} className='text-decoration-none'>
-                                        <Button className="d-flex align-items-center gap-1" variant="outline-success">
-                                            <MdOutlineRemoveRedEye /> view
-                                        </Button>
-                                    </Link>
-                                </div>
+                    {filteredHouses.length === 0 ? (
+                        <tr>
+                            <td colSpan="5" className="text-center py-4">
+                                {houses.length === 0
+                                    ? "Tidak ada data rumah..."
+                                    : "Tidak ada data rumah yang cocok.."}
                             </td>
                         </tr>
-                    ))}
+                    ) : (
+                        filteredHouses.map((house, index) => (
+                            <tr key={index}>
+                                <td className='text-center'>{index + 1}.</td>
+                                <td>{house.id}</td>
+                                <td>{house.title}</td>
+                                <td className='text-end'>
+                                    {Number(house.price).toLocaleString('id-ID')}
+                                </td>
+                                <td className="align-middle">
+                                    <div className="d-flex justify-content-center">
+                                        <Link
+                                            to={`./detail/${house.id}`}
+                                            className='text-decoration-none'
+                                        >
+                                            <Button
+                                                className="d-flex align-items-center gap-1"
+                                                variant="outline-success"
+                                            >
+                                                <MdOutlineRemoveRedEye /> view
+                                            </Button>
+                                        </Link>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))
+                    )}
                 </tbody>
             </Table>
         </>

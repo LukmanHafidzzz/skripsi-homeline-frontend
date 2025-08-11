@@ -62,7 +62,7 @@ export default function ReqSurveyApprovalDetail() {
                                         <Image
                                             src={item.photo}
                                             className="img-fill rounded-2"
-                                            fetchpriority="high"
+                                            fetchPriority="high"
                                             decoding="async"
                                         />
                                     </SplideSlide>
@@ -170,7 +170,7 @@ export default function ReqSurveyApprovalDetail() {
                 </Row>
                 <Row className="mt-5 mb-4" data-aos="fade-up" data-aos-duration="800">
                     <Col className="p-0">
-                        {house?.survey_request && house.survey_request.request_status !== 'approved' && house.survey_request.request_status !== 'rejected' ? (
+                        {house?.survey_request && house.survey_request.request_status !== 'Approved' && house.survey_request.request_status !== 'Rejected' ? (
                             <>
                                 <div className="fw-bold mb-2 fs-5">
                                     DETAIL REQUEST

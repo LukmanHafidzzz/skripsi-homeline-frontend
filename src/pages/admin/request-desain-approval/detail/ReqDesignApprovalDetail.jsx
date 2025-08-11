@@ -62,7 +62,7 @@ export default function ReqDesignApprovalDetail() {
                                         <Image
                                             src={item.photo}
                                             className="img-fill rounded-2"
-                                            fetchpriority="high"
+                                            fetchPriority="high"
                                             decoding="async"
                                         />
                                     </SplideSlide>
@@ -170,7 +170,7 @@ export default function ReqDesignApprovalDetail() {
                 </Row>
                 <Row className="mt-5 mb-4" data-aos="fade-up" data-aos-duration="800">
                     <Col className="p-0">
-                        {house?.design_request && house.design_request.request_status !== 'approved' && house.design_request.request_status !== 'rejected' ? (
+                        {house?.design_request && house.design_request.request_status !== 'Approved' && house.design_request.request_status !== 'Rejected' ? (
                             <>
                                 <div className="fw-bold mb-2 fs-5">
                                     DETAIL REQUEST

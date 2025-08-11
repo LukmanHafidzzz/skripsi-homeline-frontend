@@ -7,15 +7,19 @@ import axios from 'axios';
 
 export default function DesignerMakeReq() {
     const [houseProcesses, setHouseProcesses] = useState([]);
+    const [filteredHouses, setFilteredHouses] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchHouseProcesses = async () => {
             try {
-                const res = await axios.get('https://skripsi-homeline-backend.vercel.app/api/designer/make-request', {
-                    withCredentials: true
-                });
+                const res = await axios.get(
+                    'https://skripsi-homeline-backend.vercel.app/api/designer/make-request',
+                    { withCredentials: true }
+                );
                 setHouseProcesses(res.data);
+                setFilteredHouses(res.data);
             } catch (err) {
                 console.error(err.response?.data?.message || err.message);
             } finally {
@@ -26,22 +30,34 @@ export default function DesignerMakeReq() {
         fetchHouseProcesses();
     }, []);
 
+    useEffect(() => {
+        let filtered = [...houseProcesses];
+
+        if (searchTerm) {
+            filtered = filtered.filter(
+                (item) =>
+                    item.house.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    item.house.id.toString().includes(searchTerm)
+            );
+        }
+
+        setFilteredHouses(filtered);
+    }, [searchTerm, houseProcesses]);
+
     if (loading) {
         return <div className="mt-5 pt-5 text-center">Loading...</div>;
-    };
-
-    if (houseProcesses.length === 0) {
-        return (
-            <div className="mt-5 pt-5 text-center">
-                Tidak ada data rumah...
-            </div>
-        );
-    };
+    }
 
     return (
         <>
             <div className='mb-3'>
-                <Form.Control type="text" className='search-form rounded-5 p-3 mb-3' placeholder="Cari rumah..." />
+                <Form.Control
+                    type="text"
+                    className='search-form rounded-5 p-3 mb-3'
+                    placeholder="Cari rumah..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
             </div>
 
             <Table bordered>
@@ -57,25 +73,35 @@ export default function DesignerMakeReq() {
                     </tr>
                 </thead>
                 <tbody className='align-middle'>
-                    {houseProcesses.map((houseProcess, index) => (
-                        <tr key={index}>
-                            <td className='text-center'>{index + 1}.</td>
-                            <td>{houseProcess.house.id}</td>
-                            <td>{houseProcess.house.title}</td>
-                            <td className=''>Rp {parseInt(houseProcess.house.price).toLocaleString("id-ID")}</td>
-                            <td className=''>{houseProcess.house.address.full_address}</td>
-                            <td className=''>{houseProcess.design_process}</td>
-                            <td className="align-middle">
-                                <div className="d-flex justify-content-center">
-                                    <Link to={`./detail/${houseProcess.house.id}`} className='text-decoration-none'>
-                                        <Button className="d-flex align-items-center gap-1" variant="outline-success">
-                                            <MdOutlineRemoveRedEye /> view
-                                        </Button>
-                                    </Link>
-                                </div>
+                    {filteredHouses.length === 0 ? (
+                        <tr>
+                            <td colSpan="7" className="text-center py-4">
+                                {houseProcesses.length === 0
+                                    ? "Tidak ada data rumah..."
+                                    : "Tidak ada data rumah yang cocok.."}
                             </td>
                         </tr>
-                    ))}
+                    ) : (
+                        filteredHouses.map((houseProcess, index) => (
+                            <tr key={index}>
+                                <td className='text-center'>{index + 1}.</td>
+                                <td>{houseProcess.house.id}</td>
+                                <td>{houseProcess.house.title}</td>
+                                <td>Rp {parseInt(houseProcess.house.price).toLocaleString("id-ID")}</td>
+                                <td>{houseProcess.house.address.full_address}</td>
+                                <td>{houseProcess.design_process}</td>
+                                <td className="align-middle">
+                                    <div className="d-flex justify-content-center">
+                                        <Link to={`./detail/${houseProcess.house.id}`} className='text-decoration-none'>
+                                            <Button className="d-flex align-items-center gap-1" variant="outline-success">
+                                                <MdOutlineRemoveRedEye /> view
+                                            </Button>
+                                        </Link>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))
+                    )}
                 </tbody>
             </Table>
         </>

@@ -101,7 +101,7 @@ export default function QrInputDetail() {
                                         <Image
                                             src={item.photo}
                                             className="img-fill rounded-2"
-                                            fetchpriority="high"
+                                            fetchPriority="high"
                                             decoding="async"
                                         />
                                     </SplideSlide>

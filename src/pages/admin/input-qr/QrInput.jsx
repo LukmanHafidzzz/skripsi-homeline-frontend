@@ -7,24 +7,21 @@ import axios from 'axios';
 
 export default function QrInput() {
     const [show, setShow] = useState(false);
+    const [selectedQR, setSelectedQR] = useState(null);
+    const [selected, setSelected] = useState('Semua');
+    const [houses, setHouses] = useState([]);
+    const [filteredHouses, setFilteredHouses] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [loading, setLoading] = useState(true);
 
     const handleClose = () => setShow(false);
-    const [selectedQR, setSelectedQR] = useState(null);
-
     const handleShowQR = (qr) => {
         setSelectedQR(qr);
         setShow(true);
-
     };
-
-    const [selected, setSelected] = useState('Semua');
-
     const handleSelect = (value) => {
         setSelected(value);
     };
-
-    const [houses, setHouses] = useState([]);
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchHouses = async () => {
@@ -33,6 +30,7 @@ export default function QrInput() {
                     withCredentials: true
                 });
                 setHouses(res.data);
+                setFilteredHouses(res.data);
             } catch (err) {
                 console.error(err.response?.data?.message || err.message);
             } finally {
@@ -43,22 +41,38 @@ export default function QrInput() {
         fetchHouses();
     }, []);
 
+    useEffect(() => {
+        let filtered = [...houses];
+
+        if (selected === 'Butuh QR') {
+            filtered = filtered.filter(h => !h.payments?.[0]?.qr);
+        } else if (selected === 'Sudah Input') {
+            filtered = filtered.filter(h => h.payments?.[0]?.qr);
+        }
+
+        if (searchTerm) {
+            filtered = filtered.filter(house =>
+                house.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                house.id.toString().includes(searchTerm)
+            );
+        }
+
+        setFilteredHouses(filtered);
+    }, [searchTerm, selected, houses]);
+
     if (loading) {
         return <div className="mt-5 pt-5 text-center">Loading...</div>;
-    };
-
-    if (houses.length === 0) {
-        return (
-            <div className="mt-5 pt-5 text-center">
-                Tidak ada data rumah...
-            </div>
-        );
-    };
+    }
 
     return (
         <>
             <div className='mb-3'>
-                <Form.Control type="text" className='search-form rounded-5 p-3 mb-3' placeholder="Cari rumah..." />
+                <Form.Control type="text"
+                    className='search-form rounded-5 p-3 mb-3'
+                    placeholder="Cari rumah..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
                 <div className='d-flex align-items-center text-black gap-3'>
                     <div className='fw-semibold'>Status:</div>
                     <DropdownButton id="dropdown-basic-button" title={`${selected}`}>
@@ -80,33 +94,41 @@ export default function QrInput() {
                     </tr>
                 </thead>
                 <tbody className='align-middle'>
-                    {houses.map((house, index) => (
-                        <tr key={index}>
-                            <td className='text-center'>{index + 1}.</td>
-                            <td>{house.id}</td>
-                            <td>{house.title}</td>
-                            <td className='text-end'>{Number(house.price).toLocaleString('id-ID')}</td>
-                            <td className="d-flex align-items-center justify-content-center">
-                                {house.payments?.[0]?.qr ? (
-                                    <>
-                                        <Button className="d-flex align-items-center" variant="outline-primary" onClick={() => handleShowQR(house.payments?.[0]?.qr)}>
-                                            <MdOutlineQrCode2 /> show QR
-                                        </Button>
-                                    </>
-                                ) : (
-                                    <>
-                                        <div className="d-flex justify-content-center">
-                                            <Link to={`./detail/${house.id}`} className='text-decoration-none'>
-                                                <Button className="d-flex align-items-center gap-1" variant="outline-success">
-                                                    <MdOutlineRemoveRedEye /> view
-                                                </Button>
-                                            </Link>
-                                        </div>
-                                    </>
-                                )}
+                    {filteredHouses.length === 0 ? (
+                        <tr>
+                            <td colSpan="5" className="text-center py-4">
+                                {houses.length === 0
+                                    ? "Tidak ada data rumah..."
+                                    : "Tidak ada data rumah yang cocok.."}
                             </td>
                         </tr>
-                    ))}
+                    ) : (
+                        filteredHouses.map((house, index) => (
+                            <tr key={index}>
+                                <td className='text-center'>{index + 1}.</td>
+                                <td>{house.id}</td>
+                                <td>{house.title}</td>
+                                <td className='text-end'>{Number(house.price).toLocaleString('id-ID')}</td>
+                                <td className="d-flex align-items-center justify-content-center">
+                                    {house.payments?.[0]?.qr ? (
+                                        <Button
+                                            className="d-flex align-items-center"
+                                            variant="outline-primary"
+                                            onClick={() => handleShowQR(house.payments?.[0]?.qr)}
+                                        >
+                                            <MdOutlineQrCode2 /> show QR
+                                        </Button>
+                                    ) : (
+                                        <Link to={`./detail/${house.id}`} className='text-decoration-none'>
+                                            <Button className="d-flex align-items-center gap-1" variant="outline-success">
+                                                <MdOutlineRemoveRedEye /> view
+                                            </Button>
+                                        </Link>
+                                    )}
+                                </td>
+                            </tr>
+                        ))
+                    )}
                 </tbody>
             </Table>
 
