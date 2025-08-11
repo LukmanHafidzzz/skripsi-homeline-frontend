@@ -80,7 +80,7 @@ export default function HouseCard({ house }) {
                     {loading ? (
                         <Skeleton height={40} width="100%" borderRadius={8} />
                     ) : (
-                        <Link to={`./detail/${house.id}`}>
+                        <Link to={`search/detail/${house.id}`}>
                             <Button className='w-100 detail-btn'>Detail</Button>
                         </Link>
                     )}
