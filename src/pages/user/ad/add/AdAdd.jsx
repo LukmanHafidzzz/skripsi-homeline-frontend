@@ -448,7 +448,6 @@ export default function AdAdd() {
                     </div>
                     <div className='d-flex justify-content-end'>
                         <Button type='submit' variant="primary" className='btn-input fw-semibold' disabled={loading}>
-                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             {loading ? (
                                 <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             ) : (

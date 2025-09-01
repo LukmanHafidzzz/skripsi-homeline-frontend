@@ -1,10 +1,53 @@
-import React from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import './style.css'
 import { Button, Col, Container, Row, Card } from 'react-bootstrap'
 import { MdLockOutline } from "react-icons/md";
 import { FaRegClock } from 'react-icons/fa';
 import { PiCubeBold } from 'react-icons/pi';
 import { Link } from 'react-router-dom';
+import { MapContainer, TileLayer, Marker, Popup, Circle } from "react-leaflet";
+import "leaflet.awesome-markers";
+import L, { map } from 'leaflet';
+
+const center = {
+    lat: -6.421152113648593,
+    lng: 106.77021142436178,
+    maps: "https://maps.app.goo.gl/c1qByJcvzJJE96tV9"
+};
+
+const schools = [
+    {
+        id: 1,
+        name: "SMP Negeri 25 Kota Depok",
+        maps: "https://maps.app.goo.gl/d2L7uajkJJArA735A",
+        position: {
+            lat: -6.412595878316234,
+            lng: 106.76881422448695,
+        }
+    },
+];
+
+const healthFacilities = [
+    { id: 1, name: "Klinik Widis Medica", maps: "https://maps.app.goo.gl/JbstrM1mrDXiKF7J9", position: { lat: -6.411944267429344, lng: 106.77038208511823 } },
+]
+
+const homeIcon = L.AwesomeMarkers.icon({
+    icon: 'house',
+    markerColor: 'red',
+    prefix: 'fa',
+});
+
+const schoolIcon = L.AwesomeMarkers.icon({
+    icon: 'graduation-cap',
+    markerColor: 'blue',
+    prefix: 'fa',
+});
+
+const healthFacilitiesIcon = L.AwesomeMarkers.icon({
+    icon: 'hospital',
+    markerColor: 'green',
+    prefix: 'fa',
+});
 
 export default function Landingpage() {
     return (
@@ -126,6 +169,50 @@ export default function Landingpage() {
                             <Button className='btn-explore fw-semibold'>Mulai</Button>
                         </Link>
                     </div>
+                </div>
+                <div className='section-gap text-center border' data-aos="fade-up" data-aos-duration="800">
+                    <MapContainer
+                        center={center}
+                        zoom={15}
+                        style={{ height: "500px", width: "100%" }}
+                    >
+                        <TileLayer
+                            attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        />
+
+                        <Circle center={center} radius={2000} color="blue" />
+                        <Marker position={center} icon={homeIcon}>
+                            <Popup>
+                                <div>Rumah Ini</div>
+                                <a href={center.maps} target="_blank" rel="noopener noreferrer">
+                                    Lihat di Google Maps
+                                </a>
+                            </Popup>
+                        </Marker>
+
+                        {schools.map((school) => (
+                            <Marker key={school.id} position={school.position} icon={schoolIcon}>
+                                <Popup>
+                                    <div>{school.name}</div>
+                                    <a href={school.maps} target="_blank" rel="noopener noreferrer">
+                                        Lihat di Google Maps
+                                    </a>
+                                </Popup>
+                            </Marker>
+                        ))}
+
+                        {healthFacilities.map((facility) => (
+                            <Marker key={facility.id} position={facility.position} icon={healthFacilitiesIcon}>
+                                <Popup>
+                                    <div>{facility.name}</div>
+                                    <a href={facility.maps} target="_blank" rel="noopener noreferrer">
+                                        Lihat di Google Maps
+                                    </a>
+                                </Popup>
+                            </Marker>
+                        ))}
+                    </MapContainer>
                 </div>
             </Container>
         </>

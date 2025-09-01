@@ -7,6 +7,39 @@ import { Link, useParams } from 'react-router-dom';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import Skeleton from 'react-loading-skeleton';
 import { FaRegFile } from 'react-icons/fa6';
+import { MapContainer, TileLayer, Marker, Popup, Circle } from "react-leaflet";
+import "leaflet.awesome-markers";
+import L from 'leaflet';
+
+const homeIcon = L.AwesomeMarkers.icon({
+    icon: 'house',
+    markerColor: 'red',
+    prefix: 'fa',
+});
+
+const schoolIcon = L.AwesomeMarkers.icon({
+    icon: 'graduation-cap',
+    markerColor: 'blue',
+    prefix: 'fa',
+});
+
+const healthFacilitiesIcon = L.AwesomeMarkers.icon({
+    icon: 'hospital',
+    markerColor: 'green',
+    prefix: 'fa',
+});
+
+const supermarketIcon = L.AwesomeMarkers.icon({
+    icon: 'shopping-cart',
+    markerColor: 'orange',
+    prefix: 'fa',
+});
+
+const worshipPlaceIcon = L.AwesomeMarkers.icon({
+    icon: 'place-of-worship',
+    markerColor: 'purple',
+    prefix: 'fa',
+});
 
 export default function AdApprovedDetail() {
     const [loading, setLoading] = useState(true);
@@ -153,15 +186,68 @@ export default function AdApprovedDetail() {
                                 </Row>
                                 <Row>
                                     <Col data-aos="fade-up" data-aos-duration="800">
-                                        <iframe className='rounded-2'
-                                            src={house.embed_maps}
-                                            width="100%"
-                                            height="400"
-                                            style={{ border: 0 }}
-                                            allowFullScreen
-                                            loading="lazy"
-                                            referrerPolicy="no-referrer-when-downgrade"
-                                        ></iframe>
+                                        {house.latitude && house.longitude ? (
+                                            <>
+                                                <MapContainer
+                                                    center={{ lat: parseFloat(house.latitude), lng: parseFloat(house.longitude) }}
+                                                    zoom={15}
+                                                    style={{ height: "500px", width: "100%" }}
+                                                >
+                                                    <TileLayer
+                                                        attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+                                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                                    />
+
+                                                    <Circle center={{ lat: parseFloat(house.latitude), lng: parseFloat(house.longitude) }} radius={1500} color="blue" />
+                                                    <Marker position={{ lat: parseFloat(house.latitude), lng: parseFloat(house.longitude) }} icon={homeIcon}>
+                                                        <Popup>
+                                                            <div>{house.title}</div>
+                                                            <a href={house.link_maps} target="_blank" rel="noopener noreferrer">
+                                                                Lihat di Google Maps
+                                                            </a>
+                                                        </Popup>
+                                                    </Marker>
+
+                                                    {house.general_facilities?.map((facility, idx) => {
+                                                        let icon = null;
+
+                                                        switch (facility.general_facility_type.type.toLowerCase()) {
+                                                            case "school":
+                                                                icon = schoolIcon;
+                                                                break;
+                                                            case "health":
+                                                                icon = healthFacilitiesIcon;
+                                                                break;
+                                                            case "supermarket":
+                                                                icon = supermarketIcon;
+                                                                break;
+                                                            case "religious":
+                                                                icon = worshipPlaceIcon;
+                                                                break;
+                                                            default:
+                                                                icon = schoolIcon;
+                                                        }
+
+                                                        return (
+                                                            <Marker
+                                                                key={idx}
+                                                                position={{ lat: parseFloat(facility.latitude), lng: parseFloat(facility.longitude) }}
+                                                                icon={icon}
+                                                            >
+                                                                <Popup>
+                                                                    <div>{facility.name}</div>
+                                                                    <a href={facility.maps} target="_blank" rel="noopener noreferrer">
+                                                                        Lihat di Google Maps
+                                                                    </a>
+                                                                </Popup>
+                                                            </Marker>
+                                                        );
+                                                    })}
+                                                </MapContainer>
+                                            </>
+                                        ) : (
+                                            <>-</>
+                                        )}
                                     </Col>
                                 </Row>
                             </Col>

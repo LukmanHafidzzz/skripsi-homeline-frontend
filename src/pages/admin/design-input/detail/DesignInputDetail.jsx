@@ -185,14 +185,14 @@ export default function DesignInputDetail() {
                 <Row className="mt-5 mb-4" data-aos="fade-up" data-aos-duration="800">
                     <Col className="p-0">
                         <div className="fw-bold mb-2 fs-5">
-                            HASIL DESIGN 3D
+                            HASIL INPUT DESAIN
                         </div>
                         <div>
                             <Table bordered>
                                 <thead>
                                     <tr className='text-center'>
                                         <th className='custom-table-header'>Desain 3D</th>
-                                        <th className='custom-table-header'>Action</th>
+                                        <th className='custom-table-header'>Floor Plan</th>
                                     </tr>
                                 </thead>
                                 <tbody className='align-middle'>
@@ -202,60 +202,10 @@ export default function DesignInputDetail() {
                                                 {house.house_design.design_file}
                                             </Link>
                                         </td>
-                                        <td className="align-middle">
-                                            <div className="d-flex justify-content-center">
-                                                <Button
-                                                    variant="success"
-                                                    className='py-2 px-4'
-                                                    onClick={() => {
-                                                        Swal.fire({
-                                                            title: 'Selesaikan Proses?',
-                                                            text: 'Apakah Anda yakin data yang diterima sudah benar?',
-                                                            icon: 'question',
-                                                            showCancelButton: true,
-                                                            confirmButtonColor: '#28a745',
-                                                            cancelButtonColor: '#6c757d',
-                                                            confirmButtonText: 'Selesai',
-                                                            cancelButtonText: 'Batal'
-                                                        }).then(async (result) => {
-                                                            if (result.isConfirmed) {
-                                                                setButtonLoading(true);
-                                                                try {
-                                                                    const res = await axios.patch(
-                                                                        `https://skripsi-homeline-backend.vercel.app/api/admin/design/design-input/${id}`,
-                                                                        { withCredentials: true }
-                                                                    );
-
-                                                                    Swal.fire(
-                                                                        'Diproses!',
-                                                                        res.data.message || 'Desain selesai.',
-                                                                        'success'
-                                                                    ).then(() => {
-                                                                        navigate('/admin/design-input');
-                                                                    });
-
-                                                                    setHouse((prev) => ({ ...prev, status: 'Desain Selesai' }));
-
-                                                                } catch (err) {
-                                                                    Swal.fire(
-                                                                        'Gagal!',
-                                                                        err.response?.data?.message || 'Terjadi kesalahan.',
-                                                                        'error'
-                                                                    );
-                                                                } finally {
-                                                                    setButtonLoading(false);
-                                                                }
-                                                            }
-                                                        })
-                                                    }}
-                                                >
-                                                    {buttonLoading ? (
-                                                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                    ) : (
-                                                        'Tandai Selesai'
-                                                    )}
-                                                </Button>
-                                            </div>
+                                        <td>
+                                            <Link to={house.house_design.floor_plan} target='_blank' className='text-decoration-none'>
+                                                {house.house_design.floor_plan}
+                                            </Link>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -263,6 +213,60 @@ export default function DesignInputDetail() {
                         </div>
                     </Col>
                 </Row>
+                <div className="mb-4 d-flex justify-content-end align-items-center">
+                    <Button
+                        variant="success"
+                        className='py-3 px-4'
+                        onClick={() => {
+                            Swal.fire({
+                                title: 'Selesaikan Proses?',
+                                text: 'Apakah Anda yakin data yang diterima sudah benar?',
+                                icon: 'question',
+                                showCancelButton: true,
+                                confirmButtonColor: '#28a745',
+                                cancelButtonColor: '#6c757d',
+                                confirmButtonText: 'Selesai',
+                                cancelButtonText: 'Batal'
+                            }).then(async (result) => {
+                                if (result.isConfirmed) {
+                                    setButtonLoading(true);
+                                    try {
+                                        const res = await axios.patch(
+                                            `https://skripsi-homeline-backend.vercel.app/api/admin/design/design-input/${id}`,
+                                            { withCredentials: true }
+                                        );
+
+                                        Swal.fire(
+                                            'Diproses!',
+                                            res.data.message || 'Desain selesai.',
+                                            'success'
+                                        ).then(() => {
+                                            navigate('/admin/design-input');
+                                        });
+
+                                        setHouse((prev) => ({ ...prev, status: 'Desain Selesai' }));
+
+                                    } catch (err) {
+                                        Swal.fire(
+                                            'Gagal!',
+                                            err.response?.data?.message || 'Terjadi kesalahan.',
+                                            'error'
+                                        );
+                                    } finally {
+                                        setButtonLoading(false);
+                                    }
+                                }
+                            })
+                        }}
+                    >
+                        {buttonLoading ? (
+                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        ) : (
+                            'Tandai Selesai'
+                        )}
+                    </Button>
+
+                </div>
             </Container >
         </>
     )

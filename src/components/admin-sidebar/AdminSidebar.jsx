@@ -57,12 +57,12 @@ export default function AdminSidebar() {
                     <FaRegEdit /> Konfirmasi Pembayaran
                 </NavLink>
                 <NavLink
-                    to='embed-map'
+                    to='geo-coordinate'
                     className={({ isActive }) =>
                         `text-decoration-none px-4 py-3 mb-1 text-black rounded-2 sub-menu gap-2 d-flex align-items-center ${isActive ? 'active-menu' : ''}`
                     }
                 >
-                    <LiaMapSolid /> Embed Map
+                    <LiaMapSolid /> Geo Coordinate
                 </NavLink>
             </div>
             <div className='mb-4'>

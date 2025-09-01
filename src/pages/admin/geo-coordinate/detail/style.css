@@ -13,12 +13,12 @@
     height: 100%;
 }
 
-.form-add-textarea {
+.form-add {
     border: 1px solid #ced4da !important;
     transition: .2s !important;
 }
 
-.form-add-textarea:focus {
+.form-add:focus {
     border: 1px solid #ced4da !important;
     outline: none !important;
     box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.25) !important;

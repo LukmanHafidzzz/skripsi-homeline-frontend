@@ -13,6 +13,7 @@ import { RiDriveLine } from 'react-icons/ri';
 
 export default function DesignerResultInputDetail() {
     const [file, setFile] = useState(null);
+    const [floorPlan, setFloorPlan] = useState(null);
     const [uploading, setUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -48,6 +49,9 @@ export default function DesignerResultInputDetail() {
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
         setUploadProgress(0);
+    };
+    const handleFloorPlanChange = (e) => {
+        setFloorPlan(e.target.files[0]);
     };
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -104,17 +108,21 @@ export default function DesignerResultInputDetail() {
                 console.error('S3 upload failed:', responseText);
                 throw new Error(`S3 upload failed: ${uploadResponse.status} ${uploadResponse.statusText}`);
             }
+            const formData = new FormData();
+            formData.append("house_id", house.id);
+            formData.append("fileUrl", fileUrl);
+            formData.append("fileName", fileName);
+            if (floorPlan) {
+                formData.append("floor_plan", floorPlan);
+            }
+
             const saveResponse = await axios.post(
                 'https://skripsi-homeline-backend.vercel.app/api/designer/save-design-file',
-                {
-                    house_id: house.id,
-                    fileUrl: fileUrl,
-                    fileName: fileName
-                },
+                formData,
                 {
                     withCredentials: true,
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'multipart/form-data'
                     }
                 }
             );
@@ -297,6 +305,17 @@ export default function DesignerResultInputDetail() {
                     <Col className='p-0 pe-2'>
                         <Form onSubmit={handleSubmit}>
                             <div className=''>
+                                <div className="fw-bold mb-2 fs-5 p-0">
+                                    INPUT FLOOR PLAN
+                                </div>
+                                <Form.Group controlId="formFileFloorPlan" className="mb-4">
+                                    <Form.Control
+                                        type="file"
+                                        onChange={handleFloorPlanChange}
+                                        disabled={uploading}
+                                        accept=".png, .jpg, .jpeg, .webp, image/png, image/jpeg, image/webp"
+                                    />
+                                </Form.Group>
                                 <div className="fw-bold mb-2 fs-5 p-0">
                                     INPUT FILE HASIL DESIGN
                                 </div>

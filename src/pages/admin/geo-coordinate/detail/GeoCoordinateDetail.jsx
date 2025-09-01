@@ -10,11 +10,12 @@ import { FaRegMap } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 
-export default function EmbedMapDetail() {
+export default function GeoCoordinateDetail() {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const [buttonLoading, setButtonLoading] = useState(false);
-    const [embedMap, setEmbedMap] = useState("");
+    const [latitude, setLatitude] = useState("");
+    const [longitude, setLongitude] = useState("");
 
     useEffect(() => {
         const timer = setTimeout(() => setLoading(false), 3000);
@@ -43,16 +44,21 @@ export default function EmbedMapDetail() {
         e.preventDefault();
         setButtonLoading(true);
 
-        if (!embedMap.trim()) {
-            return Swal.fire("Gagal", "Embed map tidak boleh kosong.", "warning");
+        if (!latitude.trim()) {
+            return Swal.fire("Gagal", "Latitude tidak boleh kosong.", "warning");
+        }
+
+        if (!longitude.trim()) {
+            return Swal.fire("Gagal", "Longitude tidak boleh kosong.", "warning");
         }
 
         const formData = new FormData();
-        formData.append("embed_maps", embedMap);
+        formData.append("latitude", latitude);
+        formData.append("longitude", longitude);
 
         try {
             const res = await axios.patch(
-                `https://skripsi-homeline-backend.vercel.app/api/admin/house/embed-maps/${id}`,
+                `https://skripsi-homeline-backend.vercel.app/api/admin/house/geo-coordinate/${id}`,
                 formData,
                 {
                     headers: {
@@ -64,13 +70,13 @@ export default function EmbedMapDetail() {
             Swal.fire({
                 icon: 'success',
                 title: 'Berhasil!',
-                text: 'Embed map berhasil ditambahkan',
+                text: 'Geo koordinat berhasil ditambahkan',
                 confirmButtonColor: '#28a745',
                 timer: 2000,
                 timerProgressBar: true,
                 showConfirmButton: false
             }).then(() => {
-                navigate('/admin/embed-map');
+                navigate('/admin/geo-coordinate');
             });
 
         } catch (err) {
@@ -213,18 +219,30 @@ export default function EmbedMapDetail() {
                     <Col className='p-0'>
                         <div className=''>
                             <div className="fw-bold mb-2 fs-5 p-0">
-                                INPUT EMBED MAPS
+                                INPUT KOORDINAT GEOGRAFIS
                             </div>
                             <Form onSubmit={handleSubmit}>
                                 <Form.Group className="mb-3" controlId="">
-                                    <Form.Control
-                                        className='form-add-textarea'
-                                        as="textarea"
-                                        placeholder='Masukkan embed map'
-                                        rows={3}
-                                        value={embedMap}
-                                        onChange={(e) => setEmbedMap(e.target.value)}
-                                    />
+                                    <Row>
+                                        <Col>
+                                            <Form.Control
+                                                className='form-add'
+                                                placeholder='Masukkan latitude'
+                                                rows={3}
+                                                value={latitude}
+                                                onChange={(e) => setLatitude(e.target.value)}
+                                            />
+                                        </Col>
+                                        <Col>
+                                            <Form.Control
+                                                className='form-add'
+                                                placeholder='Masukkan longitude'
+                                                rows={3}
+                                                value={longitude}
+                                                onChange={(e) => setLongitude(e.target.value)}
+                                            />
+                                        </Col>
+                                    </Row>
                                 </Form.Group>
                                 <div className="d-flex justify-content-end align-items-center">
                                     <Button variant="success" className='fw-semibold px-5 py-2' type='submit'>

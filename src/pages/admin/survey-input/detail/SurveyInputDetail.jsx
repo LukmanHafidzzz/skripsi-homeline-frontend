@@ -169,6 +169,52 @@ export default function SurveyInputDetail() {
                 <Row className="mt-5 mb-4" data-aos="fade-up" data-aos-duration="800">
                     <Col className="p-0">
                         <div className="fw-bold mb-2 fs-5">
+                            FASILITAS UMUM SEKITAR
+                        </div>
+                        <div>
+                            <Table bordered>
+                                <thead>
+                                    <tr className='text-center'>
+                                        <th className='custom-table-header'>Nama</th>
+                                        <th className='custom-table-header'>Tipe</th>
+                                        <th className='custom-table-header'>Latitude</th>
+                                        <th className='custom-table-header'>Longitude</th>
+                                        <th className='custom-table-header'>Maps</th>
+                                    </tr>
+                                </thead>
+                                <tbody className='align-middle'>
+                                    {house.general_facilities && house.general_facilities.length > 0 ? (
+                                        house.general_facilities.map((general_facility, index) => (
+                                            <tr key={index}>
+                                                <td>{general_facility.name}</td>
+                                                <td>{general_facility.general_facility_type.type}</td>
+                                                <td>{general_facility.latitude}</td>
+                                                <td>{general_facility.longitude}</td>
+                                                <td>
+                                                    <Link
+                                                        to={general_facility.maps}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="text-decoration-none"
+                                                    >
+                                                        {general_facility.maps}
+                                                    </Link>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td colSpan={4} className="text-center">Tidak ada data fasilitas umum</td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </Table>
+                        </div>
+                    </Col>
+                </Row>
+                <Row className="mt-5 mb-4" data-aos="fade-up" data-aos-duration="800">
+                    <Col className="p-0">
+                        <div className="fw-bold mb-2 fs-5">
                             HASIL SURVEY
                         </div>
                         <div>
@@ -177,7 +223,6 @@ export default function SurveyInputDetail() {
                                     <tr className='text-center'>
                                         <th className='custom-table-header'>Dokumentasi</th>
                                         <th className='custom-table-header'>File Pendukung</th>
-                                        <th className='custom-table-header'>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody className='align-middle'>
@@ -202,67 +247,65 @@ export default function SurveyInputDetail() {
                                                 {house.house_survey.notes_file}
                                             </Link>
                                         </td>
-                                        <td className="align-middle">
-                                            <div className="d-flex justify-content-center">
-                                                <Button
-                                                    variant="success"
-                                                    className='py-2 px-4'
-                                                    onClick={() => {
-                                                        Swal.fire({
-                                                            title: 'Selesaikan Proses?',
-                                                            text: 'Apakah Anda yakin data yang diterima sudah benar?',
-                                                            icon: 'question',
-                                                            showCancelButton: true,
-                                                            confirmButtonColor: '#28a745',
-                                                            cancelButtonColor: '#6c757d',
-                                                            confirmButtonText: 'Selesai',
-                                                            cancelButtonText: 'Batal'
-                                                        }).then(async (result) => {
-                                                            if (result.isConfirmed) {
-                                                                setButtonLoading(true);
-                                                                try {
-                                                                    const res = await axios.patch(
-                                                                        `https://skripsi-homeline-backend.vercel.app/api/admin/survey/survey-input/${id}`,
-                                                                        { withCredentials: true }
-                                                                    );
-
-                                                                    Swal.fire(
-                                                                        'Diproses!',
-                                                                        res.data.message || 'Survey selesai.',
-                                                                        'success'
-                                                                    ).then(() => {
-                                                                        navigate('/admin/survey-input');
-                                                                    });
-
-                                                                    setHouse((prev) => ({ ...prev, status: 'Survey Selesai' }));
-
-                                                                } catch (err) {
-                                                                    Swal.fire(
-                                                                        'Gagal!',
-                                                                        err.response?.data?.message || 'Terjadi kesalahan.',
-                                                                        'error'
-                                                                    );
-                                                                } finally {
-                                                                    setButtonLoading(false);
-                                                                }
-                                                            }
-                                                        })
-                                                    }}
-                                                >
-                                                    {buttonLoading ? (
-                                                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                    ) : (
-                                                        'Tandai Selesai'
-                                                    )}
-                                                </Button>
-                                            </div>
-                                        </td>
                                     </tr>
                                 </tbody>
                             </Table>
                         </div>
                     </Col>
                 </Row>
+                <div className="mb-4 d-flex justify-content-end align-items-center">
+                    <Button
+                        variant="success"
+                        className='py-3 px-4'
+                        onClick={() => {
+                            Swal.fire({
+                                title: 'Selesaikan Proses?',
+                                text: 'Apakah Anda yakin data yang diterima sudah benar?',
+                                icon: 'question',
+                                showCancelButton: true,
+                                confirmButtonColor: '#28a745',
+                                cancelButtonColor: '#6c757d',
+                                confirmButtonText: 'Selesai',
+                                cancelButtonText: 'Batal'
+                            }).then(async (result) => {
+                                if (result.isConfirmed) {
+                                    setButtonLoading(true);
+                                    try {
+                                        const res = await axios.patch(
+                                            `https://skripsi-homeline-backend.vercel.app/api/admin/survey/survey-input/${id}`,
+                                            { withCredentials: true }
+                                        );
+
+                                        Swal.fire(
+                                            'Diproses!',
+                                            res.data.message || 'Survey selesai.',
+                                            'success'
+                                        ).then(() => {
+                                            navigate('/admin/survey-input');
+                                        });
+
+                                        setHouse((prev) => ({ ...prev, status: 'Survey Selesai' }));
+
+                                    } catch (err) {
+                                        Swal.fire(
+                                            'Gagal!',
+                                            err.response?.data?.message || 'Terjadi kesalahan.',
+                                            'error'
+                                        );
+                                    } finally {
+                                        setButtonLoading(false);
+                                    }
+                                }
+                            })
+                        }}
+                    >
+                        {buttonLoading ? (
+                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        ) : (
+                            'Tandai Selesai'
+                        )}
+                    </Button>
+                </div>
             </Container >
         </>
     )

@@ -4,6 +4,8 @@ import axios from 'axios'
 import App from './App.jsx';
 import './global.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import "leaflet/dist/leaflet.css";
+import "leaflet.awesome-markers/dist/leaflet.awesome-markers.css";
 import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './context/AuthProvider.jsx';
 

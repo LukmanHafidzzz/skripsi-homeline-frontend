@@ -60,8 +60,8 @@ const PaymentConfirm = Loadable(lazy(() => import('./pages/admin/payment-confirm
 const PaymentConfirmDetail = Loadable(lazy(() => import('./pages/admin/payment-confirm/detail/PaymentConfirmDetail')));
 const QrInput = Loadable(lazy(() => import('./pages/admin/input-qr/QrInput')));
 const QrInputDetail = Loadable(lazy(() => import('./pages/admin/input-qr/detail/QrInputDetail')));
-const EmbedMap = Loadable(lazy(() => import('./pages/admin/embed-map/EmbedMap')));
-const EmbedMapDetail = Loadable(lazy(() => import('./pages/admin/embed-map/detail/EmbedMapDetail')));
+const GeoCoordinate = Loadable(lazy(() => import('./pages/admin/geo-coordinate/GeoCoordinate')));
+const GeoCoordinateDetail = Loadable(lazy(() => import('./pages/admin/geo-coordinate/detail/GeoCoordinateDetail')));
 const ReqDesignApproval = Loadable(lazy(() => import('./pages/admin/request-desain-approval/ReqDesignApproval')));
 const ReqDesignApprovalDetail = Loadable(lazy(() => import('./pages/admin/request-desain-approval/detail/ReqDesignApprovalDetail')));
 const ReqSurveyApproval = Loadable(lazy(() => import('./pages/admin/request-survey-approval/ReqSurveyApproval')));
@@ -171,8 +171,8 @@ function App() {
                 <Route path='payment-confirm/detail/:id' element={<PaymentConfirmDetail />} />
                 <Route path='input-qr' element={<QrInput />} />
                 <Route path='input-qr/detail/:id' element={<QrInputDetail />} />
-                <Route path='embed-map' element={<EmbedMap />} />
-                <Route path='embed-map/detail/:id' element={<EmbedMapDetail />} />
+                <Route path='geo-coordinate' element={<GeoCoordinate />} />
+                <Route path='geo-coordinate/detail/:id' element={<GeoCoordinateDetail />} />
                 <Route path='request-desain-approval' element={<ReqDesignApproval />} />
                 <Route path='request-desain-approval/detail/:id' element={<ReqDesignApprovalDetail />} />
                 <Route path='request-survey-approval' element={<ReqSurveyApproval />} />

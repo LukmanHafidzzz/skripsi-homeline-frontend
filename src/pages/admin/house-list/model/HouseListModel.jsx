@@ -61,7 +61,16 @@ export default function HouseListModel() {
 
     return (
         <Container className='fluid'>
+            <Row className='mb-5'>
+                <div className="fw-semibold fs-5 p-0">
+                    Denah Rumah
+                </div>
+                <img src={house.house_design.floor_plan} alt="" className='img-fluid w-50' />
+            </Row>
             <Row className="h-100 mb-4">
+                <div className="fw-semibold fs-5 p-0 mb-2">
+                    3D Model
+                </div>
                 <Col className='p-0'>
                     {loading || !house.house_design?.design_file ? (
                         <Skeleton height={500} width='100%' />

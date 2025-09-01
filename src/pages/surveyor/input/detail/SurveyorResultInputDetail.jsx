@@ -6,13 +6,41 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import Skeleton from 'react-loading-skeleton';
 import { FaRegFile } from 'react-icons/fa6';
-import { FaRegMap } from 'react-icons/fa';
+import { FaPlus, FaRegMap } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 
 export default function SurveyorResultInputDetail() {
     const [loading, setLoading] = useState(true);
     const [buttonLoading, setButtonLoading] = useState(false);
+    const [generalFacilities, setGeneralFacilities] = useState([
+        { name: "", latitude: "", longitude: "", maps: "" },
+    ]);
+    const [generalFacilityType, setGeneralFacilityType] = useState([]);
+
+    const handleChange = (index, e) => {
+        const { name, value } = e.target;
+        const newGeneralFacilities = [...generalFacilities];
+        newGeneralFacilities[index][name] = value;
+        setGeneralFacilities(newGeneralFacilities);
+    };
+
+    const handleAdd = () => {
+        setGeneralFacilities([...generalFacilities, { name: "", latitude: "", longitude: "", maps: "" }]);
+    };
+
+    useEffect(() => {
+        const fetchGeneralFacilityTypes = async () => {
+            try {
+                const response = await axios.get('https://skripsi-homeline-backend.vercel.app/api/surveyor/general-facility-types');
+                setGeneralFacilityType(response.data);
+            } catch (error) {
+                console.error('Error fetching general facility types:', error);
+            }
+        };
+
+        fetchGeneralFacilityTypes();
+    }, []);
 
     useEffect(() => {
         const timer = setTimeout(() => setLoading(false), 3000);
@@ -65,7 +93,7 @@ export default function SurveyorResultInputDetail() {
         formData.append('notes_file', file);
         formData.append('photo_video_link', link);
         formData.append('house_id', house.id);
-
+        formData.append('general_facilities', JSON.stringify(generalFacilities));
         try {
             const res = await axios.post('https://skripsi-homeline-backend.vercel.app/api/surveyor/input-house-survey', formData, {
                 withCredentials: true,
@@ -237,6 +265,71 @@ export default function SurveyorResultInputDetail() {
                                 </Form.Group>
                             </div>
                         </Col>
+                    </Row>
+                    <Row className="mt-4">
+                        <div className="fw-bold mb-2 fs-5 p-0">
+                            INPUT FASILITAS UMUM SEKITAR
+                        </div>
+                        {generalFacilities.map((generalFacility, index) => (
+                            <Row key={index} className="mb-3">
+                                <Col>
+                                    <Form.Control
+                                        type="text"
+                                        name="name"
+                                        placeholder="Nama fasilitas"
+                                        value={generalFacility.name}
+                                        onChange={(e) => handleChange(index, e)}
+                                    />
+                                </Col>
+                                <Col>
+                                    <Form.Select
+                                        name="type_id"
+                                        value={generalFacility.type_id || ""}
+                                        onChange={(e) => handleChange(index, e)}
+                                        required
+                                    >
+                                        <option value="" disabled>Pilih Tipe Fasilitas</option>
+                                        {generalFacilityType.map((type) => (
+                                            <option key={type.id} value={type.id}>
+                                                {type.type}
+                                            </option>
+                                        ))}
+                                    </Form.Select>
+                                </Col>
+                                <Col>
+                                    <Form.Control
+                                        type="text"
+                                        name="latitude"
+                                        placeholder="Latitude"
+                                        value={generalFacility.latitude}
+                                        onChange={(e) => handleChange(index, e)}
+                                    />
+                                </Col>
+                                <Col>
+                                    <Form.Control
+                                        type="text"
+                                        name="longitude"
+                                        placeholder="Longitude"
+                                        value={generalFacility.longitude}
+                                        onChange={(e) => handleChange(index, e)}
+                                    />
+                                </Col>
+                                <Col>
+                                    <Form.Control
+                                        type="text"
+                                        name="maps"
+                                        placeholder="Link Google Maps"
+                                        value={generalFacility.maps}
+                                        onChange={(e) => handleChange(index, e)}
+                                    />
+                                </Col>
+                            </Row>
+                        ))}
+                        <div className="mb-4 d-flex justify-content-start align-items-center">
+                            <Button variant="primary" onClick={handleAdd}>
+                                <FaPlus />
+                            </Button>
+                        </div>
                     </Row>
                     <div className="mb-4 d-flex justify-content-end align-items-center">
                         <Button type="submit" variant="success" className='fw-semibold px-5 py-2'>

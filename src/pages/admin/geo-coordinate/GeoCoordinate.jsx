@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import axios from 'axios';
 
-export default function EmbedMap() {
+export default function GeoCoordinate() {
     const [houses, setHouses] = useState([]);
     const [filteredHouses, setFilteredHouses] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -15,7 +15,7 @@ export default function EmbedMap() {
         const fetchHouses = async () => {
             try {
                 const res = await axios.get(
-                    'https://skripsi-homeline-backend.vercel.app/api/admin/house/embed-maps',
+                    'https://skripsi-homeline-backend.vercel.app/api/admin/house/geo-coordinate',
                     { withCredentials: true }
                 );
                 setHouses(res.data);
