@@ -36,7 +36,7 @@ export default function NavbarHomeUser() {
     return (
         <Navbar expand="lg" fixed="top" className={`px-4 py-2 custom-navbar ${isScrolled ? 'scrolled' : ''}`}>
             <Container fluid>
-                <Navbar.Brand href="#home">
+                <Navbar.Brand href="/">
                     <div className={`fw-bold fs-4 scroll-text ${isScrolled ? 'scrolled' : ''}`}>
                         <span className='clr-primary'>H</span>omeline
                     </div>
