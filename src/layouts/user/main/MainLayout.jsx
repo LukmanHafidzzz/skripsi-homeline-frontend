@@ -18,6 +18,7 @@ export default function MainLayout() {
     const [sortOption, setSortOption] = useState("Terbaru");
     const [provinsiList, setProvinsiList] = useState([]);
     const [selectedProvinsi, setSelectedProvinsi] = useState([]);
+    const [useOnly3d, setUseOnly3d] = useState(false);
 
     const handleSelectSort = (value) => setSortOption(value);
 
@@ -89,7 +90,7 @@ export default function MainLayout() {
                                 </InputGroup>
                             </div>
                         </Container>
-                        <Container className="border p-3 rounded-2 box-filter">
+                        <Container className="border p-3 rounded-2 mb-4 box-filter">
                             <div className='fw-bold mb-3'>Lokasi</div>
                             <div className="d-flex flex-column gap-2 mb-4 loc-container">
                                 {provinsiList.map((prov) => (
@@ -103,6 +104,21 @@ export default function MainLayout() {
                                         onChange={() => handleCheckboxChange(prov.name)}
                                     />
                                 ))}
+                            </div>
+                        </Container>
+                        <Container className="border p-4 rounded-2 mb-4 box-filter">
+                            <div className='fw-bold mb-3'>Tersedia Tampilan 3D</div>
+                            <div className="d-flex flex-column gap-2">
+                                <div className="mb-3">
+                                    <Form.Check
+                                        type="checkbox"
+                                        value={useOnly3d}
+                                        onChange={(e) => setUseOnly3d(e.target.checked)}
+                                        checked={useOnly3d}
+                                        id="default-checkbox"
+                                        label='Tampilkan hanya rumah dengan 3D'
+                                    />
+                                </div>
                             </div>
                         </Container>
                     </Col>
@@ -151,7 +167,7 @@ export default function MainLayout() {
                                 maxPrice={maxPrice}
                                 sortOption={sortOption}
                                 selectedProvinsi={selectedProvinsi}
-
+                                useOnly3d={useOnly3d}
                             />
                         </div>
                     </Col>

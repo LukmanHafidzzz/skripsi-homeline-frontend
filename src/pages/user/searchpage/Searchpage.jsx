@@ -3,7 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap'
 import axios from 'axios';
 const HouseCard = lazy(() => import('../../../components/house-card/HouseCard'));
 
-export default function Searchpage({ searchTerm, minPrice, maxPrice, sortOption, selectedProvinsi }) {
+export default function Searchpage({ searchTerm, minPrice, maxPrice, sortOption, selectedProvinsi, useOnly3d }) {
     const [allHouses, setAllHouses] = useState([]);
     const [filteredHouses, setFilteredHouses] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -54,8 +54,12 @@ export default function Searchpage({ searchTerm, minPrice, maxPrice, sortOption,
             filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         }
 
+        if (useOnly3d) {
+            filtered = filtered.filter(house => house.use_3d === "yes");
+        }
+
         setFilteredHouses(filtered);
-    }, [searchTerm, minPrice, maxPrice, sortOption, selectedProvinsi, allHouses]);
+    }, [searchTerm, minPrice, maxPrice, sortOption, selectedProvinsi, useOnly3d, allHouses]);
 
     return (
         <Container fluid className='p-0'>
