@@ -12,6 +12,10 @@ export default function SurveyorResultInput() {
     const [searchTerm, setSearchTerm] = useState('');
     const [loading, setLoading] = useState(true);
 
+    const handleSelect = (value) => {
+        setSelected(value);
+    }
+
     useEffect(() => {
         const fetchHouseProcesses = async () => {
             try {
@@ -84,9 +88,9 @@ export default function SurveyorResultInput() {
                 <thead>
                     <tr className='text-center'>
                         <th className='custom-table-header'>No</th>
-                        <th className='custom-table-header'>ID</th>
                         <th className='custom-table-header'>Judul</th>
                         <th className='custom-table-header'>Harga</th>
+                        <th className='custom-table-header'>Status Rumah</th>
                         <th className='custom-table-header'>Status Input</th>
                         <th className='custom-table-header'>Action</th>
                     </tr>
@@ -104,24 +108,20 @@ export default function SurveyorResultInput() {
                         filteredHouses.map((houseProcess, index) => (
                             <tr key={index}>
                                 <td className='text-center'>{index + 1}.</td>
-                                <td>{houseProcess.house.id}</td>
                                 <td>{houseProcess.house.title}</td>
                                 <td>Rp {parseInt(houseProcess.house.price).toLocaleString("id-ID")}</td>
-                                {/* <td>{houseProcess.survey_process}</td> */}
-                                {/* <td>
-                                    {houseProcess.house.survey_request ? (
-                                        <span className={`badge w-100 py-2 ${houseProcess.house.survey_request?.request_status === 'Approved'
-                                            ? 'bg-success'
-                                            : houseProcess.house.survey_request?.request_status === 'Rejected'
-                                                ? 'bg-danger'
-                                                : 'bg-warning'
-                                            }`}>
-                                            {houseProcess.house.survey_request?.request_status}
+                                <td>
+                                        <span className={`badge w-100 py-2 ${houseProcess.survey_process === 'Pengecekan Hasil' ? 'bg-info' : 'bg-warning'}`}>
+                                            {houseProcess.survey_process}
                                         </span>
+                                </td>
+                                <td>
+                                    {houseProcess.house.house_survey ? (
+                                        <span className="badge w-100 py-2 bg-success">Sudah Ada Input</span>
                                     ) : (
-                                        <span className="badge w-100 py-2 bg-secondary">Belum dibuat</span>
+                                        <span className="badge w-100 py-2 bg-secondary">Belum Ada Input</span>
                                     )}
-                                </td> */}
+                                </td>
                                 <td className="align-middle">
                                     <div className="d-flex justify-content-center">
                                         <Link to={`./detail/${houseProcess.house.id}`} className='text-decoration-none'>
