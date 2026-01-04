@@ -6,7 +6,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import Skeleton from 'react-loading-skeleton';
 import { FaRegFile } from 'react-icons/fa6';
-import { FaPlus, FaRegMap } from 'react-icons/fa';
+import { FaPlus, FaRegMap, FaMinus } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 
@@ -29,10 +29,19 @@ export default function SurveyorResultInputDetail() {
         setGeneralFacilities([...generalFacilities, { name: "", latitude: "", longitude: "", maps: "" }]);
     };
 
+    const handleRemove = (index) => {
+        if (generalFacilities.length === 1) return;
+
+        const newGeneralFacilities = generalFacilities.filter(
+            (_, i) => i !== index
+        );
+        setGeneralFacilities(newGeneralFacilities);
+    };
+
     useEffect(() => {
         const fetchGeneralFacilityTypes = async () => {
             try {
-                const response = await axios.get('https://skripsi-homeline-backend.vercel.app/api/surveyor/general-facility-types');
+                const response = await axios.get('http://localhost:5773/api/surveyor/general-facility-types');
                 setGeneralFacilityType(response.data);
             } catch (error) {
                 console.error('Error fetching general facility types:', error);
@@ -60,7 +69,7 @@ export default function SurveyorResultInputDetail() {
     useEffect(() => {
         const fetchHouseDetail = async () => {
             try {
-                const res = await axios.get(`https://skripsi-homeline-backend.vercel.app/api/surveyor/house-detail/${id}`, {
+                const res = await axios.get(`http://localhost:5773/api/surveyor/house-detail/${id}`, {
                     withCredentials: true
                 });
                 setHouse(res.data);
@@ -95,7 +104,7 @@ export default function SurveyorResultInputDetail() {
         formData.append('house_id', house.id);
         formData.append('general_facilities', JSON.stringify(generalFacilities));
         try {
-            const res = await axios.post('https://skripsi-homeline-backend.vercel.app/api/surveyor/input-house-survey', formData, {
+            const res = await axios.post('http://localhost:5773/api/surveyor/input-house-survey', formData, {
                 withCredentials: true,
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -216,7 +225,7 @@ export default function SurveyorResultInputDetail() {
                                 </div>
                                 <div>
                                     <div className="mb-2">
-                                        <Link to='' className='text-decoration-none text-black'><FaRegMap /></Link> <Link to='' className='text-decoration-none text-black ms-2'>https://maps.app.goo.gl/79XSrN3Nyr8QVKuV8</Link>
+                                        <Link target='_blank' to={house.link_maps} className='text-decoration-none text-black'><FaRegMap /><span className='ms-2'>{house.link_maps}</span></Link>
                                     </div>
                                 </div>
                                 <div className="fw-bold mb-2 fs-5 mt-4">
@@ -267,69 +276,98 @@ export default function SurveyorResultInputDetail() {
                         </Col>
                     </Row>
                     <Row className="mt-4">
-                        <div className="fw-bold mb-2 fs-5 p-0">
-                            INPUT FASILITAS UMUM SEKITAR
-                        </div>
+                        <Col className="p-0">
+                            <div className="fw-bold mb-2 fs-5">
+                                INPUT FASILITAS UMUM SEKITAR
+                            </div>
+                        </Col>
+
                         {generalFacilities.map((generalFacility, index) => (
-                            <Row key={index} className="mb-3">
-                                <Col>
-                                    <Form.Control
-                                        type="text"
-                                        name="name"
-                                        placeholder="Nama fasilitas"
-                                        value={generalFacility.name}
-                                        onChange={(e) => handleChange(index, e)}
-                                    />
-                                </Col>
-                                <Col>
-                                    <Form.Select
-                                        name="type_id"
-                                        value={generalFacility.type_id || ""}
-                                        onChange={(e) => handleChange(index, e)}
-                                        required
-                                    >
-                                        <option value="" disabled>Pilih Tipe Fasilitas</option>
-                                        {generalFacilityType.map((type) => (
-                                            <option key={type.id} value={type.id}>
-                                                {type.type}
-                                            </option>
-                                        ))}
-                                    </Form.Select>
-                                </Col>
-                                <Col>
-                                    <Form.Control
-                                        type="text"
-                                        name="latitude"
-                                        placeholder="Latitude"
-                                        value={generalFacility.latitude}
-                                        onChange={(e) => handleChange(index, e)}
-                                    />
-                                </Col>
-                                <Col>
-                                    <Form.Control
-                                        type="text"
-                                        name="longitude"
-                                        placeholder="Longitude"
-                                        value={generalFacility.longitude}
-                                        onChange={(e) => handleChange(index, e)}
-                                    />
-                                </Col>
-                                <Col>
-                                    <Form.Control
-                                        type="text"
-                                        name="maps"
-                                        placeholder="Link Google Maps"
-                                        value={generalFacility.maps}
-                                        onChange={(e) => handleChange(index, e)}
-                                    />
-                                </Col>
-                            </Row>
+                            <Col key={index} xs={12} className="p-0">
+                                <Row className="mb-3">
+                                    <Col>
+                                        <Form.Control
+                                            type="text"
+                                            name="name"
+                                            placeholder="Nama fasilitas"
+                                            value={generalFacility.name}
+                                            onChange={(e) => handleChange(index, e)}
+                                        />
+                                    </Col>
+
+                                    <Col>
+                                        <Form.Select
+                                            name="type_id"
+                                            value={generalFacility.type_id || ""}
+                                            onChange={(e) => handleChange(index, e)}
+                                            required
+                                        >
+                                            <option value="" disabled>Pilih Tipe Fasilitas</option>
+                                            {generalFacilityType.map((type) => (
+                                                <option key={type.id} value={type.id}>
+                                                    {type.type}
+                                                </option>
+                                            ))}
+                                        </Form.Select>
+                                    </Col>
+
+                                    <Col>
+                                        <Form.Control
+                                            type="text"
+                                            name="latitude"
+                                            placeholder="Latitude"
+                                            value={generalFacility.latitude}
+                                            onChange={(e) => handleChange(index, e)}
+                                        />
+                                    </Col>
+
+                                    <Col>
+                                        <Form.Control
+                                            type="text"
+                                            name="longitude"
+                                            placeholder="Longitude"
+                                            value={generalFacility.longitude}
+                                            onChange={(e) => handleChange(index, e)}
+                                        />
+                                    </Col>
+
+                                    <Col>
+                                        <Form.Control
+                                            type="text"
+                                            name="maps"
+                                            placeholder="Link Google Maps"
+                                            value={generalFacility.maps}
+                                            onChange={(e) => handleChange(index, e)}
+                                        />
+                                    </Col>
+
+                                    <Col xs="auto">
+                                        <Button
+                                            variant="danger"
+                                            onClick={() => handleRemove(index)}
+                                            disabled={generalFacilities.length === 1}
+                                            className="d-flex justify-content-center align-items-center"
+                                            style={{ height: 35 }}
+                                        >
+                                            <FaMinus />
+                                        </Button>
+                                    </Col>
+                                </Row>
+                            </Col>
                         ))}
-                        <div className="mb-4 d-flex justify-content-start align-items-center">
-                            <Button variant="primary" onClick={handleAdd}>
-                                <FaPlus />
-                            </Button>
-                        </div>
+
+                        <Col xs={12} className="p-0">
+                            <div className="mb-4 d-flex justify-content-start align-items-center">
+                                <Button
+                                    variant="primary"
+                                    onClick={handleAdd}
+                                    className="d-flex justify-content-center align-items-center"
+                                    style={{ width: 40, height: 40 }}
+                                >
+                                    <FaPlus />
+                                </Button>
+                            </div>
+                        </Col>
                     </Row>
                     <div className="mb-4 d-flex justify-content-end align-items-center">
                         <Button type="submit" variant="success" className='fw-semibold px-5 py-2'>

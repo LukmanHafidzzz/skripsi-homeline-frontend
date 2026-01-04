@@ -22,7 +22,7 @@ export default function AdRejectedDetail() {
     useEffect(() => {
         const fetchHouseDetail = async () => {
             try {
-                const res = await axios.get(`https://skripsi-homeline-backend.vercel.app/api/user/advertisement/detail/${id}`, {
+                const res = await axios.get(`http://localhost:5773/api/user/advertisement/detail/${id}`, {
                     withCredentials: true
                 });
                 setHouse(res.data);

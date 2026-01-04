@@ -20,7 +20,7 @@ export default function SurveyorHouseList() {
         const fetchHouses = async () => {
             try {
                 const res = await axios.get(
-                    'https://skripsi-homeline-backend.vercel.app/api/surveyor/house-list',
+                    'http://localhost:5773/api/surveyor/house-list',
                     { withCredentials: true }
                 );
                 setHouseProcesses(res.data);
@@ -40,7 +40,7 @@ export default function SurveyorHouseList() {
 
         if (selected !== 'Semua') {
             filtered = filtered.filter(
-                (item) => item.design_process.toLowerCase() === selected.toLowerCase()
+                (item) => item.survey_process.toLowerCase() === selected.toLowerCase()
             );
         }
 
@@ -85,7 +85,6 @@ export default function SurveyorHouseList() {
                 <thead>
                     <tr className='text-center'>
                         <th className='custom-table-header'>No</th>
-                        <th className='custom-table-header'>ID</th>
                         <th className='custom-table-header'>Judul</th>
                         <th className='custom-table-header'>Alamat</th>
                         <th className='custom-table-header'>Status</th>
@@ -105,10 +104,22 @@ export default function SurveyorHouseList() {
                         filteredHouses.map((houseProcess, index) => (
                             <tr key={index}>
                                 <td className='text-center'>{index + 1}.</td>
-                                <td>{houseProcess.house.id}</td>
                                 <td>{houseProcess.house.title}</td>
                                 <td>{houseProcess.house.address.full_address}</td>
-                                <td>{houseProcess.survey_process}</td>
+                                <td>
+                                    <span className={`badge w-100 py-2 ${houseProcess.survey_process === 'Perlu Survey'
+                                            ? 'bg-secondary'
+                                            : houseProcess.survey_process === 'Sedang Survey'
+                                                ? 'bg-info'
+                                                : houseProcess.survey_process === 'Pengecekan Hasil'
+                                                    ? 'bg-warning'
+                                                    : houseProcess.survey_process === 'Survey Selesai'
+                                                        ? 'bg-success'
+                                                        : 'bg-dark'
+                                        }`}>
+                                        {houseProcess.survey_process}
+                                    </span>
+                                </td>
                                 <td className="align-middle">
                                     <div className="d-flex justify-content-center">
                                         <Link to={`./detail/${houseProcess.house.id}`} className='text-decoration-none'>

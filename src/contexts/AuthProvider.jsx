@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
         const fetchUser = async () => {
             try {
                 const res = await axios.get(
-                    "https://skripsi-homeline-backend.vercel.app/api/auth/me",
+                    "http://localhost:5773/api/auth/me",
                     { withCredentials: true }
                 );
                 setUser(res.data);

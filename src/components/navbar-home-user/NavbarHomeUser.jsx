@@ -23,7 +23,7 @@ export default function NavbarHomeUser() {
 
     const handleLogout = async () => {
         try {
-            await axios.delete('https://skripsi-homeline-backend.vercel.app/api/auth/logout', {
+            await axios.delete('http://localhost:5773/api/auth/logout', {
                 withCredentials: true
             });
             setUser(null);

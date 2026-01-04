@@ -65,7 +65,7 @@ export default function AdAdd() {
     useEffect(() => {
         const fetchCertificateTypes = async () => {
             try {
-                const response = await axios.get('https://skripsi-homeline-backend.vercel.app/api/user/certificate-types');
+                const response = await axios.get('http://localhost:5773/api/user/certificate-types');
                 setCertificateTypes(response.data);
             } catch (error) {
                 console.error('Error fetching certificate types:', error);
@@ -150,7 +150,7 @@ export default function AdAdd() {
                 data.append('certificate', certificate);
             }
             const response = await axios.post(
-                'https://skripsi-homeline-backend.vercel.app/api/user/advertisement/add',
+                'http://localhost:5773/api/user/advertisement/add',
                 data,
                 {
                     headers: { 'Content-Type': 'multipart/form-data' },
@@ -172,10 +172,18 @@ export default function AdAdd() {
             });
 
         } catch (err) {
+            console.error('Error detail:', err);
+
             let errorTitle = 'Gagal Menyimpan';
             let errorMessage = 'Terjadi kesalahan saat menyimpan data rumah';
 
-            if (err.response?.status === 500) {
+            if (err.message === 'Network Error' || !err.response) {
+                errorTitle = 'Masalah Koneksi';
+                errorMessage = 'Tidak dapat terhubung ke server. Periksa koneksi internet Anda atau coba lagi nanti.';
+            } else if (err.response?.status === 403) {
+                errorTitle = 'Akses Ditolak';
+                errorMessage = 'Server menolak permintaan. Silakan hubungi administrator.';
+            } else if (err.response?.status === 500) {
                 errorTitle = 'Error Server';
                 errorMessage = 'Terjadi kesalahan server. Silakan coba lagi dalam beberapa saat.';
             } else if (err.response?.status === 401) {

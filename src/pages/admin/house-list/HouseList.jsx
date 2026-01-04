@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './style.css'
-import { DropdownButton, Form, Dropdown, Table, Button } from 'react-bootstrap'
+import { DropdownButton, Form, Dropdown, Table, Button, Image } from 'react-bootstrap'
 import { Link } from 'react-router-dom';
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import axios from 'axios';
@@ -20,7 +20,7 @@ export default function HouseList() {
     useEffect(() => {
         const fetchHouses = async () => {
             try {
-                const res = await axios.get('https://skripsi-homeline-backend.vercel.app/api/admin/house/house-list', {
+                const res = await axios.get('http://localhost:5773/api/admin/house/house-list', {
                     withCredentials: true
                 });
                 setHouses(res.data);
@@ -86,7 +86,8 @@ export default function HouseList() {
                 <thead>
                     <tr className='text-center'>
                         <th className='custom-table-header'>No</th>
-                        <th className='custom-table-header'>ID</th>
+                        <th className='custom-table-header'>Pengunggah</th>
+                        <th className='custom-table-header'>Nomor Kontak</th>
                         <th className='custom-table-header'>Judul</th>
                         <th className='custom-table-header'>Harga</th>
                         <th className='custom-table-header'>Status</th>
@@ -104,7 +105,8 @@ export default function HouseList() {
                         filteredHouses.map((house, index) => (
                             <tr key={index}>
                                 <td className='text-center'>{index + 1}.</td>
-                                <td>{house.id}</td>
+                                <td>{house.user.username}</td>
+                                <td>+62 {house.no_telp}</td>
                                 <td>{house.title}</td>
                                 <td className='text-end'>{Number(house.price).toLocaleString('id-ID')}</td>
                                 <td className='text-end'>{house.status}</td>

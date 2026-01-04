@@ -20,7 +20,7 @@ export default function ReqSurveyApproval() {
         const fetchSurveyRequest = async () => {
             try {
                 const res = await axios.get(
-                    'https://skripsi-homeline-backend.vercel.app/api/admin/request/survey-request',
+                    'http://localhost:5773/api/admin/request/survey-request',
                     { withCredentials: true }
                 );
                 setSurveyRequests(res.data);
@@ -81,7 +81,6 @@ export default function ReqSurveyApproval() {
                 <thead>
                     <tr className='text-center'>
                         <th className='custom-table-header'>No</th>
-                        <th className='custom-table-header'>ID</th>
                         <th className='custom-table-header'>Judul</th>
                         <th className='custom-table-header'>Harga</th>
                         <th className='custom-table-header'>Request Status</th>
@@ -101,7 +100,6 @@ export default function ReqSurveyApproval() {
                         filteredRequests.map((surveyRequest, index) => (
                             <tr key={index}>
                                 <td className='text-center'>{index + 1}.</td>
-                                <td>{surveyRequest.house_id}</td>
                                 <td>{surveyRequest.house.title}</td>
                                 <td className='text-end'>{Number(surveyRequest.house.price).toLocaleString('id-ID')}</td>
                                 <td className='text-center'>{surveyRequest.request_status}</td>

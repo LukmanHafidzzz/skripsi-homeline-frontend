@@ -3,6 +3,7 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, useGLTF, Bounds, PointerLockControls } from '@react-three/drei';
 import { Breadcrumb, Col, Container, Row } from 'react-bootstrap';
 import { Link, useParams } from 'react-router-dom';
+import * as THREE from 'three';
 import Skeleton from 'react-loading-skeleton';
 import './style.css';
 import '@splidejs/react-splide/css';
@@ -77,7 +78,7 @@ export default function User3dModel() {
     useEffect(() => {
         const fetchHouseDetail = async () => {
             try {
-                const res = await axios.get(`https://skripsi-homeline-backend.vercel.app/api/user/search/detail/model/${id}`, {
+                const res = await axios.get(`http://localhost:5773/api/user/search/detail/model/${id}`, {
                     withCredentials: true
                 });
                 setHouse(res.data);
