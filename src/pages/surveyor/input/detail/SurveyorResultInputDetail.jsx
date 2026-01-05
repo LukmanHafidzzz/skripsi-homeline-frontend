@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Col, Container, Form, Image, Row } from 'react-bootstrap'
+import { Button, Col, Container, Form, Image, Row, Table } from 'react-bootstrap'
 import './style.css'
 import '@splidejs/react-splide/css';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -252,134 +252,215 @@ export default function SurveyorResultInputDetail() {
                         </Row>
                     </Col>
                 </Row>
-                <Form onSubmit={handleSubmit}>
+                <Form onSubmit={handleSubmit} data-aos="fade-up" data-aos-duration="800">
                     <Row className="mt-4">
                         <Col xs={5} className='p-0 pe-4'>
                             <div className=''>
                                 <div className="fw-bold mb-2 fs-5 p-0">
-                                    INPUT FILE HASIL SURVEY
+                                    {house.house_survey
+                                        ? 'FILE HASIL SURVEY'
+                                        : 'INPUT FILE HASIL SURVEY'}
                                 </div>
-                                <Form.Group controlId="formFile" className="mb-3">
-                                    <Form.Control type="file" onChange={handleFileChange} />
-                                </Form.Group>
+                                {house.house_survey ? (
+                                    <Link
+                                        target='_blank'
+                                        to={house.house_survey.notes_file}
+                                        className='text-decoration-none'
+                                    >
+                                        <span className="">{house.house_survey.notes_file}</span>
+                                    </Link>
+                                ) : (
+                                    <Form.Group controlId="formFile" className="mb-3">
+                                        <Form.Control type="file" onChange={handleFileChange} required />
+                                    </Form.Group>
+                                )}
                             </div>
                         </Col>
                         <Col className='p-0 px-2'>
                             <div className=''>
                                 <div className="fw-bold mb-2 fs-5 p-0">
-                                    INPUT LINK DRIVE HASIL FOTO/VIDEO
+                                    {house.house_survey
+                                        ? 'LINK DRIVE HASIL FOTO/VIDEO'
+                                        : 'INPUT LINK DRIVE HASIL FOTO/VIDEO'}
                                 </div>
-                                <Form.Group controlId="formFile" className="mb-3">
-                                    <Form.Control type="text" value={link} onChange={handleLinkChange} />
-                                </Form.Group>
+                                {house.house_survey ? (
+                                    <Link
+                                        target='_blank'
+                                        to={house.house_survey.photo_video_link}
+                                        className='text-decoration-none'
+                                    >
+                                        <span className="">{house.house_survey.photo_video_link}</span>
+                                    </Link>
+                                ) : (
+                                    <Form.Group controlId="formFile" className="mb-3">
+                                        <Form.Control type="text" value={link} onChange={handleLinkChange} required />
+                                    </Form.Group>
+                                )}
                             </div>
                         </Col>
                     </Row>
                     <Row className="mt-4">
                         <Col className="p-0">
                             <div className="fw-bold mb-2 fs-5">
-                                INPUT FASILITAS UMUM SEKITAR
+                                {house.house_survey
+                                    ? 'FASILITAS UMUM SEKITAR'
+                                    : 'INPUT FASILITAS UMUM SEKITAR'}
                             </div>
                         </Col>
-
-                        {generalFacilities.map((generalFacility, index) => (
-                            <Col key={index} xs={12} className="p-0">
-                                <Row className="mb-3">
-                                    <Col>
-                                        <Form.Control
-                                            type="text"
-                                            name="name"
-                                            placeholder="Nama fasilitas"
-                                            value={generalFacility.name}
-                                            onChange={(e) => handleChange(index, e)}
-                                        />
-                                    </Col>
-
-                                    <Col>
-                                        <Form.Select
-                                            name="type_id"
-                                            value={generalFacility.type_id || ""}
-                                            onChange={(e) => handleChange(index, e)}
-                                            required
-                                        >
-                                            <option value="" disabled>Pilih Tipe Fasilitas</option>
-                                            {generalFacilityType.map((type) => (
-                                                <option key={type.id} value={type.id}>
-                                                    {type.type}
-                                                </option>
-                                            ))}
-                                        </Form.Select>
-                                    </Col>
-
-                                    <Col>
-                                        <Form.Control
-                                            type="text"
-                                            name="latitude"
-                                            placeholder="Latitude"
-                                            value={generalFacility.latitude}
-                                            onChange={(e) => handleChange(index, e)}
-                                        />
-                                    </Col>
-
-                                    <Col>
-                                        <Form.Control
-                                            type="text"
-                                            name="longitude"
-                                            placeholder="Longitude"
-                                            value={generalFacility.longitude}
-                                            onChange={(e) => handleChange(index, e)}
-                                        />
-                                    </Col>
-
-                                    <Col>
-                                        <Form.Control
-                                            type="text"
-                                            name="maps"
-                                            placeholder="Link Google Maps"
-                                            value={generalFacility.maps}
-                                            onChange={(e) => handleChange(index, e)}
-                                        />
-                                    </Col>
-
-                                    <Col xs="auto">
-                                        <Button
-                                            variant="danger"
-                                            onClick={() => handleRemove(index)}
-                                            disabled={generalFacilities.length === 1}
-                                            className="d-flex justify-content-center align-items-center"
-                                            style={{ height: 35 }}
-                                        >
-                                            <FaMinus />
-                                        </Button>
-                                    </Col>
-                                </Row>
+                        {house.house_survey ? (
+                            <Col xs={12} className="p-0">
+                                <Table bordered>
+                                    <thead>
+                                        <tr className="text-center">
+                                            <th>No</th>
+                                            <th>Nama Fasilitas</th>
+                                            <th>Tipe Fasilitas</th>
+                                            <th>Latitude</th>
+                                            <th>Longitude</th>
+                                            <th>Maps</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="align-middle">
+                                        {house.general_facilities.map((item, index) => (
+                                            <tr key={index}>
+                                                <td className="text-center">{index + 1}.</td>
+                                                <td>{item.name}</td>
+                                                <td>{item.general_facility_type.type}</td>
+                                                <td>{item.latitude}</td>
+                                                <td>{item.longitude}</td>
+                                                <td>
+                                                    <Link
+                                                        target="_blank"
+                                                        to={item.maps}
+                                                        className="text-decoration-none"
+                                                    >
+                                                        {item.maps}
+                                                    </Link>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </Table>
                             </Col>
-                        ))}
+                        ) : (
+                            <>
+                                {generalFacilities.map((generalFacility, index) => (
+                                    <Col key={index} xs={12} className="p-0">
+                                        <Row className="mb-3">
+                                            <Col>
+                                                <Form.Control
+                                                    type="text"
+                                                    name="name"
+                                                    placeholder="Nama fasilitas"
+                                                    value={generalFacility.name}
+                                                    onChange={(e) => handleChange(index, e)}
+                                                    required
+                                                />
+                                            </Col>
 
-                        <Col xs={12} className="p-0">
-                            <div className="mb-4 d-flex justify-content-start align-items-center">
-                                <Button
-                                    variant="primary"
-                                    onClick={handleAdd}
-                                    className="d-flex justify-content-center align-items-center"
-                                    style={{ width: 40, height: 40 }}
-                                >
-                                    <FaPlus />
-                                </Button>
-                            </div>
-                        </Col>
+                                            <Col>
+                                                <Form.Select
+                                                    name="type_id"
+                                                    value={generalFacility.type_id || ""}
+                                                    onChange={(e) => handleChange(index, e)}
+                                                    required
+                                                >
+                                                    <option value="" disabled>
+                                                        Pilih Tipe Fasilitas
+                                                    </option>
+                                                    {generalFacilityType.map((type) => (
+                                                        <option key={type.id} value={type.id}>
+                                                            {type.type}
+                                                        </option>
+                                                    ))}
+                                                </Form.Select>
+                                            </Col>
+
+                                            <Col>
+                                                <Form.Control
+                                                    type="text"
+                                                    name="latitude"
+                                                    placeholder="Latitude"
+                                                    value={generalFacility.latitude}
+                                                    onChange={(e) => handleChange(index, e)}
+                                                    required
+                                                />
+                                            </Col>
+
+                                            <Col>
+                                                <Form.Control
+                                                    type="text"
+                                                    name="longitude"
+                                                    placeholder="Longitude"
+                                                    value={generalFacility.longitude}
+                                                    onChange={(e) => handleChange(index, e)}
+                                                    required
+                                                />
+                                            </Col>
+
+                                            <Col>
+                                                <Form.Control
+                                                    type="text"
+                                                    name="maps"
+                                                    placeholder="Link Google Maps"
+                                                    value={generalFacility.maps}
+                                                    onChange={(e) => handleChange(index, e)}
+                                                    required
+                                                />
+                                            </Col>
+
+                                            <Col xs="auto">
+                                                <Button
+                                                    variant="danger"
+                                                    onClick={() => handleRemove(index)}
+                                                    disabled={generalFacilities.length === 1}
+                                                    className="d-flex justify-content-center align-items-center"
+                                                    style={{ height: 35 }}
+                                                >
+                                                    <FaMinus />
+                                                </Button>
+                                            </Col>
+                                        </Row>
+                                    </Col>
+                                ))}
+
+                                <Col xs={12} className="p-0">
+                                    <div className="mb-4 d-flex justify-content-start align-items-center">
+                                        <Button
+                                            variant="primary"
+                                            onClick={handleAdd}
+                                            className="d-flex justify-content-center align-items-center"
+                                            style={{ width: 40, height: 40 }}
+                                        >
+                                            <FaPlus />
+                                        </Button>
+                                    </div>
+                                </Col>
+                            </>
+                        )}
                     </Row>
-                    <div className="mb-4 d-flex justify-content-end align-items-center">
-                        <Button type="submit" variant="success" className='fw-semibold px-5 py-2'>
-                            {buttonLoading ? (
-                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            ) : (
-                                'Input'
-                            )}
-                        </Button>
-                    </div>
+                    {house.house_survey ? (null) : (
+                        <div className="mb-4 d-flex justify-content-end align-items-center">
+                            <Button
+                                type="submit"
+                                variant="success"
+                                className="fw-semibold px-5 py-2"
+                                disabled={buttonLoading}
+                            >
+                                {buttonLoading ? (
+                                    <span
+                                        className="spinner-border spinner-border-sm"
+                                        role="status"
+                                        aria-hidden="true"
+                                    />
+                                ) : (
+                                    'Input'
+                                )}
+                            </Button>
+                        </div>
+                    )}
                 </Form>
-            </Container >
+            </Container>
         </>
     )
 }
