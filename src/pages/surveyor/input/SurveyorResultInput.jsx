@@ -51,9 +51,15 @@ export default function SurveyorResultInput() {
                 filtered = filtered.filter(
                     item => !item.house.house_survey
                 );
-            } else {
+            }
+            else if (selected === 'Pengecekan Hasil') {
                 filtered = filtered.filter(
-                    item => item.house.house_survey
+                    item => item.survey_process === 'Pengecekan Hasil'
+                );
+            }
+            else if (selected === 'Survey Selesai') {
+                filtered = filtered.filter(
+                    item => item.survey_process === 'Survey Selesai'
                 );
             }
         }
@@ -80,6 +86,7 @@ export default function SurveyorResultInput() {
                         <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Semua')}>Semua</Dropdown.Item>
                         <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Belum Ada Input')}>Belum Ada Input</Dropdown.Item>
                         <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Pengecekan Hasil')}>Pengecekan Hasil</Dropdown.Item>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Survey Selesai')}>Survey Selesai</Dropdown.Item>
                     </DropdownButton>
                 </div>
             </div>
@@ -111,9 +118,16 @@ export default function SurveyorResultInput() {
                                 <td>{houseProcess.house.title}</td>
                                 <td>Rp {parseInt(houseProcess.house.price).toLocaleString("id-ID")}</td>
                                 <td>
-                                        <span className={`badge w-100 py-2 ${houseProcess.survey_process === 'Pengecekan Hasil' ? 'bg-info' : 'bg-warning'}`}>
-                                            {houseProcess.survey_process}
-                                        </span>
+                                    <span
+                                        className={`badge w-100 py-2 ${houseProcess.survey_process === 'Pengecekan Hasil'
+                                            ? 'bg-info'
+                                            : houseProcess.survey_process === 'Survey Selesai'
+                                                ? 'bg-success'
+                                                : 'bg-warning'
+                                            }`}
+                                    >
+                                        {houseProcess.survey_process}
+                                    </span>
                                 </td>
                                 <td>
                                     {houseProcess.house.house_survey ? (

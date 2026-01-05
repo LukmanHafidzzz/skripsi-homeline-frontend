@@ -6,10 +6,15 @@ import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import axios from 'axios';
 
 export default function DesignerResultInput() {
+    const [selected, setSelected] = useState('Semua');
     const [houseProcesses, setHouseProcesses] = useState([]);
     const [filteredHouses, setFilteredHouses] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [loading, setLoading] = useState(true);
+
+    const handleSelect = (value) => {
+        setSelected(value);
+    }
 
     useEffect(() => {
         const fetchHouseProcesses = async () => {
@@ -41,8 +46,26 @@ export default function DesignerResultInput() {
             );
         }
 
+        if (selected !== 'Semua') {
+            if (selected === 'Belum Ada Input') {
+                filtered = filtered.filter(
+                    item => !item.house.house_design
+                );
+            }
+            else if (selected === 'Pengecekan Hasil') {
+                filtered = filtered.filter(
+                    item => item.design_process === 'Pengecekan Hasil'
+                );
+            }
+            else if (selected === 'Input Selesai') {
+                filtered = filtered.filter(
+                    item => item.design_process === 'Desain Selesai'
+                );
+            }
+        }
+
         setFilteredHouses(filtered);
-    }, [searchTerm, houseProcesses]);
+    }, [selected, searchTerm, houseProcesses]);
 
     if (loading) {
         return <div className="mt-5 pt-5 text-center">Loading...</div>;
@@ -58,16 +81,25 @@ export default function DesignerResultInput() {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
+                <div className='d-flex align-items-center text-black gap-3'>
+                    <div className='fw-semibold'>Status Input:</div>
+                    <DropdownButton id="dropdown-basic-button" title={`${selected}`}>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Semua')}>Semua</Dropdown.Item>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Belum Ada Input')}>Belum Ada Input</Dropdown.Item>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Pengecekan Hasil')}>Pengecekan Hasil</Dropdown.Item>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Input Selesai')}>Input Selesai</Dropdown.Item>
+                    </DropdownButton>
+                </div>
             </div>
 
             <Table bordered>
                 <thead>
                     <tr className='text-center'>
                         <th className='custom-table-header'>No</th>
-                        <th className='custom-table-header'>ID</th>
                         <th className='custom-table-header'>Judul</th>
                         <th className='custom-table-header'>Harga</th>
-                        <th className='custom-table-header'>Status</th>
+                        <th className='custom-table-header'>Status Rumah</th>
+                        <th className='custom-table-header'>Status Input</th>
                         <th className='custom-table-header'>Action</th>
                     </tr>
                 </thead>
@@ -84,10 +116,27 @@ export default function DesignerResultInput() {
                         filteredHouses.map((houseProcess, index) => (
                             <tr key={index}>
                                 <td className='text-center'>{index + 1}.</td>
-                                <td>{houseProcess.house.id}</td>
                                 <td>{houseProcess.house.title}</td>
                                 <td>Rp {parseInt(houseProcess.house.price).toLocaleString("id-ID")}</td>
-                                <td>{houseProcess.design_process}</td>
+                                <td>
+                                    <span
+                                        className={`badge w-100 py-2 ${houseProcess.design_process === 'Pengecekan Hasil'
+                                                ? 'bg-info'
+                                                : houseProcess.design_process === 'Desain Selesai'
+                                                    ? 'bg-success'
+                                                    : 'bg-warning'
+                                            }`}
+                                    >
+                                        {houseProcess.design_process}
+                                    </span>
+                                </td>
+                                <td>
+                                    {houseProcess.house.house_design ? (
+                                        <span className="badge w-100 py-2 bg-success">Sudah Ada Input</span>
+                                    ) : (
+                                        <span className="badge w-100 py-2 bg-secondary">Belum Ada Input</span>
+                                    )}
+                                </td>
                                 <td className="align-middle">
                                     <div className="d-flex justify-content-center">
                                         <Link to={`./detail/${houseProcess.house.id}`} className='text-decoration-none'>

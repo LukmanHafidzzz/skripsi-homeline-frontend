@@ -72,9 +72,9 @@ export default function DesignerHouseList() {
                     <div className='fw-semibold'>Status Survey:</div>
                     <DropdownButton id="dropdown-basic-button" title={`${selected}`}>
                         <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Semua')}>Semua</Dropdown.Item>
-                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Perlu Design')}>Perlu Design</Dropdown.Item>
-                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Sedang Design')}>Sedang Design</Dropdown.Item>
-                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Design Selesai')}>Design Selesai</Dropdown.Item>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Perlu Desain')}>Perlu Desain</Dropdown.Item>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Sedang Desain')}>Sedang Desain</Dropdown.Item>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Desain Selesai')}>Desain Selesai</Dropdown.Item>
                     </DropdownButton>
                 </div>
             </div>
@@ -83,7 +83,6 @@ export default function DesignerHouseList() {
                 <thead>
                     <tr className='text-center'>
                         <th className='custom-table-header'>No</th>
-                        <th className='custom-table-header'>ID</th>
                         <th className='custom-table-header'>Judul</th>
                         <th className='custom-table-header'>Alamat</th>
                         <th className='custom-table-header'>Status</th>
@@ -103,10 +102,22 @@ export default function DesignerHouseList() {
                         filteredHouses.map((houseProcess, index) => (
                             <tr key={index}>
                                 <td className='text-center'>{index + 1}.</td>
-                                <td>{houseProcess.house.id}</td>
                                 <td>{houseProcess.house.title}</td>
                                 <td>{houseProcess.house.address.full_address}</td>
-                                <td>{houseProcess.design_process}</td>
+                                <td>
+                                    <span className={`badge w-100 py-2 ${houseProcess.design_process === 'Perlu Desain'
+                                        ? 'bg-secondary'
+                                        : houseProcess.design_process === 'Sedang Desain'
+                                            ? 'bg-info'
+                                            : houseProcess.design_process === 'Pengecekan Hasil'
+                                                ? 'bg-warning'
+                                                : houseProcess.design_process === 'Desain Selesai'
+                                                    ? 'bg-success'
+                                                    : 'bg-dark'
+                                        }`}>
+                                        {houseProcess.design_process}
+                                    </span>
+                                </td>
                                 <td className="align-middle">
                                     <div className="d-flex justify-content-center">
                                         <Link to={`./detail/${houseProcess.house.id}`} className='text-decoration-none'>
