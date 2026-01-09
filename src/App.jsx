@@ -90,6 +90,7 @@ const DesignerHouseListDetail = Loadable(lazy(() => import('./pages/designer/hou
 const DesignerHouseListModel = Loadable(lazy(() => import('./pages/designer/house-list/model/DesignerHouseListModel')));
 const DesignerResultInput = Loadable(lazy(() => import('./pages/designer/input/DesignerResultInput')));
 const DesignerResultInputDetail = Loadable(lazy(() => import('./pages/designer/input/detail/DesignerResultInputDetail')));
+const DesignerResultInputDetailModel = Loadable(lazy(() => import('./pages/designer/input/model/DesignerResultInputDetailModel')));
 const DesignerMakeReq = Loadable(lazy(() => import('./pages/designer/make-request/DesignerMakeReq')));
 const DesignerMakeReqDetail = Loadable(lazy(() => import('./pages/designer/make-request/detail/DesignerMakeReqDetail')));
 
@@ -219,6 +220,7 @@ function App() {
                 <Route path='house-list/detail/:id/model/:id' element={<DesignerHouseListModel />} />
                 <Route path='input-house-model' element={<DesignerResultInput />} />
                 <Route path='input-house-model/detail/:id' element={<DesignerResultInputDetail />} />
+                <Route path='input-house-model/detail/:id/model/:id' element={<DesignerResultInputDetailModel />} />
                 <Route path='make-request' element={<DesignerMakeReq />} />
                 <Route path='make-request/detail/:id' element={<DesignerMakeReqDetail />} />
             </Route>

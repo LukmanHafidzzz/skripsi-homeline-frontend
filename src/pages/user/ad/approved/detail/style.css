@@ -12,3 +12,22 @@
 .splide__slide {
     height: 100%;
 }
+
+.btn-visit {
+    border: solid 2px #7A5B46 !important;
+    text-decoration: none !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    color: #7A5B46;
+    width: 7.2rem !important;
+    height: 2.7rem !important;
+    border-radius: 7rem !important;
+    transition: .2s;
+}
+
+.btn-visit:hover, .btn-visit:active {
+    color: #fff;
+    background-color: #7A5B46 !important;
+    transition: .2s;
+}

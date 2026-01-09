@@ -306,27 +306,54 @@ export default function DesignerResultInputDetail() {
                         <Form onSubmit={handleSubmit}>
                             <div className=''>
                                 <div className="fw-bold mb-2 fs-5 p-0">
-                                    INPUT FLOOR PLAN
+                                    {house.house_design
+                                        ? "FLOOR PLAN"
+                                        : "INPUT FLOOR PLAN"}
                                 </div>
-                                <Form.Group controlId="formFileFloorPlan" className="mb-4">
-                                    <Form.Control
-                                        type="file"
-                                        onChange={handleFloorPlanChange}
-                                        disabled={uploading}
-                                        accept=".png, .jpg, .jpeg, .webp, image/png, image/jpeg, image/webp"
-                                    />
-                                </Form.Group>
+                                {house.house_design ? (
+                                    <div className="mb-4">
+                                        <Link
+                                            target='_blank'
+                                            to={house.house_design.floor_plan}
+                                            className='text-decoration-none'
+                                        >
+                                            <span className="">{house.house_design.floor_plan}</span>
+                                        </Link>
+                                    </div>
+                                ) : (
+                                    <Form.Group controlId="formFileFloorPlan" className="mb-4">
+                                        <Form.Control
+                                            type="file"
+                                            onChange={handleFloorPlanChange}
+                                            disabled={uploading}
+                                            accept=".png, .jpg, .jpeg, .webp, image/png, image/jpeg, image/webp"
+                                        />
+                                    </Form.Group>
+                                )}
                                 <div className="fw-bold mb-2 fs-5 p-0">
-                                    INPUT FILE HASIL DESIGN
+                                    {house.house_design
+                                        ? "HASIL DESIGN 3D"
+                                        : "INPUT FILE HASIL DESIGN 3D"}
                                 </div>
-                                <Form.Group controlId="formFile" className="mb-3">
-                                    <Form.Control
-                                        type="file"
-                                        onChange={handleFileChange}
-                                        disabled={uploading}
-                                        accept=".glb"
-                                    />
-                                </Form.Group>
+                                {house.house_design ? (
+                                    <div className="mb-5">
+                                        <Link
+                                            to={`./model/${house.id}`}
+                                            className='text-decoration-none'
+                                        >
+                                            <span>{house.house_design.design_file}</span>
+                                        </Link>
+                                    </div>
+                                ) : (
+                                    <Form.Group controlId="formFile" className="mb-3">
+                                        <Form.Control
+                                            type="file"
+                                            onChange={handleFileChange}
+                                            disabled={uploading}
+                                            accept=".glb"
+                                        />
+                                    </Form.Group>
+                                )}
                                 {uploading && (
                                     <div className="mb-3">
                                         <div className="progress">
@@ -345,16 +372,18 @@ export default function DesignerResultInputDetail() {
                                     </div>
                                 )}
 
-                                <div className="mb-4 d-flex justify-content-end align-items-center">
-                                    <Button
-                                        type='submit'
-                                        variant="success"
-                                        className='fw-semibold px-5 py-2'
-                                        disabled={uploading || !file}
-                                    >
-                                        {uploading ? 'Uploading...' : 'Input'}
-                                    </Button>
-                                </div>
+                                {house.house_design ? (null) : (
+                                    <div className="mb-4 d-flex justify-content-end align-items-center">
+                                        <Button
+                                            type='submit'
+                                            variant="success"
+                                            className='fw-semibold px-5 py-2'
+                                            disabled={uploading || !file}
+                                        >
+                                            {uploading ? 'Uploading...' : 'Input'}
+                                        </Button>
+                                    </div>
+                                )}
                             </div>
                         </Form>
                     </Col>

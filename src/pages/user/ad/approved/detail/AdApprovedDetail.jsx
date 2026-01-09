@@ -168,7 +168,11 @@ export default function AdApprovedDetail() {
                                     HASIL DESIGN MODEL 3D
                                 </div>
                                 <div>
-                                    <Link to={`./model/${house.id}`} className='text-decoration-none text-black'>Lihat hasil</Link>
+                                    {house.house_design ? (
+                                        <Link to={`./model/${house.id}`} className='text-decoration-none text-black'>Lihat hasil</Link>
+                                    ) :
+                                        <>-</>
+                                    }
                                 </div>
                             </Col>
                         </Row>

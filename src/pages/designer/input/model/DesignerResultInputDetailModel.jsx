@@ -4,7 +4,6 @@ import { OrbitControls, useGLTF, Bounds, PointerLockControls } from '@react-thre
 import { Breadcrumb, Col, Container, Row } from 'react-bootstrap';
 import { Link, useParams } from 'react-router-dom';
 import * as THREE from 'three';
-import Skeleton from 'react-loading-skeleton';
 import './style.css';
 import '@splidejs/react-splide/css';
 import axios from 'axios';
@@ -65,20 +64,13 @@ function ThreeDViewer({ fileName }) {
 }
 
 export default function User3dModel() {
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const timer = setTimeout(() => setLoading(false), 2000);
-        return () => clearTimeout(timer);
-    }, []);
-
     const { id } = useParams();
     const [house, setHouse] = useState(null);
 
     useEffect(() => {
         const fetchHouseDetail = async () => {
             try {
-                const res = await axios.get(`http://localhost:5773/api/user/search/detail/model/${id}`, {
+                const res = await axios.get(`http://localhost:5773/api/designer/house-detail/model/${id}`, {
                     withCredentials: true
                 });
                 setHouse(res.data);
@@ -94,33 +86,8 @@ export default function User3dModel() {
 
     return (
         <Container className='fluid'>
-            <Row>
-                <Col className="p-0 fs-7">
-                    <Breadcrumb>
-                        <Breadcrumb.Item linkAs={Link} to='/search' className='breadcrumb-link'>
-                            Pencarian
-                        </Breadcrumb.Item>
-                        <Breadcrumb.Item linkAs={Link} to={`../search/detail/${house.id}`} className='breadcrumb-link'>
-                            {house.title}
-                        </Breadcrumb.Item>
-                        <Breadcrumb.Item active>{house.house_design.design_file}</Breadcrumb.Item>
-                    </Breadcrumb>
-                </Col>
-            </Row>
-            <Row className='mb-5'>
-                <div className="fw-semibold fs-5 p-0">
-                    Denah Rumah
-                </div>
-                <img src={house.house_design.floor_plan} alt="" className='img-fluid w-50' />
-            </Row>
-            <Row>
-                <div className="fw-semibold fs-5 p-0 mb-2">
-                    3D Model
-                </div>
-            </Row>
             <Row className="h-100 mb-4">
                 <Col className='p-0'>
-                    {loading && <Skeleton height={500} width='100%' />}
                     <ThreeDViewer fileName={house.house_design.design_file} />
                 </Col>
             </Row>
