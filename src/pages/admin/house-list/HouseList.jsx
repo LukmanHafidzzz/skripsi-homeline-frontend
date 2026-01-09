@@ -14,6 +14,15 @@ export default function HouseList() {
         setSelected(value);
     };
 
+    const statusBadgeClass = {
+        'Pending': 'bg-secondary',
+        'Waiting Payment': 'bg-info',
+        'Offering 3D': 'bg-primary',
+        'Processing': 'bg-warning',
+        'Approved': 'bg-success',
+        'Rejected': 'bg-danger',
+    };
+
     const [houses, setHouses] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -109,7 +118,13 @@ export default function HouseList() {
                                 <td>+62 {house.no_telp}</td>
                                 <td>{house.title}</td>
                                 <td className='text-end'>{Number(house.price).toLocaleString('id-ID')}</td>
-                                <td className='text-end'>{house.status}</td>
+                                <td className='text-end'>
+                                    <span
+                                        className={`badge w-100 py-2 ${statusBadgeClass[house.status]}`}
+                                    >
+                                        {house.status}
+                                    </span>
+                                </td>
                                 <td className="align-middle">
                                     <div className="d-flex justify-content-center">
                                         <Link to={`./detail/${house.id}`} className='text-decoration-none'>

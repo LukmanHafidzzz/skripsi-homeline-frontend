@@ -17,6 +17,13 @@ export default function DesignListHouse() {
         setSelected(value);
     };
 
+    const statusBadgeClass = {
+        'Perlu Desain': 'bg-warning',
+        'Sedang Desain': 'bg-info',
+        'Pengecekan Hasil': 'bg-primary',
+        'Desain Selesai': 'bg-success',
+    };
+
     useEffect(() => {
         const fetchHouses = async () => {
             try {
@@ -86,7 +93,6 @@ export default function DesignListHouse() {
                 <thead>
                     <tr className='text-center'>
                         <th className='custom-table-header'>No</th>
-                        <th className='custom-table-header'>ID</th>
                         <th className='custom-table-header'>Judul</th>
                         <th className='custom-table-header'>Status</th>
                         <th className='custom-table-header'>Action</th>
@@ -105,9 +111,14 @@ export default function DesignListHouse() {
                         filteredHouses.map((houseProcess, index) => (
                             <tr key={index}>
                                 <td className='text-center'>{index + 1}.</td>
-                                <td>{houseProcess.house.id}</td>
                                 <td>{houseProcess.house.title}</td>
-                                <td>{houseProcess.design_process}</td>
+                                <td>
+                                    <span
+                                        className={`badge w-100 py-2 ${statusBadgeClass[houseProcess.design_process]}`}
+                                    >
+                                        {houseProcess.design_process}
+                                    </span>
+                                </td>
                                 <td>
                                     <div className="d-flex justify-content-center">
                                         <Link

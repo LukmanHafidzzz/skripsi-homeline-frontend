@@ -6,6 +6,7 @@ import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import axios from 'axios';
 
 export default function DesignInput() {
+    const [selected, setSelected] = useState('Semua');
     const [houses, setHouses] = useState([]);
     const [filteredHouses, setFilteredHouses] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -30,6 +31,10 @@ export default function DesignInput() {
         fetchHouses();
     }, []);
 
+    const handleSelect = (value) => {
+        setSelected(value);
+    }
+
     useEffect(() => {
         let filtered = [...houses];
 
@@ -41,8 +46,14 @@ export default function DesignInput() {
             );
         }
 
+        if (selected !== 'Semua') {
+            filtered = filtered.filter(
+                item => item.house_process.design_process === selected
+            );
+        }
+
         setFilteredHouses(filtered);
-    }, [searchTerm, houses]);
+    }, [searchTerm, houses, selected]);
 
     if (loading) {
         return <div className="mt-5 pt-5 text-center">Loading...</div>;
@@ -58,15 +69,23 @@ export default function DesignInput() {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
+                <div className='d-flex align-items-center text-black gap-3'>
+                    <div className='fw-semibold'>Status:</div>
+                    <DropdownButton id="dropdown-basic-button" title={`${selected}`}>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Semua')}>Semua</Dropdown.Item>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Pengecekan Hasil')}>Pengecekan Hasil</Dropdown.Item>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Desain Selesai')}>Desain Selesai</Dropdown.Item>
+                    </DropdownButton>
+                </div>
             </div>
 
             <Table bordered>
                 <thead>
                     <tr className='text-center'>
                         <th className='custom-table-header'>No</th>
-                        <th className='custom-table-header'>ID</th>
                         <th className='custom-table-header'>Judul</th>
                         <th className='custom-table-header'>Harga</th>
+                        <th className='custom-table-header'>Status</th>
                         <th className='custom-table-header'>Action</th>
                     </tr>
                 </thead>
@@ -83,10 +102,19 @@ export default function DesignInput() {
                         filteredHouses.map((house, index) => (
                             <tr key={index}>
                                 <td className='text-center'>{index + 1}.</td>
-                                <td>{house.id}</td>
                                 <td>{house.title}</td>
                                 <td className='text-end'>
                                     {Number(house.price).toLocaleString('id-ID')}
+                                </td>
+                                <td>
+                                    <span
+                                        className={`badge w-100 py-2 ${house.house_process.design_process === 'Desain Selesai'
+                                            ? 'bg-success'
+                                            : 'bg-info'
+                                            }`}
+                                    >
+                                        {house.house_process.design_process}
+                                    </span>
                                 </td>
                                 <td className="align-middle">
                                     <div className="d-flex justify-content-center">

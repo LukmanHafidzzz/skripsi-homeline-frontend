@@ -16,6 +16,13 @@ export default function SurveyListHouse() {
         setSelected(value);
     };
 
+    const statusBadgeClass = {
+        'Perlu Survey': 'bg-warning',
+        'Sedang Survey': 'bg-info',
+        'Pengecekan Hasil': 'bg-primary',
+        'Survey Selesai': 'bg-success',
+    };
+
     useEffect(() => {
         const fetchHouses = async () => {
             try {
@@ -87,9 +94,8 @@ export default function SurveyListHouse() {
                 <thead>
                     <tr className='text-center'>
                         <th className='custom-table-header'>No</th>
-                        <th className='custom-table-header'>ID</th>
                         <th className='custom-table-header'>Judul</th>
-                        <th className='custom-table-header'>Survey Status</th>
+                        <th className='custom-table-header'>Status</th>
                         <th className='custom-table-header'>Action</th>
                     </tr>
                 </thead>
@@ -106,9 +112,14 @@ export default function SurveyListHouse() {
                         filteredHouses.map((houseProcess, index) => (
                             <tr key={index}>
                                 <td className='text-center'>{index + 1}.</td>
-                                <td>{houseProcess.house.id}</td>
                                 <td>{houseProcess.house.title}</td>
-                                <td>{houseProcess.survey_process}</td>
+                                <td>
+                                    <span
+                                        className={`badge w-100 py-2 ${statusBadgeClass[houseProcess.survey_process]}`}
+                                    >
+                                        {houseProcess.survey_process}
+                                    </span>
+                                </td>
                                 <td className="align-middle">
                                     <div className="d-flex justify-content-center">
                                         <Link to={`./detail/${houseProcess.house.id}`} className='text-decoration-none'>

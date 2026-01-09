@@ -45,7 +45,7 @@ export default function ReqSurveyApproval() {
         if (searchTerm) {
             filtered = filtered.filter(req =>
                 req.house.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                req.house_id.toString().includes(searchTerm)
+                req.house_id.toString().includes(searchTerm.toLowerCase())
             );
         }
 
@@ -69,10 +69,10 @@ export default function ReqSurveyApproval() {
                 <div className='d-flex align-items-center text-black gap-3'>
                     <div className='fw-semibold'>Status:</div>
                     <DropdownButton id="dropdown-basic-button" title={`${selected}`}>
-                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Semua')}>semua</Dropdown.Item>
-                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Waiting')}>waiting</Dropdown.Item>
-                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Approved')}>approved</Dropdown.Item>
-                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Rejected')}>rejected</Dropdown.Item>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Semua')}>Semua</Dropdown.Item>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Waiting')}>Waiting</Dropdown.Item>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Approved')}>Approved</Dropdown.Item>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Rejected')}>Rejected</Dropdown.Item>
                     </DropdownButton>
                 </div>
             </div>
@@ -102,7 +102,13 @@ export default function ReqSurveyApproval() {
                                 <td className='text-center'>{index + 1}.</td>
                                 <td>{surveyRequest.house.title}</td>
                                 <td className='text-end'>{Number(surveyRequest.house.price).toLocaleString('id-ID')}</td>
-                                <td className='text-center'>{surveyRequest.request_status}</td>
+                                <td className='text-center'>
+                                    <span className={`badge w-100 py-2 ${surveyRequest.request_status === 'Waiting'
+                                        ? 'bg-warning' : surveyRequest.request_status === 'Approved'
+                                            ? 'bg-success' : 'bg-danger'}`}>
+                                        {surveyRequest.request_status}
+                                    </span>
+                                </td>
                                 <td className="align-middle">
                                     <div className="d-flex justify-content-center">
                                         <Link to={`./detail/${surveyRequest.house.id}`} className='text-decoration-none'>

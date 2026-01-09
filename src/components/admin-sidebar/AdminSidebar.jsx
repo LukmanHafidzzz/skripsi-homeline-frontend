@@ -100,7 +100,7 @@ export default function AdminSidebar() {
                         `text-decoration-none px-4 py-3 mb-1 text-black rounded-2 sub-menu gap-2 d-flex align-items-center ${isActive ? 'active-menu' : ''}`
                     }
                 >
-                    <LuFileInput /> Hasil Input
+                    <LuFileInput /> Cek Hasil Input
                 </NavLink>
             </div>
             <div className='mb-4'>
@@ -119,7 +119,7 @@ export default function AdminSidebar() {
                         `text-decoration-none px-4 py-3 mb-1 text-black rounded-2 sub-menu gap-2 d-flex align-items-center ${isActive ? 'active-menu' : ''}`
                     }
                 >
-                    <LuFileInput /> Hasil Input
+                    <LuFileInput /> Cek Hasil Input
                 </NavLink>
             </div>
         </>

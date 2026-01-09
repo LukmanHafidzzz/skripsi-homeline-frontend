@@ -68,10 +68,10 @@ export default function ReqDesignApproval() {
                 <div className='d-flex align-items-center text-black gap-3'>
                     <div className='fw-semibold'>Status:</div>
                     <DropdownButton id="dropdown-basic-button" title={`${selected}`}>
-                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Semua')}>semua</Dropdown.Item>
-                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Waiting')}>waiting</Dropdown.Item>
-                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Approved')}>approved</Dropdown.Item>
-                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Rejected')}>rejected</Dropdown.Item>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Semua')}>Semua</Dropdown.Item>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Waiting')}>Waiting</Dropdown.Item>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Approved')}>Approved</Dropdown.Item>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Rejected')}>Rejected</Dropdown.Item>
                     </DropdownButton>
                 </div>
             </div>
@@ -80,7 +80,6 @@ export default function ReqDesignApproval() {
                 <thead>
                     <tr className='text-center'>
                         <th className='custom-table-header'>No</th>
-                        <th className='custom-table-header'>ID</th>
                         <th className='custom-table-header'>Judul</th>
                         <th className='custom-table-header'>Harga</th>
                         <th className='custom-table-header'>Request Status</th>
@@ -100,12 +99,17 @@ export default function ReqDesignApproval() {
                         filteredRequests.map((designRequests, index) => (
                             <tr key={index}>
                                 <td className='text-center'>{index + 1}.</td>
-                                <td>{designRequests.house_id}</td>
                                 <td>{designRequests.house.title}</td>
                                 <td className='text-end'>
                                     {Number(designRequests.house.price).toLocaleString('id-ID')}
                                 </td>
-                                <td className='text-center'>{designRequests.request_status}</td>
+                                <td className='text-center'>
+                                    <span className={`badge w-100 py-2 ${designRequests.request_status === 'Waiting'
+                                        ? 'bg-warning' : designRequests.request_status === 'Approved'
+                                            ? 'bg-success' : 'bg-danger'}`}>
+                                        {designRequests.request_status}
+                                    </span>
+                                </td>
                                 <td className="align-middle">
                                     <div className="d-flex justify-content-center">
                                         <Link to={`./detail/${designRequests.house.id}`} className='text-decoration-none'>
