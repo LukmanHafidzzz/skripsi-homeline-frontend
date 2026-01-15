@@ -17,7 +17,7 @@ export default function HouseList() {
     const statusBadgeClass = {
         'Pending': 'bg-secondary',
         'Waiting Payment': 'bg-info',
-        'Offering 3D': 'bg-primary',
+        'Offering 3d': 'bg-primary',
         'Processing': 'bg-warning',
         'Approved': 'bg-success',
         'Rejected': 'bg-danger',

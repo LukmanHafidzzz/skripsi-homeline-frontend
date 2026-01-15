@@ -219,41 +219,54 @@ export default function GeoCoordinateDetail() {
                     <Col className='p-0'>
                         <div className=''>
                             <div className="fw-bold mb-2 fs-5 p-0">
-                                INPUT KOORDINAT GEOGRAFIS
+                                {house.latitude && house.longitude
+                                    ? 'KOORDINAT GEOGRAFIS'
+                                    : 'INPUT KOORDINAT GEOGRAFIS'
+                                }
                             </div>
-                            <Form onSubmit={handleSubmit}>
-                                <Form.Group className="mb-3" controlId="">
-                                    <Row>
-                                        <Col>
-                                            <Form.Control
-                                                className='form-add'
-                                                placeholder='Masukkan latitude'
-                                                rows={3}
-                                                value={latitude}
-                                                onChange={(e) => setLatitude(e.target.value)}
-                                            />
-                                        </Col>
-                                        <Col>
-                                            <Form.Control
-                                                className='form-add'
-                                                placeholder='Masukkan longitude'
-                                                rows={3}
-                                                value={longitude}
-                                                onChange={(e) => setLongitude(e.target.value)}
-                                            />
-                                        </Col>
-                                    </Row>
-                                </Form.Group>
-                                <div className="d-flex justify-content-end align-items-center">
-                                    <Button variant="success" className='fw-semibold px-5 py-2' type='submit'>
-                                        {buttonLoading ? (
-                                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                        ) : (
-                                            'Input'
-                                        )}
-                                    </Button>
-                                </div>
-                            </Form>
+                            <div>
+                                {house.latitude && house.longitude ? (
+                                    <div>
+                                        <span>Latitude: {house.latitude}</span>
+                                        <br />
+                                        <span>Longitude: {house.longitude}</span>
+                                    </div>
+                                ) : (
+                                    <Form onSubmit={handleSubmit}>
+                                        <Form.Group className="mb-3" controlId="">
+                                            <Row>
+                                                <Col>
+                                                    <Form.Control
+                                                        className='form-add'
+                                                        placeholder='Masukkan latitude'
+                                                        rows={3}
+                                                        value={latitude}
+                                                        onChange={(e) => setLatitude(e.target.value)}
+                                                    />
+                                                </Col>
+                                                <Col>
+                                                    <Form.Control
+                                                        className='form-add'
+                                                        placeholder='Masukkan longitude'
+                                                        rows={3}
+                                                        value={longitude}
+                                                        onChange={(e) => setLongitude(e.target.value)}
+                                                    />
+                                                </Col>
+                                            </Row>
+                                        </Form.Group>
+                                        <div className="d-flex justify-content-end align-items-center">
+                                            <Button variant="success" className='fw-semibold px-5 py-2' type='submit'>
+                                                {buttonLoading ? (
+                                                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                ) : (
+                                                    'Input'
+                                                )}
+                                            </Button>
+                                        </div>
+                                    </Form>
+                                )}
+                            </div>
                         </div>
                     </Col>
                 </Row>

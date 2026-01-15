@@ -6,6 +6,7 @@ import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import axios from 'axios';
 
 export default function GeoCoordinate() {
+    const [selected, setSelected] = useState('Semua');
     const [houses, setHouses] = useState([]);
     const [filteredHouses, setFilteredHouses] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -30,18 +31,29 @@ export default function GeoCoordinate() {
         fetchHouses();
     }, []);
 
+    const handleSelect = (value) => {
+        setSelected(value);
+    }
+
     useEffect(() => {
-        if (!searchTerm) {
-            setFilteredHouses(houses);
-        } else {
-            const filtered = houses.filter(
-                house =>
+        let filtered = [...houses];
+
+        if (searchTerm) {
+            filtered = filtered.filter(
+                (house) =>
                     house.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                     house.id.toString().includes(searchTerm)
             );
-            setFilteredHouses(filtered);
         }
-    }, [searchTerm, houses]);
+
+        if (selected === 'Belum Ada Input') {
+            filtered = filtered.filter(house => house.latitude == null || house.longitude == null);
+        } else if (selected === 'Sudah Ada Input') {
+            filtered = filtered.filter(house => house.latitude != null && house.longitude != null);
+        }
+
+        setFilteredHouses(filtered);
+    }, [searchTerm, houses, selected]);
 
     if (loading) {
         return <div className="mt-5 pt-5 text-center">Loading...</div>;
@@ -65,15 +77,24 @@ export default function GeoCoordinate() {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
+                <div className='d-flex align-items-center text-black gap-3'>
+                    <div className='fw-semibold'>Status Input:</div>
+                    <DropdownButton id="dropdown-basic-button" title={`${selected}`}>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Semua')}>Semua</Dropdown.Item>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Belum Ada Input')}>Belum Ada Input</Dropdown.Item>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Sudah Ada Input')}>Sudah Ada Input</Dropdown.Item>
+                    </DropdownButton>
+                </div>
             </div>
 
             <Table bordered>
                 <thead>
                     <tr className='text-center'>
                         <th className='custom-table-header'>No</th>
-                        <th className='custom-table-header'>ID</th>
                         <th className='custom-table-header'>Judul</th>
                         <th className='custom-table-header'>Harga</th>
+                        <th className='custom-table-header'>Status Rumah</th>
+                        <th className='custom-table-header'>Status Input</th>
                         <th className='custom-table-header'>Action</th>
                     </tr>
                 </thead>
@@ -90,9 +111,18 @@ export default function GeoCoordinate() {
                         filteredHouses.map((house, index) => (
                             <tr key={index}>
                                 <td className='text-center'>{index + 1}.</td>
-                                <td>{house.id}</td>
                                 <td>{house.title}</td>
                                 <td className='text-end'>{Number(house.price).toLocaleString('id-ID')}</td>
+                                <td>
+                                    <span className={`badge w-100 py-2 ${house.status === 'Processing' ? 'bg-warning' : 'bg-success'}`}>{house.status}</span>
+                                </td>
+                                <td>
+                                    {house.latitude && house.longitude ? (
+                                        <span className="badge w-100 py-2 bg-success">Sudah Koordinat</span>
+                                    ) : (
+                                        <span className="badge w-100 py-2 bg-danger">Belum Ada Koordinat</span>
+                                    )}
+                                </td>
                                 <td className="align-middle">
                                     <div className="d-flex justify-content-center">
                                         <Link to={`./detail/${house.id}`} className='text-decoration-none'>

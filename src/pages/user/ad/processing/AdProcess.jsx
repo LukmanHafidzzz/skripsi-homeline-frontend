@@ -59,7 +59,14 @@ export default function AdProcess() {
                             <td className='text-end'>{Number(house.price).toLocaleString('id-ID')}</td>
                             <td className='text-center'>{house.status}</td>
                             <td className='text-center'>{house.house_process.survey_process}</td>
-                            <td className='text-center'>{house.house_process.design_process}</td>
+                            <td className='text-center'>
+                                {house.house_process.design_process}
+                                {house.house_process.design_process ? (
+                                    <span>{house.house_process.design_process}</span>
+                                ) : (
+                                    <span> - </span>
+                                )}
+                            </td>
                             <td className="align-middle">
                                 <div className="d-flex justify-content-center">
                                     <Link to={`./detail/${house.id}`} className='text-decoration-none'><Button className="d-flex align-items-center gap-1" variant="outline-success">

@@ -166,81 +166,86 @@ export default function PaymentConfirmDetail() {
                         </Row>
                     </Col>
                 </Row>
-                <Row className="mt-5 mb-4" data-aos="fade-up" data-aos-duration="800">
-                    <Col className="p-0">
-                        <div className="fw-bold mb-2 fs-5">
-                            DETAIL STATUS
-                        </div>
-                        <div>
-                            <Table bordered>
-                                <thead>
-                                    <tr className='text-center'>
-                                        <th className='custom-table-header'>Status Saat Ini</th>
-                                        <th className='custom-table-header'>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody className='align-middle'>
-                                    <tr>
-                                        <td>{house.status}</td>
-                                        <td className="align-middle">
-                                            <div className="d-flex justify-content-center">
-                                                <Button
-                                                    variant="success"
-                                                    className='p-2'
-                                                    onClick={() => {
-                                                        Swal.fire({
-                                                            title: 'Lanjutkan Proses?',
-                                                            text: 'Apakah Anda yakin proses pembayaran telah selesai?',
-                                                            icon: 'question',
-                                                            showCancelButton: true,
-                                                            confirmButtonColor: '#28a745',
-                                                            cancelButtonColor: '#6c757d',
-                                                            confirmButtonText: 'Ya, saya yakin!',
-                                                            cancelButtonText: 'Batal'
-                                                        }).then(async (result) => {
-                                                            if (result.isConfirmed) {
-                                                                setButtonLoading(true);
-                                                                try {
-                                                                    const res = await axios.patch(
-                                                                        `http://localhost:5773/api/admin/house/payment-confirm/${id}`,
-                                                                        { withCredentials: true }
-                                                                    );
-                                                                    Swal.fire(
-                                                                        'Proses selesai!',
-                                                                        res.data.message || 'Proses akan dilanjutkan.',
-                                                                        'success'
-                                                                    ).then(() => {
-                                                                        navigate('/admin/payment-confirm');
-                                                                    });
+                {house.status === "Waiting Payment" ? (
 
-                                                                    setHouse((prev) => ({ ...prev, status: 'Processing' }));
-                                                                } catch (err) {
-                                                                    Swal.fire(
-                                                                        'Gagal!',
-                                                                        err.response?.data?.message || 'Terjadi kesalahan.',
-                                                                        'error'
-                                                                    );
-                                                                } finally {
-                                                                    setButtonLoading(false);
+                    <Row className="mt-5 mb-4" data-aos="fade-up" data-aos-duration="800">
+                        <Col className="p-0">
+                            <div className="fw-bold mb-2 fs-5">
+                                DETAIL STATUS
+                            </div>
+                            <div>
+                                <Table bordered>
+                                    <thead>
+                                        <tr className='text-center'>
+                                            <th className='custom-table-header'>Status Saat Ini</th>
+                                            <th className='custom-table-header'>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className='align-middle'>
+                                        <tr>
+                                            <td>{house.status}</td>
+                                            <td className="align-middle">
+                                                <div className="d-flex justify-content-center">
+                                                    <Button
+                                                        variant="success"
+                                                        className='p-2'
+                                                        onClick={() => {
+                                                            Swal.fire({
+                                                                title: 'Lanjutkan Proses?',
+                                                                text: 'Apakah Anda yakin proses pembayaran telah selesai?',
+                                                                icon: 'question',
+                                                                showCancelButton: true,
+                                                                confirmButtonColor: '#28a745',
+                                                                cancelButtonColor: '#6c757d',
+                                                                confirmButtonText: 'Ya, saya yakin!',
+                                                                cancelButtonText: 'Batal'
+                                                            }).then(async (result) => {
+                                                                if (result.isConfirmed) {
+                                                                    setButtonLoading(true);
+                                                                    try {
+                                                                        const res = await axios.patch(
+                                                                            `http://localhost:5773/api/admin/house/payment-confirm/${id}`,
+                                                                            { withCredentials: true }
+                                                                        );
+                                                                        Swal.fire(
+                                                                            'Proses selesai!',
+                                                                            res.data.message || 'Proses akan dilanjutkan.',
+                                                                            'success'
+                                                                        ).then(() => {
+                                                                            navigate('/admin/payment-confirm');
+                                                                        });
+
+                                                                        setHouse((prev) => ({ ...prev, status: 'Processing' }));
+                                                                    } catch (err) {
+                                                                        Swal.fire(
+                                                                            'Gagal!',
+                                                                            err.response?.data?.message || 'Terjadi kesalahan.',
+                                                                            'error'
+                                                                        );
+                                                                    } finally {
+                                                                        setButtonLoading(false);
+                                                                    }
                                                                 }
-                                                            }
-                                                        })
-                                                    }}
-                                                >
-                                                    {buttonLoading ? (
-                                                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                    ) : (
-                                                        'Konfirmasi Pembayaran'
-                                                    )}
-                                                </Button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </Table>
-                        </div>
-                    </Col>
-                </Row>
+                                                            })
+                                                        }}
+                                                    >
+                                                        {buttonLoading ? (
+                                                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                        ) : (
+                                                            'Konfirmasi Pembayaran'
+                                                        )}
+                                                    </Button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </Table>
+                            </div>
+                        </Col>
+                    </Row>
+                ) : (
+                    <div className='mb-5'></div>
+                )}
             </Container >
         </>
     )

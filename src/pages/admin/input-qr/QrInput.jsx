@@ -87,9 +87,9 @@ export default function QrInput() {
                 <thead>
                     <tr className='text-center'>
                         <th className='custom-table-header'>No</th>
-                        <th className='custom-table-header'>ID</th>
                         <th className='custom-table-header'>Judul</th>
                         <th className='custom-table-header'>Harga Rumah</th>
+                        <th className='custom-table-header'>Status</th>
                         <th className='custom-table-header'>Action</th>
                     </tr>
                 </thead>
@@ -106,9 +106,15 @@ export default function QrInput() {
                         filteredHouses.map((house, index) => (
                             <tr key={index}>
                                 <td className='text-center'>{index + 1}.</td>
-                                <td>{house.id}</td>
                                 <td>{house.title}</td>
                                 <td className='text-end'>{Number(house.price).toLocaleString('id-ID')}</td>
+                                <td>
+                                    {house.payments[0]?.qr ? (
+                                        <span className="badge w-100 py-2 bg-success">Sudah Ada QR</span>
+                                    ) : (
+                                        <span className="badge w-100 py-2 bg-secondary">Belum Ada QR</span>
+                                    )}
+                                </td>
                                 <td className="d-flex align-items-center justify-content-center">
                                     {house.payments?.[0]?.qr ? (
                                         <Button
