@@ -58,10 +58,16 @@ export default function AdProcess() {
                             <td>{house.title}</td>
                             <td className='text-end'>{Number(house.price).toLocaleString('id-ID')}</td>
                             <td className='text-center'>{house.status}</td>
-                            <td className='text-center'>{house.house_process.survey_process}</td>
                             <td className='text-center'>
-                                {house.house_process.design_process}
-                                {house.house_process.design_process ? (
+                                {house.house_process?.survey_process ? (
+                                    <span>{house.house_process.survey_process}</span>
+                                ) : (
+                                    <span> - </span>
+                                )}
+
+                            </td>
+                            <td className='text-center'>
+                                {house.house_process?.design_process ? (
                                     <span>{house.house_process.design_process}</span>
                                 ) : (
                                     <span> - </span>
