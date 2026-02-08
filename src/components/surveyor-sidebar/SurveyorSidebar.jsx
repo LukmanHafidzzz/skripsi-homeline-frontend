@@ -2,7 +2,7 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 import './style.css'
 import { BsHouses } from 'react-icons/bs'
-import { LuClipboardPen, LuFileInput } from 'react-icons/lu'
+import { LuClipboardPen, LuFileInput, LuClipboardList } from 'react-icons/lu'
 import { IoHomeOutline } from 'react-icons/io5'
 
 export default function SurveyorSidebar() {
@@ -31,12 +31,12 @@ export default function SurveyorSidebar() {
                     <BsHouses /> List Rumah
                 </NavLink>
                 <NavLink
-                    to='make-request'
+                    to='need-survey'
                     className={({ isActive }) =>
                         `text-decoration-none px-4 py-3 mb-1 text-black rounded-2 sub-menu gap-2 d-flex align-items-center ${isActive ? 'active-menu' : ''}`
                     }
                 >
-                    <LuClipboardPen /> Buat Request
+                    <LuClipboardList /> Perlu Survey
                 </NavLink>
                 <NavLink
                     to='input-house-survey'
@@ -45,6 +45,14 @@ export default function SurveyorSidebar() {
                     }
                 >
                     <LuFileInput /> Input Hasil Survey
+                </NavLink>
+                <NavLink
+                    to='need-revision'
+                    className={({ isActive }) =>
+                        `text-decoration-none px-4 py-3 mb-1 text-black rounded-2 sub-menu gap-2 d-flex align-items-center ${isActive ? 'active-menu' : ''}`
+                    }
+                >
+                    <LuClipboardPen /> Perlu Revisi
                 </NavLink>
             </div>
         </>

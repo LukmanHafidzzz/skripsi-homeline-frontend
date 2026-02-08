@@ -54,12 +54,17 @@ export default function SurveyorResultInput() {
             }
             else if (selected === 'Pengecekan Hasil') {
                 filtered = filtered.filter(
-                    item => item.survey_process === 'Pengecekan Hasil'
+                    item => item.survey_status_input === 'Pengecekan Hasil'
                 );
             }
-            else if (selected === 'Survey Selesai') {
+            else if (selected === 'Revisi') {
                 filtered = filtered.filter(
-                    item => item.survey_process === 'Survey Selesai'
+                    item => item.survey_status_input === 'Revisi'
+                );
+            }
+            else if (selected === 'Approved') {
+                filtered = filtered.filter(
+                    item => item.survey_status_input === 'Approved'
                 );
             }
         }
@@ -86,7 +91,8 @@ export default function SurveyorResultInput() {
                         <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Semua')}>Semua</Dropdown.Item>
                         <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Belum Ada Input')}>Belum Ada Input</Dropdown.Item>
                         <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Pengecekan Hasil')}>Pengecekan Hasil</Dropdown.Item>
-                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Survey Selesai')}>Survey Selesai</Dropdown.Item>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Revisi')}>Revisi</Dropdown.Item>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Approved')}>Approved</Dropdown.Item>
                     </DropdownButton>
                 </div>
             </div>
@@ -119,11 +125,9 @@ export default function SurveyorResultInput() {
                                 <td>Rp {parseInt(houseProcess.house.price).toLocaleString("id-ID")}</td>
                                 <td>
                                     <span
-                                        className={`badge w-100 py-2 ${houseProcess.survey_process === 'Pengecekan Hasil'
-                                            ? 'bg-info'
-                                            : houseProcess.survey_process === 'Survey Selesai'
-                                                ? 'bg-success'
-                                                : 'bg-warning'
+                                        className={`badge w-100 py-2 ${houseProcess.survey_process === 'Survey Selesai'
+                                            ? 'bg-success'
+                                            : 'bg-warning'
                                             }`}
                                     >
                                         {houseProcess.survey_process}
@@ -131,7 +135,17 @@ export default function SurveyorResultInput() {
                                 </td>
                                 <td>
                                     {houseProcess.house.house_survey ? (
-                                        <span className="badge w-100 py-2 bg-success">Sudah Ada Input</span>
+                                        <span
+                                            className={`badge w-100 py-2 ${houseProcess.survey_status_input === 'Approved'
+                                                ? 'bg-success'
+                                                : houseProcess.survey_status_input === 'Pengecekan Hasil'
+                                                    ? 'bg-info'
+                                                    : 'bg-danger'
+                                                }`}
+                                        >
+                                            {houseProcess.survey_status_input}
+                                        </span>
+
                                     ) : (
                                         <span className="badge w-100 py-2 bg-secondary">Belum Ada Input</span>
                                     )}

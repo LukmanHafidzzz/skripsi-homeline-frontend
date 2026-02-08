@@ -66,25 +66,6 @@ export default function AdminSidebar() {
                 </NavLink>
             </div>
             <div className='mb-4'>
-                <div className='text-secondary fw-medium mb-2'>Request</div>
-                <NavLink
-                    to='request-survey-approval'
-                    className={({ isActive }) =>
-                        `text-decoration-none px-4 py-3 mb-1 text-black rounded-2 sub-menu gap-2 d-flex align-items-center ${isActive ? 'active-menu' : ''}`
-                    }
-                >
-                    <LuClipboardList /> Survey
-                </NavLink>
-                <NavLink
-                    to='request-desain-approval'
-                    className={({ isActive }) =>
-                        `text-decoration-none px-4 py-3 mb-1 text-black rounded-2 sub-menu gap-2 d-flex align-items-center ${isActive ? 'active-menu' : ''}`
-                    }
-                >
-                    <LuPaintbrush /> Desain
-                </NavLink>
-            </div>
-            <div className='mb-4'>
                 <div className='text-secondary fw-medium mb-2'>Survey</div>
                 <NavLink
                     to='survey-list-house'
@@ -101,6 +82,14 @@ export default function AdminSidebar() {
                     }
                 >
                     <LuFileInput /> Cek Hasil Input
+                </NavLink>
+                <NavLink
+                    to='survey-revision'
+                    className={({ isActive }) =>
+                        `text-decoration-none px-4 py-3 mb-1 text-black rounded-2 sub-menu gap-2 d-flex align-items-center ${isActive ? 'active-menu' : ''}`
+                    }
+                >
+                    <LuClipboardList /> Revisi
                 </NavLink>
             </div>
             <div className='mb-4'>
@@ -120,6 +109,14 @@ export default function AdminSidebar() {
                     }
                 >
                     <LuFileInput /> Cek Hasil Input
+                </NavLink>
+                <NavLink
+                    to='design-revision'
+                    className={({ isActive }) =>
+                        `text-decoration-none px-4 py-3 mb-1 text-black rounded-2 sub-menu gap-2 d-flex align-items-center ${isActive ? 'active-menu' : ''}`
+                    }
+                >
+                    <LuClipboardList /> Revisi
                 </NavLink>
             </div>
         </>

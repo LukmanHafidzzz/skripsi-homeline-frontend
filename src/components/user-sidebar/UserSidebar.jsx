@@ -55,14 +55,6 @@ export default function UserSidebar() {
                         <MdOutlinePendingActions /> Menunggu
                     </NavLink>
                     <NavLink
-                        to="need-approval"
-                        className={({ isActive }) =>
-                            `text-decoration-none px-4 py-3 mb-1 text-black rounded-2 sub-menu gap-2 d-flex align-items-center ${isActive ? 'active-menu' : ''}`
-                        }
-                    >
-                        <FaRegPenToSquare /> Butuh Persetujuan
-                    </NavLink>
-                    <NavLink
                         to='processing'
                         className={({ isActive }) =>
                             `text-decoration-none px-4 py-3 mb-1 text-black rounded-2 sub-menu gap-2 d-flex align-items-center ${isActive ? 'active-menu' : ''}`

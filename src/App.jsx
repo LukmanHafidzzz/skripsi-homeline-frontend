@@ -35,8 +35,6 @@ const AdWaiting = Loadable(lazy(() => import("./pages/user/ad/waiting/AdWaiting.
 const AdWaitingDetail = Loadable(lazy(() => import("./pages/user/ad/waiting/detail/AdWaitingDetail.jsx")));
 const AdWaitingPayment = Loadable(lazy(() => import("./pages/user/ad/waiting-payment/AdWaitingPayment.jsx")));
 const AdWaitingPaymentDetail = Loadable(lazy(() => import("./pages/user/ad/waiting-payment/detail/AdWaitingPaymentDetail.jsx")));
-const AdNeedApproval = Loadable(lazy(() => import("./pages/user/ad/need-approval/AdNeedApproval.jsx")));
-const AdNeedApprovalDetail = Loadable(lazy(() => import("./pages/user/ad/need-approval/detail/AdNeedApprovalDetail.jsx")));
 const AdProcess = Loadable(lazy(() => import("./pages/user/ad/processing/AdProcess.jsx")));
 const AdProcessDetail = Loadable(lazy(() => import("./pages/user/ad/processing/detail/AdProcessDetail.jsx")));
 const AdProcessDetailModel = Loadable(lazy(() => import("./pages/user/ad/processing/model/AdProcessDetailModel.jsx")));
@@ -70,6 +68,8 @@ const SurveyListHouse = Loadable(lazy(() => import('./pages/admin/survey-list-ho
 const SurveyListHouseDetail = Loadable(lazy(() => import('./pages/admin/survey-list-house/detail/SurveyListHouseDetail')));
 const SurveyInput = Loadable(lazy(() => import('./pages/admin/survey-input/SurveyInput')));
 const SurveyInputDetail = Loadable(lazy(() => import('./pages/admin/survey-input/detail/SurveyInputDetail')));
+const SurveyRev = Loadable(lazy(() => import('./pages/admin/survey-rev/SurveyRev')));
+const SurveyRevDetail = Loadable(lazy(() => import('./pages/admin/survey-rev/detail/SurveyRevDetail')));
 const DesignListHouse = Loadable(lazy(() => import('./pages/admin/design-list-house/DesignListHouse')));
 const DesignListHouseDetail = Loadable(lazy(() => import('./pages/admin/design-list-house/detail/DesignListHouseDetail')));
 const DesignInput = Loadable(lazy(() => import('./pages/admin/design-input/DesignInput')));
@@ -81,6 +81,9 @@ const SurveyorHouseList = Loadable(lazy(() => import('./pages/surveyor/house-lis
 const SurveyorHouseListDetail = Loadable(lazy(() => import('./pages/surveyor/house-list/detail/SurveyorHouseListDetail')));
 const SurveyorResultInput = Loadable(lazy(() => import('./pages/surveyor/input/SurveyorResultInput')));
 const SurveyorResultInputDetail = Loadable(lazy(() => import('./pages/surveyor/input/detail/SurveyorResultInputDetail')));
+const SurveyorNeedSurvey = Loadable(lazy(() => import('./pages/surveyor/need-survey/SurveyorNeedSurvey')));
+const SurveyorNeedRevision = Loadable(lazy(() => import('./pages/surveyor/revision/SurveyNeedRev')));
+const SurveyNeedRevDetail = Loadable(lazy(() => import('./pages/surveyor/revision/detail/SurveyNeedRevDetail')));
 const SurveyorMakeReq = Loadable(lazy(() => import('./pages/surveyor/make-request/SurveyorMakeReq')));
 const SurveyorMakeReqDetail = Loadable(lazy(() => import('./pages/surveyor/make-request/detail/SurveyorMakeReqDetail')));
 
@@ -91,6 +94,7 @@ const DesignerHouseListModel = Loadable(lazy(() => import('./pages/designer/hous
 const DesignerResultInput = Loadable(lazy(() => import('./pages/designer/input/DesignerResultInput')));
 const DesignerResultInputDetail = Loadable(lazy(() => import('./pages/designer/input/detail/DesignerResultInputDetail')));
 const DesignerResultInputDetailModel = Loadable(lazy(() => import('./pages/designer/input/model/DesignerResultInputDetailModel')));
+
 const DesignerMakeReq = Loadable(lazy(() => import('./pages/designer/make-request/DesignerMakeReq')));
 const DesignerMakeReqDetail = Loadable(lazy(() => import('./pages/designer/make-request/detail/DesignerMakeReqDetail')));
 
@@ -138,8 +142,6 @@ function App() {
                 <Route path="waiting/detail/:id" element={<AdWaitingDetail />} />
                 <Route path="waiting-payment" element={<AdWaitingPayment />} />
                 <Route path="waiting-payment/detail/:id" element={<AdWaitingPaymentDetail />} />
-                <Route path="need-approval" element={<AdNeedApproval />} />
-                <Route path="need-approval/detail/:id" element={<AdNeedApprovalDetail />} />
                 <Route path="processing" element={<AdProcess />} />
                 <Route path="processing/detail/:id" element={<AdProcessDetail />} />
                 <Route path="processing/detail/:id/model/:id" element={<AdProcessDetailModel />} />
@@ -182,6 +184,8 @@ function App() {
                 <Route path='survey-list-house/detail/:id' element={<SurveyListHouseDetail />} />
                 <Route path='survey-input' element={<SurveyInput />} />
                 <Route path='survey-input/detail/:id' element={<SurveyInputDetail />} />
+                <Route path='survey-revision' element={<SurveyRev />} />
+                <Route path='survey-revision/detail/:id' element={<SurveyRevDetail />} />
                 <Route path='design-list-house' element={<DesignListHouse />} />
                 <Route path='design-list-house/detail/:id' element={<DesignListHouseDetail />} />
                 <Route path='design-input' element={<DesignInput />} />
@@ -202,6 +206,9 @@ function App() {
                 <Route path='house-list/detail/:id' element={<SurveyorHouseListDetail />} />
                 <Route path='input-house-survey' element={<SurveyorResultInput />} />
                 <Route path='input-house-survey/detail/:id' element={<SurveyorResultInputDetail />} />
+                <Route path='need-survey' element={<SurveyorNeedSurvey />} />
+                <Route path='need-revision' element={<SurveyorNeedRevision />} />
+                <Route path='need-revision/detail/:id' element={<SurveyNeedRevDetail />} />
                 <Route path='make-request' element={<SurveyorMakeReq />} />
                 <Route path='make-request/detail/:id' element={<SurveyorMakeReqDetail />} />
             </Route>
@@ -221,6 +228,7 @@ function App() {
                 <Route path='input-house-model' element={<DesignerResultInput />} />
                 <Route path='input-house-model/detail/:id' element={<DesignerResultInputDetail />} />
                 <Route path='input-house-model/detail/:id/model/:id' element={<DesignerResultInputDetailModel />} />
+
                 <Route path='make-request' element={<DesignerMakeReq />} />
                 <Route path='make-request/detail/:id' element={<DesignerMakeReqDetail />} />
             </Route>

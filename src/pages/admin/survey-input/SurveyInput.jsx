@@ -47,9 +47,17 @@ export default function SurveyInput() {
         }
 
         if (selected !== 'Semua') {
-            filtered = filtered.filter(
-                item => item.house_process.survey_process === selected
-            );
+            filtered = filtered.filter((item) => {
+                if (selected === 'Pengecekan Hasil') {
+                    return item.house_process.survey_status_input === 'Pengecekan Hasil';
+                }
+
+                if (selected === 'Survey Selesai') {
+                    return item.house_process.survey_process === 'Survey Selesai';
+                }
+
+                return true;
+            });
         }
 
         setFilteredHouses(filtered);
@@ -107,8 +115,8 @@ export default function SurveyInput() {
                                 <td>
                                     <span
                                         className={`badge w-100 py-2 ${house.house_process.survey_process === 'Survey Selesai'
-                                                ? 'bg-success'
-                                                : 'bg-info'
+                                            ? 'bg-success'
+                                            : 'bg-info'
                                             }`}
                                     >
                                         {house.house_process.survey_process}

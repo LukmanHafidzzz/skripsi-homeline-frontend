@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 export default function AdAdd() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    const [use3D, setUse3D] = useState(false);
 
     const [provinsiList, setProvinsiList] = useState([]);
     const [kotaList, setKotaList] = useState([]);
@@ -121,6 +122,19 @@ export default function AdAdd() {
                 setLoading(false);
                 return;
             }
+            if (use3D) {
+                const result = await Swal.fire({
+                    title: 'Gunakan fitur 3D modeling?',
+                    html: `<small><i>*Biaya Rp 150.000 dengan metode QRIS</i></small>`,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya',
+                    cancelButtonText: 'Tidak',
+                });
+
+                if (!result.isConfirmed) return;
+            }
+
 
             const data = new FormData();
 
@@ -135,6 +149,8 @@ export default function AdAdd() {
             data.append('subdistrict', getNameById(kecamatanList, selectedKecamatan));
             data.append('village', getNameById(kelurahanList, selectedKelurahan));
             data.append('certificate_type_id', selectedType);
+
+            data.append('use_3d', use3D ? 'yes' : 'no');
 
             const validFacilities = formData.facilities.filter(f => f.quantity && f.quantity > 0);
             data.append('facilities', JSON.stringify(validFacilities));
@@ -451,6 +467,24 @@ export default function AdAdd() {
                             </Form.Group>
                         </Col>
                     </Row>
+                    <div className='d-flex justify-content-start'>
+                        <div className="mb-4 p-3 border rounded">
+                            <Form.Check
+                                type="checkbox"
+                                label={
+                                    <>
+                                        Gunakan fitur <b>3D Modeling</b>
+                                        <span className="text-success ms-2">(Rp 150.000)</span>
+                                    </>
+                                }
+                                checked={use3D}
+                                onChange={(e) => setUse3D(e.target.checked)}
+                            />
+                            <small className="text-muted">
+                                Pembayaran dilakukan menggunakan QRIS setelah iklan diajukan.
+                            </small>
+                        </div>
+                    </div>
                     <div className='mb-3'>
                         Note: tanda (<span className='text-danger'>*</span>) wajib diisi
                     </div>

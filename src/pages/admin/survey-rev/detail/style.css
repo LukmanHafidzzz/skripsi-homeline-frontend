@@ -1,0 +1,21 @@
+.photos-frame {
+    height: 30rem;
+}
+
+.img-fill {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.splide__track,
+.splide__slide {
+    height: 100%;
+}
+
+.td {
+    display: block !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}

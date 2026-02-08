@@ -1,29 +1,29 @@
 import React, { useState, useEffect } from 'react'
 import './style.css'
 import { DropdownButton, Form, Dropdown, Table, Button } from 'react-bootstrap'
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import axios from 'axios';
 
-export default function SurveyorHouseList() {
+export default function SurveyRev() {
     const [selected, setSelected] = useState('Semua');
-    const [searchTerm, setSearchTerm] = useState('');
-    const [houseProcesses, setHouseProcesses] = useState([]);
+    const [houses, setHouses] = useState([]);
     const [filteredHouses, setFilteredHouses] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
     const [loading, setLoading] = useState(true);
 
     const handleSelect = (value) => {
         setSelected(value);
-    };
+    }
 
     useEffect(() => {
         const fetchHouses = async () => {
             try {
                 const res = await axios.get(
-                    'http://localhost:5773/api/surveyor/house-list',
+                    'http://localhost:5773/api/admin/survey/revision-house-list',
                     { withCredentials: true }
                 );
-                setHouseProcesses(res.data);
+                setHouses(res.data);
                 setFilteredHouses(res.data);
             } catch (err) {
                 console.error(err.response?.data?.message || err.message);
@@ -36,24 +36,34 @@ export default function SurveyorHouseList() {
     }, []);
 
     useEffect(() => {
-        let filtered = [...houseProcesses];
-
-        if (selected !== 'Semua') {
-            filtered = filtered.filter(
-                (item) => item.survey_process.toLowerCase() === selected.toLowerCase()
-            );
-        }
+        let filtered = [...houses];
 
         if (searchTerm) {
             filtered = filtered.filter(
-                (item) =>
-                    item.house.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    item.house.id.toString().includes(searchTerm)
+                (house) =>
+                    house.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    house.id.toString().includes(searchTerm)
             );
         }
 
+        if (selected !== 'Semua') {
+            filtered = filtered.filter((item) => {
+
+                if (selected === 'Sudah Input') {
+                    return item.house_process.survey_status_input === 'Pengecekan Hasil';
+                }
+                if (selected === 'Belum Ada Input') {
+                    return item.house_process.survey_status_input === 'Revisi';
+                }
+                if (selected === 'Revisi Selesai') {
+                    return item.house_process.survey_status_input === 'Approved';
+                }
+
+                return true;
+            });
+        }
         setFilteredHouses(filtered);
-    }, [selected, searchTerm, houseProcesses]);
+    }, [searchTerm, houses, selected]);
 
     if (loading) {
         return <div className="mt-5 pt-5 text-center">Loading...</div>;
@@ -70,12 +80,12 @@ export default function SurveyorHouseList() {
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
                 <div className='d-flex align-items-center text-black gap-3'>
-                    <div className='fw-semibold'>Status Survey:</div>
+                    <div className='fw-semibold'>Status:</div>
                     <DropdownButton id="dropdown-basic-button" title={`${selected}`}>
                         <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Semua')}>Semua</Dropdown.Item>
-                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Perlu Survey')}>Perlu Survey</Dropdown.Item>
-                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Sedang Survey')}>Sedang Survey</Dropdown.Item>
-                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Survey Selesai')}>Survey Selesai</Dropdown.Item>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Sudah Input')}>Sudah Input</Dropdown.Item>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Belum Ada Input')}>Belum Ada Input</Dropdown.Item>
+                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Revisi Selesai')}>Revisi Selesai</Dropdown.Item>
                     </DropdownButton>
                 </div>
             </div>
@@ -85,7 +95,7 @@ export default function SurveyorHouseList() {
                     <tr className='text-center'>
                         <th className='custom-table-header'>No</th>
                         <th className='custom-table-header'>Judul</th>
-                        <th className='custom-table-header'>Alamat</th>
+                        <th className='custom-table-header'>Revisi</th>
                         <th className='custom-table-header'>Status</th>
                         <th className='custom-table-header'>Action</th>
                     </tr>
@@ -93,33 +103,39 @@ export default function SurveyorHouseList() {
                 <tbody className='align-middle'>
                     {filteredHouses.length === 0 ? (
                         <tr>
-                            <td colSpan="6" className="text-center py-4">
-                                {houseProcesses.length === 0
+                            <td colSpan="5" className="text-center py-4">
+                                {houses.length === 0
                                     ? "Tidak ada data rumah..."
                                     : "Tidak ada data rumah yang cocok.."}
                             </td>
                         </tr>
                     ) : (
-                        filteredHouses.map((houseProcess, index) => (
+                        filteredHouses.map((house, index) => (
                             <tr key={index}>
                                 <td className='text-center'>{index + 1}.</td>
-                                <td>{houseProcess.house.title}</td>
-                                <td>{houseProcess.house.address.full_address}</td>
+                                <td>{house.title}</td>
+                                <td>{house.house_process.house_survey_revs[0].comment}</td>
                                 <td>
-                                    <span className={`badge w-100 py-2 ${houseProcess.survey_process === 'Perlu Survey'
-                                            ? 'bg-warning'
-                                            : houseProcess.survey_process === 'Sedang Survey'
+                                    <span
+                                        className={`badge w-100 py-2 ${house.house_process.survey_status_input === 'Pengecekan Hasil'
                                                 ? 'bg-info'
-                                                    : houseProcess.survey_process === 'Survey Selesai'
-                                                        ? 'bg-success'
-                                                        : 'bg-dark'
-                                        }`}>
-                                        {houseProcess.survey_process}
+                                                : house.house_process.survey_status_input === 'Revisi'
+                                                    ? 'bg-danger'
+                                                    : 'bg-success'
+                                            }`}
+                                    >
+                                        {
+                                            house.house_process.survey_status_input === 'Pengecekan Hasil'
+                                                ? 'Sudah Input'
+                                                : house.house_process.survey_status_input === 'Revisi'
+                                                    ? 'Belum Ada Input'
+                                                    : 'Revisi Selesai'
+                                        }
                                     </span>
                                 </td>
                                 <td className="align-middle">
                                     <div className="d-flex justify-content-center">
-                                        <Link to={`./detail/${houseProcess.house.id}`} className='text-decoration-none'>
+                                        <Link to={`./detail/${house.id}`} className='text-decoration-none'>
                                             <Button className="d-flex align-items-center gap-1" variant="outline-success">
                                                 <MdOutlineRemoveRedEye /> view
                                             </Button>

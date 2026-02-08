@@ -1,26 +1,79 @@
 import React, { useState, useEffect } from 'react'
 import './style.css'
-import { DropdownButton, Form, Dropdown, Table, Button } from 'react-bootstrap'
+import { DropdownButton, Form, Dropdown, Table, Button, Modal } from 'react-bootstrap'
 import { Link } from 'react-router-dom';
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
+import { LuClipboardPlus } from 'react-icons/lu';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
-export default function SurveyorHouseList() {
+export default function SurveyorNeedSurvey() {
     const [selected, setSelected] = useState('Semua');
     const [searchTerm, setSearchTerm] = useState('');
     const [houseProcesses, setHouseProcesses] = useState([]);
     const [filteredHouses, setFilteredHouses] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [hasPendingSurvey, setHasPendingSurvey] = useState(false);
 
     const handleSelect = (value) => {
         setSelected(value);
+    };
+
+    const handleStartSurvey = async (houseProcessId) => {
+        const result = await Swal.fire({
+            title: 'Mulai Survey?',
+            text: 'Apakah Anda yakin ingin mensurvey rumah ini?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Survey',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#0d6efd',
+            cancelButtonColor: '#6c757d',
+        });
+
+        if (result.isConfirmed) {
+            try {
+                await axios.patch(
+                    `http://localhost:5773/api/surveyor/start-survey/${houseProcessId}`,
+                    {},
+                    { withCredentials: true }
+                );
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: 'Survey dimulai!',
+                    timer: 1500,
+                    showConfirmButton: false,
+                });
+
+                const res = await axios.get(
+                    'http://localhost:5773/api/surveyor/need-survey',
+                    { withCredentials: true }
+                );
+                setHouseProcesses(res.data);
+                setFilteredHouses(res.data);
+
+                const pending = res.data.some(
+                    item => item.survey_process === "Sedang Survey" && item.status_input == null
+                );
+
+                setHasPendingSurvey(pending);
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: error.response?.data?.message || 'Terjadi kesalahan',
+                });
+            }
+        }
     };
 
     useEffect(() => {
         const fetchHouses = async () => {
             try {
                 const res = await axios.get(
-                    'http://localhost:5773/api/surveyor/house-list',
+                    'http://localhost:5773/api/surveyor/need-survey',
                     { withCredentials: true }
                 );
                 setHouseProcesses(res.data);
@@ -38,12 +91,6 @@ export default function SurveyorHouseList() {
     useEffect(() => {
         let filtered = [...houseProcesses];
 
-        if (selected !== 'Semua') {
-            filtered = filtered.filter(
-                (item) => item.survey_process.toLowerCase() === selected.toLowerCase()
-            );
-        }
-
         if (searchTerm) {
             filtered = filtered.filter(
                 (item) =>
@@ -53,7 +100,7 @@ export default function SurveyorHouseList() {
         }
 
         setFilteredHouses(filtered);
-    }, [selected, searchTerm, houseProcesses]);
+    }, [searchTerm, houseProcesses]);
 
     if (loading) {
         return <div className="mt-5 pt-5 text-center">Loading...</div>;
@@ -69,15 +116,6 @@ export default function SurveyorHouseList() {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                <div className='d-flex align-items-center text-black gap-3'>
-                    <div className='fw-semibold'>Status Survey:</div>
-                    <DropdownButton id="dropdown-basic-button" title={`${selected}`}>
-                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Semua')}>Semua</Dropdown.Item>
-                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Perlu Survey')}>Perlu Survey</Dropdown.Item>
-                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Sedang Survey')}>Sedang Survey</Dropdown.Item>
-                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Survey Selesai')}>Survey Selesai</Dropdown.Item>
-                    </DropdownButton>
-                </div>
             </div>
 
             <Table bordered>
@@ -86,7 +124,7 @@ export default function SurveyorHouseList() {
                         <th className='custom-table-header'>No</th>
                         <th className='custom-table-header'>Judul</th>
                         <th className='custom-table-header'>Alamat</th>
-                        <th className='custom-table-header'>Status</th>
+                        <th className='custom-table-header'>No Whatsapp</th>
                         <th className='custom-table-header'>Action</th>
                     </tr>
                 </thead>
@@ -106,19 +144,23 @@ export default function SurveyorHouseList() {
                                 <td>{houseProcess.house.title}</td>
                                 <td>{houseProcess.house.address.full_address}</td>
                                 <td>
-                                    <span className={`badge w-100 py-2 ${houseProcess.survey_process === 'Perlu Survey'
-                                            ? 'bg-warning'
-                                            : houseProcess.survey_process === 'Sedang Survey'
-                                                ? 'bg-info'
-                                                    : houseProcess.survey_process === 'Survey Selesai'
-                                                        ? 'bg-success'
-                                                        : 'bg-dark'
-                                        }`}>
-                                        {houseProcess.survey_process}
-                                    </span>
+                                    <a
+                                        href={`https://wa.me/${houseProcess.house.no_telp}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-success fw-semibold text-decoration-none"
+                                    >
+                                        +62{houseProcess.house.no_telp}
+                                    </a>
                                 </td>
                                 <td className="align-middle">
-                                    <div className="d-flex justify-content-center">
+                                    <div className="d-flex gap-2 justify-content-center">
+                                        <Link className='text-decoration-none'>
+                                            <Button className="d-flex align-items-center gap-1" variant="primary" disabled={hasPendingSurvey} onClick={() => handleStartSurvey(houseProcess.id)}>
+                                                <LuClipboardPlus /> survey
+                                            </Button>
+
+                                        </Link>
                                         <Link to={`./detail/${houseProcess.house.id}`} className='text-decoration-none'>
                                             <Button className="d-flex align-items-center gap-1" variant="outline-success">
                                                 <MdOutlineRemoveRedEye /> view
