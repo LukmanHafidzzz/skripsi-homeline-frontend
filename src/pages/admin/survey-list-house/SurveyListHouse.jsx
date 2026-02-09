@@ -19,7 +19,6 @@ export default function SurveyListHouse() {
     const statusBadgeClass = {
         'Perlu Survey': 'bg-warning',
         'Sedang Survey': 'bg-info',
-        'Pengecekan Hasil': 'bg-primary',
         'Survey Selesai': 'bg-success',
     };
 
@@ -84,7 +83,6 @@ export default function SurveyListHouse() {
                         <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Semua')}>Semua</Dropdown.Item>
                         <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Perlu Survey')}>Perlu Survey</Dropdown.Item>
                         <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Sedang Survey')}>Sedang Survey</Dropdown.Item>
-                        <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Pengecekan Hasil')}>Pengecekan Hasil</Dropdown.Item>
                         <Dropdown.Item className='fw-semibold' onClick={() => handleSelect('Survey Selesai')}>Survey Selesai</Dropdown.Item>
                     </DropdownButton>
                 </div>

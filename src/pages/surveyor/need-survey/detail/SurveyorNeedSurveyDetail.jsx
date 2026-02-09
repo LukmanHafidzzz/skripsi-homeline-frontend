@@ -10,7 +10,7 @@ import { FaRegMap } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 
-export default function SurveyorHouseListDetail() {
+export default function SurveyorNeedSurveyDetail() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -118,24 +118,6 @@ export default function SurveyorHouseListDetail() {
                                 </div>
                                 <div>
                                     {house.address.full_address}
-                                </div>
-                                <div className="fw-bold mb-2 fs-5 mt-4">
-                                    HASIL SURVEY
-                                </div>
-                                <div>
-                                    {house.house_survey?.notes_file ? (
-                                        <>
-                                            <Link
-                                                target='_blank'
-                                                to={house.house_survey.notes_file}
-                                                className='text-decoration-none text-black'
-                                            >
-                                                <FaRegFile /> <span className="ms-2">{house.house_survey.notes_file}</span>
-                                            </Link>
-                                        </>
-                                    ) : (
-                                        <>-</>
-                                    )}
                                 </div>
                             </Col>
                             <Col data-aos="fade-up" data-aos-duration="800">

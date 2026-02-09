@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Col, Container, Image, Row } from 'react-bootstrap'
+import { Col, Container, Image, Row } from 'react-bootstrap'
 import './style.css'
 import '@splidejs/react-splide/css';
 import { Link, useParams } from 'react-router-dom';
@@ -7,10 +7,10 @@ import { Splide, SplideSlide } from '@splidejs/react-splide';
 import Skeleton from 'react-loading-skeleton';
 import { FaRegFile } from 'react-icons/fa6';
 import { FaRegMap } from 'react-icons/fa';
-import Swal from 'sweetalert2';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
-export default function SurveyorHouseListDetail() {
+export default function DesignerNeedDesignDetail() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -24,7 +24,7 @@ export default function SurveyorHouseListDetail() {
     useEffect(() => {
         const fetchHouseDetail = async () => {
             try {
-                const res = await axios.get(`http://localhost:5773/api/surveyor/house-detail/${id}`, {
+                const res = await axios.get(`http://localhost:5773/api/designer/house-detail/${id}`, {
                     withCredentials: true
                 });
                 setHouse(res.data);
@@ -55,12 +55,7 @@ export default function SurveyorHouseListDetail() {
                             >
                                 {house.house_photos.map((item, index) => (
                                     <SplideSlide className="h-100" key={index}>
-                                        <Image
-                                            src={item.photo}
-                                            className="img-fill rounded-2"
-                                            fetchPriority="high"
-                                            decoding="async"
-                                        />
+                                        <Image src={item.photo} className="img-fill rounded-2" />
                                     </SplideSlide>
                                 ))}
                             </Splide>
@@ -118,24 +113,6 @@ export default function SurveyorHouseListDetail() {
                                 </div>
                                 <div>
                                     {house.address.full_address}
-                                </div>
-                                <div className="fw-bold mb-2 fs-5 mt-4">
-                                    HASIL SURVEY
-                                </div>
-                                <div>
-                                    {house.house_survey?.notes_file ? (
-                                        <>
-                                            <Link
-                                                target='_blank'
-                                                to={house.house_survey.notes_file}
-                                                className='text-decoration-none text-black'
-                                            >
-                                                <FaRegFile /> <span className="ms-2">{house.house_survey.notes_file}</span>
-                                            </Link>
-                                        </>
-                                    ) : (
-                                        <>-</>
-                                    )}
                                 </div>
                             </Col>
                             <Col data-aos="fade-up" data-aos-duration="800">

@@ -75,6 +75,9 @@ const DesignListHouseDetail = Loadable(lazy(() => import('./pages/admin/design-l
 const DesignInput = Loadable(lazy(() => import('./pages/admin/design-input/DesignInput')));
 const DesignInputDetail = Loadable(lazy(() => import('./pages/admin/design-input/detail/DesignInputDetail')));
 const DesignInputModel = Loadable(lazy(() => import('./pages/admin/design-input/model/DesignInputModel')));
+const DesignRev = Loadable(lazy(() => import('./pages/admin/design-rev/DesignRev')));
+const DesignRevDetail = Loadable(lazy(() => import('./pages/admin/design-rev/detail/DesignRevDetail')));
+const DesignRevModel = Loadable(lazy(() => import('./pages/admin/design-rev/model/DesignRevModel')));
 
 const SurveyorHome = Loadable(lazy(() => import("./pages/surveyor/home/SurveyorHome.jsx")));
 const SurveyorHouseList = Loadable(lazy(() => import('./pages/surveyor/house-list/SurveyorHouseList')));
@@ -82,6 +85,7 @@ const SurveyorHouseListDetail = Loadable(lazy(() => import('./pages/surveyor/hou
 const SurveyorResultInput = Loadable(lazy(() => import('./pages/surveyor/input/SurveyorResultInput')));
 const SurveyorResultInputDetail = Loadable(lazy(() => import('./pages/surveyor/input/detail/SurveyorResultInputDetail')));
 const SurveyorNeedSurvey = Loadable(lazy(() => import('./pages/surveyor/need-survey/SurveyorNeedSurvey')));
+const SurveyorNeedSurveyDetail = Loadable(lazy(() => import('./pages/surveyor/need-survey/detail/SurveyorNeedSurveyDetail')));
 const SurveyorNeedRevision = Loadable(lazy(() => import('./pages/surveyor/revision/SurveyNeedRev')));
 const SurveyNeedRevDetail = Loadable(lazy(() => import('./pages/surveyor/revision/detail/SurveyNeedRevDetail')));
 const SurveyorMakeReq = Loadable(lazy(() => import('./pages/surveyor/make-request/SurveyorMakeReq')));
@@ -94,7 +98,11 @@ const DesignerHouseListModel = Loadable(lazy(() => import('./pages/designer/hous
 const DesignerResultInput = Loadable(lazy(() => import('./pages/designer/input/DesignerResultInput')));
 const DesignerResultInputDetail = Loadable(lazy(() => import('./pages/designer/input/detail/DesignerResultInputDetail')));
 const DesignerResultInputDetailModel = Loadable(lazy(() => import('./pages/designer/input/model/DesignerResultInputDetailModel')));
-
+const DesignerNeedDesign = Loadable(lazy(() => import('./pages/designer/need-design/DesignerNeedDesign')));
+const DesignerNeedDesignDetail = Loadable(lazy(() => import('./pages/designer/need-design/detail/DesignerNeedDesignDetail')));
+const DesignerNeedRev = Loadable(lazy(() => import('./pages/designer/revision/DesignNeedRev')));
+const DesignerNeedRevDetail = Loadable(lazy(() => import('./pages/designer/revision/detail/DesignNeedRevDetail')));
+const DesignerNeedRevModel = Loadable(lazy(() => import('./pages/designer/revision/model/DesignNeedRevModel')));
 const DesignerMakeReq = Loadable(lazy(() => import('./pages/designer/make-request/DesignerMakeReq')));
 const DesignerMakeReqDetail = Loadable(lazy(() => import('./pages/designer/make-request/detail/DesignerMakeReqDetail')));
 
@@ -191,6 +199,9 @@ function App() {
                 <Route path='design-input' element={<DesignInput />} />
                 <Route path='design-input/detail/:id' element={<DesignInputDetail />} />
                 <Route path='design-input/detail/:id/model/:id' element={<DesignInputModel />} />
+                <Route path='design-revision' element={<DesignRev />} />
+                <Route path='design-revision/detail/:id' element={<DesignRevDetail />} />
+                <Route path='design-revision/detail/:id/model/:id' element={<DesignRevModel />} />
             </Route>
 
             <Route
@@ -207,8 +218,10 @@ function App() {
                 <Route path='input-house-survey' element={<SurveyorResultInput />} />
                 <Route path='input-house-survey/detail/:id' element={<SurveyorResultInputDetail />} />
                 <Route path='need-survey' element={<SurveyorNeedSurvey />} />
+                <Route path='need-survey/detail/:id' element={<SurveyorNeedSurveyDetail />} />
                 <Route path='need-revision' element={<SurveyorNeedRevision />} />
                 <Route path='need-revision/detail/:id' element={<SurveyNeedRevDetail />} />
+
                 <Route path='make-request' element={<SurveyorMakeReq />} />
                 <Route path='make-request/detail/:id' element={<SurveyorMakeReqDetail />} />
             </Route>
@@ -225,9 +238,14 @@ function App() {
                 <Route path='house-list' element={<DesignerHouseList />} />
                 <Route path='house-list/detail/:id' element={<DesignerHouseListDetail />} />
                 <Route path='house-list/detail/:id/model/:id' element={<DesignerHouseListModel />} />
+                <Route path='need-design' element={<DesignerNeedDesign />} />
+                <Route path='need-design/detail/:id' element={<DesignerNeedDesignDetail />} />
                 <Route path='input-house-model' element={<DesignerResultInput />} />
                 <Route path='input-house-model/detail/:id' element={<DesignerResultInputDetail />} />
                 <Route path='input-house-model/detail/:id/model/:id' element={<DesignerResultInputDetailModel />} />
+                <Route path='need-revision' element={<DesignerNeedRev />} />
+                <Route path='need-revision/detail/:id' element={<DesignerNeedRevDetail />} />
+                <Route path='need-revision/detail/:id/model/:id' element={<DesignerNeedRevModel />} />
 
                 <Route path='make-request' element={<DesignerMakeReq />} />
                 <Route path='make-request/detail/:id' element={<DesignerMakeReqDetail />} />

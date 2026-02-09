@@ -10,7 +10,7 @@ import { FaRegMap } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 
-export default function DesignInputDetail() {
+export default function DesignRevDetail() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [buttonLoading, setButtonLoading] = useState(false);
@@ -220,6 +220,16 @@ export default function DesignInputDetail() {
                                 </div>
                             </Col>
                         </Row>
+                    </Col>
+                </Row>
+                <Row className="mt-5 mb-4" data-aos="fade-up" data-aos-duration="800">
+                    <Col className="p-0">
+                        <div className="fw-bold mb-2 fs-5">
+                            REVISI YANG DIBERIKAN
+                        </div>
+                        <div className='border border-2 p-3 rounded'>
+                            {house.house_process.house_design_revs[0].comment}
+                        </div>
                     </Col>
                 </Row>
                 <Row className="mt-5 mb-4" data-aos="fade-up" data-aos-duration="800">

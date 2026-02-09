@@ -172,6 +172,24 @@ export default function DesignerHouseListDetail() {
                                         <Col className='p-0'>+62{house.no_telp}</Col>
                                     </Row>
                                 </div>
+                                <div className="fw-bold mb-2 fs-5 mt-4">
+                                    DOKUMENTASI FOTO & VIDEO
+                                </div>
+                                <div>
+                                    {house.house_survey?.photo_video_link ? (
+                                        <>
+                                            <Link
+                                                target='_blank'
+                                                to={house.house_survey.photo_video_link}
+                                                className='text-decoration-none text-black'
+                                            >
+                                                <span>{house.house_survey.photo_video_link}</span>
+                                            </Link>
+                                        </>
+                                    ) : (
+                                        <>-</>
+                                    )}
+                                </div>
                             </Col>
                         </Row>
                     </Col>

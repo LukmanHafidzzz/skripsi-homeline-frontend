@@ -5,7 +5,7 @@ import { Link, useParams } from 'react-router-dom';
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import axios from 'axios';
 
-export default function SurveyRev() {
+export default function SurveyNeedRev() {
     const [selected, setSelected] = useState('Semua');
     const [houses, setHouses] = useState([]);
     const [filteredHouses, setFilteredHouses] = useState([]);

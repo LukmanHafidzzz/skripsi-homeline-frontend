@@ -262,7 +262,7 @@ export default function SurveyRevDetail() {
                         </div>
                     </Col>
                 </Row>
-                <Row className="mt-5 mb-4" data-aos="fade-up" data-aos-duration="800">
+                <Row className="mt-5 mb-4">
                     <Col className="p-0">
                         <div className="fw-bold mb-2 fs-5">
                             HASIL SURVEY

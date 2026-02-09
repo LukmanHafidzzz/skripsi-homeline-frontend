@@ -2,7 +2,7 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 import './style.css';
 import { BsHouses } from 'react-icons/bs';
-import { LuClipboardPen, LuFileInput } from 'react-icons/lu';
+import { LuClipboardList, LuClipboardPen, LuFileInput } from 'react-icons/lu';
 import { IoHomeOutline } from 'react-icons/io5';
 
 export default function DesignerSidebar() {
@@ -31,12 +31,12 @@ export default function DesignerSidebar() {
                     <BsHouses /> List Rumah
                 </NavLink>
                 <NavLink
-                    to='make-request'
+                    to='need-design'
                     className={({ isActive }) =>
                         `text-decoration-none px-4 py-3 mb-1 text-black rounded-2 sub-menu gap-2 d-flex align-items-center ${isActive ? 'active-menu' : ''}`
                     }
                 >
-                    <LuClipboardPen /> Buat Request
+                    <LuClipboardList /> Perlu Desain
                 </NavLink>
                 <NavLink
                     to='input-house-model'
@@ -45,6 +45,14 @@ export default function DesignerSidebar() {
                     }
                 >
                     <LuFileInput /> Input Hasil Design
+                </NavLink>
+                <NavLink
+                    to='need-revision'
+                    className={({ isActive }) =>
+                        `text-decoration-none px-4 py-3 mb-1 text-black rounded-2 sub-menu gap-2 d-flex align-items-center ${isActive ? 'active-menu' : ''}`
+                    }
+                >
+                    <LuClipboardPen /> Perlu Revisi
                 </NavLink>
             </div>
         </>

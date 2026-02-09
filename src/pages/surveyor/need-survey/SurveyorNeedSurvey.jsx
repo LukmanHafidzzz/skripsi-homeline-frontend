@@ -157,9 +157,8 @@ export default function SurveyorNeedSurvey() {
                                     <div className="d-flex gap-2 justify-content-center">
                                         <Link className='text-decoration-none'>
                                             <Button className="d-flex align-items-center gap-1" variant="primary" disabled={hasPendingSurvey} onClick={() => handleStartSurvey(houseProcess.id)}>
-                                                <LuClipboardPlus /> survey
+                                                <LuClipboardPlus /> mulai
                                             </Button>
-
                                         </Link>
                                         <Link to={`./detail/${houseProcess.house.id}`} className='text-decoration-none'>
                                             <Button className="d-flex align-items-center gap-1" variant="outline-success">
