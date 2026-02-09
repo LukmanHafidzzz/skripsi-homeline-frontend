@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import './style.css'
 import { Link } from 'react-router-dom';
 import NProgress from 'nprogress';
+import { LuEye, LuEyeOff } from "react-icons/lu";
 
 export default function Register() {
     const [loading, setLoading] = useState(false);
@@ -14,6 +15,8 @@ export default function Register() {
         password: '',
         confirmPassword: ''
     });
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const [message, setMessage] = useState('');
 
@@ -105,27 +108,39 @@ export default function Register() {
                                 placeholder="Masukkan alamat email"
                             />
                         </Form.Group>
-                        <Form.Group className="mb-4" controlId="">
+                        <Form.Group className="mb-4 position-relative">
                             <Form.Label className='fw-bold'>Password</Form.Label>
                             <Form.Control
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 name="password"
                                 value={formData.password}
                                 onChange={handleChange}
-                                className='auth-form fs-7'
+                                className='auth-form fs-7 pe-5'
                                 placeholder="Masukkan password"
                             />
+                            <span
+                                className="toggle-password"
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                {showPassword ? <LuEyeOff /> : <LuEye />}
+                            </span>
                         </Form.Group>
-                        <Form.Group className="mb-5" controlId="">
+                        <Form.Group className="mb-5 position-relative">
                             <Form.Label className='fw-bold'>Konfirmasi Password</Form.Label>
                             <Form.Control
-                                type="password"
+                                type={showConfirmPassword ? "text" : "password"}
                                 name="confirmPassword"
                                 value={formData.confirmPassword}
                                 onChange={handleChange}
-                                className='auth-form fs-7'
+                                className='auth-form fs-7 pe-5'
                                 placeholder="Masukkan konfirmasi password"
                             />
+                            <span
+                                className="toggle-password"
+                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            >
+                                {showConfirmPassword ? <LuEyeOff /> : <LuEye />}
+                            </span>
                         </Form.Group>
                         <div className='d-flex justify-content-center align-items-center'>
                             <Button type="submit" className='btn-auth fw-semibold'>

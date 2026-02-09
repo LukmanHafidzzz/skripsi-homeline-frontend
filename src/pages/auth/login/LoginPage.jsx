@@ -6,10 +6,12 @@ import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import axios from 'axios'
 import './style.css'
+import { LuEye, LuEyeOff } from "react-icons/lu";
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
@@ -85,17 +87,26 @@ export default function LoginPage() {
                             required
                         />
                     </Form.Group>
-                    <Form.Group className="mb-5">
+                    <Form.Group className="position-relative">
                         <Form.Label className='fw-bold'>Password</Form.Label>
                         <Form.Control
-                            type="password"
-                            className='auth-form fs-7'
+                            type={showPassword ? "text" : "password"}
+                            className='auth-form fs-7 pe-5'
                             placeholder="Masukkan password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
                         />
+                        <span
+                            className="toggle-password"
+                            onClick={() => setShowPassword(!showPassword)}
+                        >
+                            {showPassword ? <LuEyeOff /> : <LuEye />}
+                        </span>
                     </Form.Group>
+                    <div className='text-end mt-1 fs-7 mb-5'>
+                        <Link to="/auth/forgot-password" className='text-secondary text-decoration-none'>Lupa Password?</Link>
+                    </div>
                     <div className='d-flex justify-content-center align-items-center'>
                         <Button type="submit" className='btn-auth fw-semibold'>
                             {loading ? (

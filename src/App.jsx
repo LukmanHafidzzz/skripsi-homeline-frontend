@@ -108,6 +108,8 @@ const DesignerMakeReqDetail = Loadable(lazy(() => import('./pages/designer/make-
 
 const Login = Loadable(lazy(() => import("./pages/auth/login/LoginPage.jsx")));
 const Register = Loadable(lazy(() => import("./pages/auth/register/Register.jsx")));
+const ForgotPassword = Loadable(lazy(() => import("./pages/auth/forgot-password/ForgotPassword.jsx")));
+const ResetPassword = Loadable(lazy(() => import("./pages/auth/reset-password/ResetPassword.jsx")));
 
 function App() {
     useEffect(() => {
@@ -254,6 +256,8 @@ function App() {
             <Route path="/auth">
                 <Route path="login" element={<Login />} />
                 <Route path="register" element={<Register />} />
+                <Route path="forgot-password" element={<ForgotPassword />} />
+                <Route path="reset-password" element={<ResetPassword />} />
             </Route>
         </Routes>
     );
