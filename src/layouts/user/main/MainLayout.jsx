@@ -13,8 +13,8 @@ export default function MainLayout() {
     const { loading: authLoading } = useAuth();
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
-    const [minPrice, setMinPrice] = useState("");
-    const [maxPrice, setMaxPrice] = useState("");
+    const [minPrice, setMinPrice] = useState({ value: "", unit: "jt" });
+    const [maxPrice, setMaxPrice] = useState({ value: "", unit: "jt" });
     const [sortOption, setSortOption] = useState("Terbaru");
     const [provinsiList, setProvinsiList] = useState([]);
     const [selectedProvinsi, setSelectedProvinsi] = useState([]);
@@ -28,6 +28,22 @@ export default function MainLayout() {
         );
     };
 
+    const handlePriceChange = (val, setter, currentUnit) => {
+        const num = parseFloat(val);
+        if (!val || isNaN(num)) {
+            setter({ value: "", unit: "jt" });
+            return;
+        }
+
+        const inJuta = currentUnit === "m" ? num * 1000 : num;
+
+        if (inJuta >= 1000) {
+            setter({ value: inJuta / 1000, unit: "m" });
+        } else {
+            setter({ value: inJuta, unit: "jt" });
+        }
+    };
+
     useEffect(() => {
         const timer = setTimeout(() => setLoading(false), 1000);
         return () => clearTimeout(timer);
@@ -38,7 +54,7 @@ export default function MainLayout() {
     }, [authLoading]);
 
     useEffect(() => {
-        fetch('https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json')
+        fetch('http://localhost:5773/api/user/provinces')
             .then(res => res.json())
             .then(data => setProvinsiList(data));
     }, []);
@@ -53,40 +69,46 @@ export default function MainLayout() {
                     <Col xs={3} className="">
                         <div className='fw-bold fs-5 mb-3'>Filter</div>
                         <Container className="border p-4 rounded-2 mb-4 box-filter">
-                            <div className='fw-bold mb-3'>Harga</div>
+                            <div className='fw-bold mb-3'>Harga (dalam Juta Rp)</div>
                             <div className="d-flex flex-column gap-2 mb-4">
-                                <InputGroup className="">
+                                <InputGroup>
                                     <InputGroup.Text id="basic-addon1">Rp</InputGroup.Text>
                                     <Form.Control
-                                        placeholder="Harga minimum"
-                                        value={minPrice}
-                                        onChange={(e) => setMinPrice(e.target.value)}
-                                        className="form-maxmin"
+                                        placeholder="Minimal Harga"
+                                        value={minPrice.value}
+                                        onChange={(e) => handlePriceChange(e.target.value, setMinPrice, minPrice.unit)}
+                                        className="form-maxmin text-end"
+                                        type="number"
+                                        min="0"
                                     />
+                                    <span className="input-suffix">{minPrice.unit}</span>
                                 </InputGroup>
-                                <InputGroup className="">
+                                <InputGroup>
                                     <InputGroup.Text id="basic-addon2">Rp</InputGroup.Text>
                                     <Form.Control
-                                        placeholder="Harga maksimum"
-                                        value={maxPrice}
-                                        onChange={(e) => setMaxPrice(e.target.value)}
-                                        className="form-maxmin"
+                                        placeholder="Maksimal Harga"
+                                        value={maxPrice.value}
+                                        onChange={(e) => handlePriceChange(e.target.value, setMaxPrice, maxPrice.unit)}
+                                        className="form-maxmin text-end"
+                                        type="number"
+                                        min="0"
                                     />
+                                    <span className="input-suffix">{maxPrice.unit}</span>
                                 </InputGroup>
                             </div>
                         </Container>
                         <Container className="border p-3 rounded-2 mb-4 box-filter">
                             <div className='fw-bold mb-3'>Lokasi</div>
                             <div className="d-flex flex-column gap-2 mb-4 loc-container">
-                                {provinsiList.map((prov) => (
+                                {provinsiList.map((province) => (
                                     <Form.Check
-                                        key={prov.id}
+                                        key={province}
                                         className="checkbox-ellipsis"
                                         type="checkbox"
-                                        id={`provinsi-${prov.id}`}
-                                        label={prov.name}
-                                        checked={selectedProvinsi.includes(prov.name)}
-                                        onChange={() => handleCheckboxChange(prov.name)}
+                                        id={`provinsi-${province}`}
+                                        label={province}
+                                        checked={selectedProvinsi.includes(province)}
+                                        onChange={() => handleCheckboxChange(province)}
                                     />
                                 ))}
                             </div>

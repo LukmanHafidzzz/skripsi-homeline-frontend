@@ -33,11 +33,22 @@ export default function Searchpage({ searchTerm, minPrice, maxPrice, sortOption,
             );
         }
 
-        if (minPrice) {
-            filtered = filtered.filter(house => parseInt(house.price) >= parseInt(minPrice));
+        const toRupiah = (price) => {
+            if (!price.value) return null;
+
+            return price.unit === "m"
+                ? price.value * 1_000_000_000
+                : price.value * 1_000_000;
+        };
+
+        const minRupiah = toRupiah(minPrice);
+        const maxRupiah = toRupiah(maxPrice);
+
+        if (minRupiah !== null) {
+            filtered = filtered.filter(house => parseInt(house.price) >= minRupiah);
         }
-        if (maxPrice) {
-            filtered = filtered.filter(house => parseInt(house.price) <= parseInt(maxPrice));
+        if (maxRupiah !== null) {
+            filtered = filtered.filter(house => parseInt(house.price) <= maxRupiah);
         }
 
         if (selectedProvinsi.length > 0) {
