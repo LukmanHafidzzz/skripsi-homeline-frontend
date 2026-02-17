@@ -68,6 +68,7 @@ export default function DesignNeedRev() {
                 <thead>
                     <tr className='text-center'>
                         <th className='custom-table-header'>No</th>
+                        <th className='custom-table-header'>Kode</th>
                         <th className='custom-table-header'>Judul</th>
                         <th className='custom-table-header'>Revisi</th>
                         <th className='custom-table-header'>Action</th>
@@ -86,6 +87,7 @@ export default function DesignNeedRev() {
                         filteredHouses.map((house, index) => (
                             <tr key={index}>
                                 <td className='text-center'>{index + 1}.</td>
+                                <td>{house.house_code}</td>
                                 <td>{house.title}</td>
                                 <td>{house.house_process.house_design_revs[0].comment}</td>
                                 <td className="align-middle">

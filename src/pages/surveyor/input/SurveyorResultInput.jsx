@@ -101,6 +101,7 @@ export default function SurveyorResultInput() {
                 <thead>
                     <tr className='text-center'>
                         <th className='custom-table-header'>No</th>
+                        <th className='custom-table-header'>Kode</th>
                         <th className='custom-table-header'>Judul</th>
                         <th className='custom-table-header'>Harga</th>
                         <th className='custom-table-header'>Status Rumah</th>
@@ -121,6 +122,7 @@ export default function SurveyorResultInput() {
                         filteredHouses.map((houseProcess, index) => (
                             <tr key={index}>
                                 <td className='text-center'>{index + 1}.</td>
+                                <td>{houseProcess.house.house_code}</td>
                                 <td>{houseProcess.house.title}</td>
                                 <td>Rp {parseInt(houseProcess.house.price).toLocaleString("id-ID")}</td>
                                 <td>

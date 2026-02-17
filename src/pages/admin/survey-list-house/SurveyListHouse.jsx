@@ -92,6 +92,7 @@ export default function SurveyListHouse() {
                 <thead>
                     <tr className='text-center'>
                         <th className='custom-table-header'>No</th>
+                        <th className='custom-table-header'>Kode</th>
                         <th className='custom-table-header'>Judul</th>
                         <th className='custom-table-header'>Status</th>
                         <th className='custom-table-header'>Action</th>
@@ -110,6 +111,7 @@ export default function SurveyListHouse() {
                         filteredHouses.map((houseProcess, index) => (
                             <tr key={index}>
                                 <td className='text-center'>{index + 1}.</td>
+                                <td>{houseProcess.house.house_code}</td>
                                 <td>{houseProcess.house.title}</td>
                                 <td>
                                     <span

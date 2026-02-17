@@ -94,6 +94,7 @@ export default function SurveyRev() {
                 <thead>
                     <tr className='text-center'>
                         <th className='custom-table-header'>No</th>
+                        <th className='custom-table-header'>Kode</th>
                         <th className='custom-table-header'>Judul</th>
                         <th className='custom-table-header'>Revisi</th>
                         <th className='custom-table-header'>Status</th>
@@ -113,6 +114,7 @@ export default function SurveyRev() {
                         filteredHouses.map((house, index) => (
                             <tr key={index}>
                                 <td className='text-center'>{index + 1}.</td>
+                                <td>{house.house_code}</td>
                                 <td>{house.title}</td>
                                 <td>{house.house_process.house_survey_revs[0].comment}</td>
                                 <td>

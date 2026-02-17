@@ -95,6 +95,7 @@ export default function HouseList() {
                 <thead>
                     <tr className='text-center'>
                         <th className='custom-table-header'>No</th>
+                        <th className='custom-table-header'>Kode</th>
                         <th className='custom-table-header'>Pengunggah</th>
                         <th className='custom-table-header'>Nomor Kontak</th>
                         <th className='custom-table-header'>Judul</th>
@@ -114,6 +115,7 @@ export default function HouseList() {
                         filteredHouses.map((house, index) => (
                             <tr key={index}>
                                 <td className='text-center'>{index + 1}.</td>
+                                <td>{house.house_code}</td>
                                 <td>{house.user.username}</td>
                                 <td>+62 {house.no_telp}</td>
                                 <td>{house.title}</td>

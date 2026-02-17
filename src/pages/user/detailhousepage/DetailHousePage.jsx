@@ -71,6 +71,13 @@ export default function DetailHousePage() {
         fetchHouseDetail();
     }, [id]);
     if (!house) return <div>Loading...</div>;
+    const phone = house.no_telp?.startsWith('0')
+        ? house.no_telp.substring(1)
+        : house.no_telp;
+
+    const waMessage = encodeURIComponent(
+        `Halo, saya tertarik dengan rumah "${house.title}" dengan kode ${house.house_code}. Saya mengetahui iklan ini dari Homeline.`
+    );
     return (
         <>
             <Container className='fluid'>
@@ -304,7 +311,7 @@ export default function DetailHousePage() {
                             <div className='mb-4'>{house.user.email}</div>
                             <Link
                                 className='btn-wa fs-4 fw-semibold text-decoration-none'
-                                to={`https://wa.me/62${house.no_telp}`}
+                                to={`https://wa.me/62${house.no_telp}?text=${waMessage}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >

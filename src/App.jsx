@@ -131,9 +131,7 @@ function App() {
 
             <Route
                 element={
-                    <ProtectedRoute allowedLevels={[4]}>
-                        <SecondaryLayout />
-                    </ProtectedRoute>
+                    <SecondaryLayout />
                 }>
                 <Route path="search/detail/:id" element={<DetailHousePage />} />
                 <Route path="search/detail/:id/model/:id" element={<User3dModel />} />
