@@ -7,11 +7,11 @@ import { Outlet } from 'react-router-dom'
 import './style.css'
 import axios from 'axios';
 import Searchpage from '../../../pages/user/searchpage/Searchpage.jsx';
+import { useAuth } from '../../../context/AuthProvider.jsx';
 
 export default function MainLayout() {
+    const { loading: authLoading } = useAuth();
     const [loading, setLoading] = useState(true);
-    const [user, setUser] = useState(null);
-
     const [searchTerm, setSearchTerm] = useState("");
     const [minPrice, setMinPrice] = useState("");
     const [maxPrice, setMaxPrice] = useState("");
@@ -33,35 +33,20 @@ export default function MainLayout() {
         return () => clearTimeout(timer);
     }, []);
 
-    // Get list provinsi
+    useEffect(() => {
+        if (!authLoading) setLoading(false);
+    }, [authLoading]);
+
     useEffect(() => {
         fetch('https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json')
             .then(res => res.json())
             .then(data => setProvinsiList(data));
     }, []);
 
-    const fetchUser = async () => {
-        try {
-            const res = await axios.get('http://localhost:5773/api/auth/me', {
-                withCredentials: true
-            });
-            setUser(res.data);
-        } catch (error) {
-            setUser(null);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        fetchUser();
-    }, []);
-
-
     return (
         <>
             <Suspense fallback={<div>Loading...</div>}>
-                <NavbarHomeUser user={user} setUser={setUser} />
+                <NavbarHomeUser />
             </Suspense>
             <Container fluid className="mt-21 px-4">
                 <Row>

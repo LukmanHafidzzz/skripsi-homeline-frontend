@@ -7,6 +7,7 @@ import 'nprogress/nprogress.css';
 import axios from 'axios'
 import './style.css'
 import { LuEye, LuEyeOff } from "react-icons/lu";
+import { useAuth } from '../../../context/AuthProvider.jsx';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -15,6 +16,7 @@ export default function LoginPage() {
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const { setUser } = useAuth();
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -33,6 +35,7 @@ export default function LoginPage() {
             });
 
             const user = response.data;
+            setUser(user);
             const level = user.level_user_id;
 
             Swal.fire({
