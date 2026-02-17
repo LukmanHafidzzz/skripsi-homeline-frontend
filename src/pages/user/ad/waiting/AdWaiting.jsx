@@ -44,6 +44,7 @@ export default function AdWaiting() {
                 <thead>
                     <tr className='text-center'>
                         <th>No</th>
+                        <th>Kode</th>
                         <th>Judul</th>
                         <th>Harga</th>
                         <th>Status</th>
@@ -54,6 +55,7 @@ export default function AdWaiting() {
                     {houses.map((house, index) => (
                         <tr key={house.id}>
                             <td className='text-center'>{index + 1}.</td>
+                            <td>{house.house_code}</td>
                             <td>{house.title}</td>
                             <td className='text-end'>{Number(house.price).toLocaleString('id-ID')}</td>
                             <td className='text-center'>{house.status}</td>

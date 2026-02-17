@@ -35,14 +35,6 @@ export default function UserSidebar() {
                     >
                         <IoAdd /> Tambah Iklan
                     </NavLink>
-                    <NavLink
-                        to='delete'
-                        className={({ isActive }) =>
-                            `text-decoration-none px-4 py-3 mb-1 text-black rounded-2 sub-menu gap-2 d-flex align-items-center ${isActive ? 'active-menu' : ''}`
-                        }
-                    >
-                        <IoTrashOutline /> Hapus Iklan
-                    </NavLink>
                 </div>
                 <div className=''>
                     <div className='text-secondary fw-medium mb-2'>Status Iklan</div>
