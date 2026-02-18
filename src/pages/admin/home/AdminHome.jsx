@@ -1,9 +1,8 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
 import SummaryCard from '../../../components/summary-card/SummaryCard'
 import { LuHouse, LuCircleCheck, LuCircleX, LuClock, LuCreditCard, LuLoaderCircle, LuClipboardList, LuSearchCheck, LuClipboardCheck, LuBadgeCheck, LuScanSearch, LuPencilLine } from 'react-icons/lu'
 import axios from 'axios'
-import { useState, useEffect } from 'react'
 
 export default function AdminHome() {
     const [houses, setHouses] = useState({
