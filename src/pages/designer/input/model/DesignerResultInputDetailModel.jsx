@@ -47,19 +47,20 @@ function PlayerControls() {
 function ThreeDViewer({ fileName }) {
     const cameraPosition = [0, 1.6, 7]
     return (
-        <Canvas
-            style={{ height: '500px', background: '#BDDDE4' }}
-            shadows
-            camera={{ position: cameraPosition, fov: 75 }}
-        >
-            <ambientLight intensity={0.5} />
-            <directionalLight position={[5, 10, 5]} intensity={2} castShadow />
-            <spotLight position={[0, 5, 5]} angle={Math.PI / 6} intensity={2} castShadow />
-            <Suspense fallback={null}>
-                <Model fileName={fileName} />
-            </Suspense>
-            <PlayerControls />
-        </Canvas>
+        <div id="canvas-wrapper" style={{ height: '500px', background: '#BDDDE4' }}>
+            <Canvas
+                shadows
+                camera={{ position: cameraPosition, fov: 75 }}
+            >
+                <ambientLight intensity={0.5} />
+                <directionalLight position={[5, 10, 5]} intensity={2} castShadow />
+                <spotLight position={[0, 5, 5]} angle={Math.PI / 6} intensity={2} castShadow />
+                <Suspense fallback={null}>
+                    <Model fileName={fileName} />
+                </Suspense>
+                <PlayerControls />
+            </Canvas>
+        </div>
     )
 }
 
