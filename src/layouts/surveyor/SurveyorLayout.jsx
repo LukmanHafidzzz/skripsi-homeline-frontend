@@ -5,16 +5,18 @@ import { Outlet, useNavigate } from 'react-router-dom'
 const SurveyorSidebar = lazy(() => import('../../components/surveyor-sidebar/SurveyorSidebar.jsx'));
 import './style.css'
 import { FaUser } from "react-icons/fa";
+import { useAuth } from '../../context/AuthProvider.jsx';
 
 export default function SurveyorLayout() {
 
     const navigate = useNavigate();
-
+    const { setUser } = useAuth();
     const handleLogout = async () => {
         try {
             await axios.delete('http://localhost:5773/api/auth/logout', {
                 withCredentials: true
             });
+            setUser(null);
             navigate('/');
         } catch (error) {
             console.error('Logout gagal:', error);

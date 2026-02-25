@@ -2,6 +2,7 @@ import React, { lazy, Suspense } from 'react';
 import axios from 'axios';
 import { Col, Container, Dropdown, Row } from 'react-bootstrap'
 import { Outlet, useNavigate } from 'react-router-dom'
+import { useAuth } from '../../context/AuthProvider.jsx';
 const DesignerSidebar = lazy(() => import('../../components/designer-sidebar/DesignerSidebar.jsx'));
 
 
@@ -10,12 +11,13 @@ import { FaUser } from "react-icons/fa";
 
 export default function DesignerLayout() {
     const navigate = useNavigate();
-
+    const { setUser } = useAuth();
     const handleLogout = async () => {
         try {
             await axios.delete('http://localhost:5773/api/auth/logout', {
                 withCredentials: true
             });
+            setUser(null);
             navigate('/');
         } catch (error) {
             console.error('Logout gagal:', error);

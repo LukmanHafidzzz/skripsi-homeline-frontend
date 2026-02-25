@@ -3,17 +3,20 @@ import { Col, Container, Dropdown, Image, Row } from 'react-bootstrap'
 import { Outlet } from 'react-router-dom'
 const AdminSidebar = lazy(() => import('../../components/admin-sidebar/AdminSidebar.jsx'));
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthProvider.jsx';
 import axios from 'axios';
 import './style.css'
 import { FaUser } from "react-icons/fa";
 
 export default function AdminLayout() {
     const navigate = useNavigate();
+    const { setUser } = useAuth();
     const handleLogout = async () => {
         try {
             await axios.delete('http://localhost:5773/api/auth/logout', {
                 withCredentials: true
             });
+            setUser(null);
             navigate('/auth/login');
         } catch (error) {
             console.error('Logout gagal:', error);
