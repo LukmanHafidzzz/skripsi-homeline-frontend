@@ -20,7 +20,7 @@ export default function SurveyNeedRev() {
         const fetchHouses = async () => {
             try {
                 const res = await axios.get(
-                    'http://localhost:5773/api/surveyor/rev-house-survey',
+                    'https://skripsi-homeline-backend.vercel.app/api/surveyor/rev-house-survey',
                     { withCredentials: true }
                 );
                 setHouses(res.data);

@@ -16,7 +16,7 @@ export default function DesignInput() {
         const fetchHouses = async () => {
             try {
                 const res = await axios.get(
-                    'http://localhost:5773/api/admin/design/design-input',
+                    'https://skripsi-homeline-backend.vercel.app/api/admin/design/design-input',
                     { withCredentials: true }
                 );
                 setHouses(res.data);

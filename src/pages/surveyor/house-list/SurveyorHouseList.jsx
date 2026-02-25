@@ -20,7 +20,7 @@ export default function SurveyorHouseList() {
         const fetchHouses = async () => {
             try {
                 const res = await axios.get(
-                    'http://localhost:5773/api/surveyor/house-list',
+                    'https://skripsi-homeline-backend.vercel.app/api/surveyor/house-list',
                     { withCredentials: true }
                 );
                 setHouseProcesses(res.data);
@@ -109,12 +109,12 @@ export default function SurveyorHouseList() {
                                 <td>{houseProcess.house.address.full_address}</td>
                                 <td>
                                     <span className={`badge w-100 py-2 ${houseProcess.survey_process === 'Perlu Survey'
-                                            ? 'bg-warning'
-                                            : houseProcess.survey_process === 'Sedang Survey'
-                                                ? 'bg-info'
-                                                    : houseProcess.survey_process === 'Survey Selesai'
-                                                        ? 'bg-success'
-                                                        : 'bg-dark'
+                                        ? 'bg-warning'
+                                        : houseProcess.survey_process === 'Sedang Survey'
+                                            ? 'bg-info'
+                                            : houseProcess.survey_process === 'Survey Selesai'
+                                                ? 'bg-success'
+                                                : 'bg-dark'
                                         }`}>
                                         {houseProcess.survey_process}
                                     </span>

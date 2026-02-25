@@ -31,7 +31,7 @@ export default function DesignRevDetail() {
     useEffect(() => {
         const fetchHouseDetail = async () => {
             try {
-                const res = await axios.get(`http://localhost:5773/api/admin/house/detail/${id}`, {
+                const res = await axios.get(`https://skripsi-homeline-backend.vercel.app/api/admin/house/detail/${id}`, {
                     withCredentials: true
                 });
                 setHouse(res.data);
@@ -53,7 +53,7 @@ export default function DesignRevDetail() {
 
         try {
             const res = await axios.patch(
-                `http://localhost:5773/api/admin/design/revision/${id}`,
+                `https://skripsi-homeline-backend.vercel.app/api/admin/design/revision/${id}`,
                 { comment },
                 { withCredentials: true }
             );
@@ -290,7 +290,7 @@ export default function DesignRevDetail() {
                                         setButtonLoading(true);
                                         try {
                                             const res = await axios.patch(
-                                                `http://localhost:5773/api/admin/design/design-input/${id}`,
+                                                `https://skripsi-homeline-backend.vercel.app/api/admin/design/design-input/${id}`,
                                                 { withCredentials: true }
                                             );
 

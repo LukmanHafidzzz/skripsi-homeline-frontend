@@ -26,7 +26,7 @@ export default function SurveyListHouse() {
         const fetchHouses = async () => {
             try {
                 const res = await axios.get(
-                    'http://localhost:5773/api/admin/survey/house-list',
+                    'https://skripsi-homeline-backend.vercel.app/api/admin/survey/house-list',
                     { withCredentials: true }
                 );
                 setHouseProcesses(res.data);

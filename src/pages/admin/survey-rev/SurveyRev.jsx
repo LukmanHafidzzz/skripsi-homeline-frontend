@@ -20,7 +20,7 @@ export default function SurveyRev() {
         const fetchHouses = async () => {
             try {
                 const res = await axios.get(
-                    'http://localhost:5773/api/admin/survey/revision-house-list',
+                    'https://skripsi-homeline-backend.vercel.app/api/admin/survey/revision-house-list',
                     { withCredentials: true }
                 );
                 setHouses(res.data);
@@ -120,10 +120,10 @@ export default function SurveyRev() {
                                 <td>
                                     <span
                                         className={`badge w-100 py-2 ${house.house_process.survey_status_input === 'Pengecekan Hasil'
-                                                ? 'bg-info'
-                                                : house.house_process.survey_status_input === 'Revisi'
-                                                    ? 'bg-danger'
-                                                    : 'bg-success'
+                                            ? 'bg-info'
+                                            : house.house_process.survey_status_input === 'Revisi'
+                                                ? 'bg-danger'
+                                                : 'bg-success'
                                             }`}
                                     >
                                         {

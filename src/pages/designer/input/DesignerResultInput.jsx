@@ -20,7 +20,7 @@ export default function DesignerResultInput() {
         const fetchHouseProcesses = async () => {
             try {
                 const res = await axios.get(
-                    'http://localhost:5773/api/designer/result-input',
+                    'https://skripsi-homeline-backend.vercel.app/api/designer/result-input',
                     { withCredentials: true }
                 );
                 setHouseProcesses(res.data);

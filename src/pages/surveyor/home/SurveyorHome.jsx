@@ -19,7 +19,7 @@ export default function SurveyorHome() {
     })
 
     useEffect(() => {
-        axios.get(`http://localhost:5773/api/surveyor/count-survey`, 
+        axios.get(`https://skripsi-homeline-backend.vercel.app/api/surveyor/count-survey`,
             { withCredentials: true })
             .then(res => setHouseSurveyProcesses(res.data))
             .catch(err => console.error(err))
