@@ -33,10 +33,10 @@ function PlayerControls() {
     useFrame(() => {
         if (!ref.current) return
         const dir = [0, 0, 0]
-        if (keys.current['KeyW']) dir[2] -= speed
-        if (keys.current['KeyS']) dir[2] += speed
-        if (keys.current['KeyA']) dir[0] -= speed
-        if (keys.current['KeyD']) dir[0] += speed
+        if (keys.current['KeyW'] || keys.current['ArrowUp']) dir[2] -= speed
+        if (keys.current['KeyS'] || keys.current['ArrowDown']) dir[2] += speed
+        if (keys.current['KeyA'] || keys.current['ArrowLeft']) dir[0] -= speed
+        if (keys.current['KeyD'] || keys.current['ArrowRight']) dir[0] += speed
 
         ref.current.moveRight(dir[0])
         ref.current.moveForward(-dir[2])
