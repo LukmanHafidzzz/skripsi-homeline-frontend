@@ -20,7 +20,12 @@ function PlayerControls() {
     const keys = useRef({});
 
     useState(() => {
-        const down = (e) => (keys.current[e.code] = true)
+        const down = (e) => {
+            if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) {
+                e.preventDefault()
+            }
+            keys.current[e.code] = true
+        }
         const up = (e) => (keys.current[e.code] = false)
         window.addEventListener('keydown', down)
         window.addEventListener('keyup', up)
@@ -37,6 +42,9 @@ function PlayerControls() {
         if (keys.current['KeyS'] || keys.current['ArrowDown']) dir[2] += speed
         if (keys.current['KeyA'] || keys.current['ArrowLeft']) dir[0] -= speed
         if (keys.current['KeyD'] || keys.current['ArrowRight']) dir[0] += speed
+
+        if (keys.current['Space']) ref.current.getObject().position.y += speed
+        if (keys.current['ShiftLeft']) ref.current.getObject().position.y -= speed
 
         ref.current.moveRight(dir[0])
         ref.current.moveForward(-dir[2])
@@ -131,6 +139,12 @@ export default function User3dModel() {
                 </Col>
                 <Col className='p-0'>
                     <span>- Klik tombol kiri pada mouse untuk interaksi</span>
+                </Col>
+                <Col className='p-0'>
+                    <span>- Gunakan tombol <strong>WASD</strong> atau <strong>Arrow (↑ ↓ ← →)</strong> untuk bergerak</span>
+                </Col>
+                <Col className='p-0'>
+                    <span>- <strong>Space</strong> untuk naik, <strong>Shift</strong> untuk turun</span>
                 </Col>
                 <Col className='p-0'>
                     <span>- Tekan tombol Esc untuk keluar dari mode 3D</span>

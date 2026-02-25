@@ -4,6 +4,7 @@ import { OrbitControls, useGLTF, Bounds, PointerLockControls } from '@react-thre
 import { Breadcrumb, Col, Container, Row } from 'react-bootstrap';
 import { Link, useParams } from 'react-router-dom';
 import * as THREE from 'three';
+import Skeleton from 'react-loading-skeleton';
 import './style.css';
 import '@splidejs/react-splide/css';
 import axios from 'axios';
@@ -19,7 +20,12 @@ function PlayerControls() {
     const keys = useRef({});
 
     useState(() => {
-        const down = (e) => (keys.current[e.code] = true)
+        const down = (e) => {
+            if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) {
+                e.preventDefault()
+            }
+            keys.current[e.code] = true
+        }
         const up = (e) => (keys.current[e.code] = false)
         window.addEventListener('keydown', down)
         window.addEventListener('keyup', up)
@@ -36,6 +42,9 @@ function PlayerControls() {
         if (keys.current['KeyS'] || keys.current['ArrowDown']) dir[2] += speed
         if (keys.current['KeyA'] || keys.current['ArrowLeft']) dir[0] -= speed
         if (keys.current['KeyD'] || keys.current['ArrowRight']) dir[0] += speed
+
+        if (keys.current['Space']) ref.current.getObject().position.y += speed
+        if (keys.current['ShiftLeft']) ref.current.getObject().position.y -= speed
 
         ref.current.moveRight(dir[0])
         ref.current.moveForward(-dir[2])
@@ -65,13 +74,20 @@ function ThreeDViewer({ fileName }) {
 }
 
 export default function DesignRevModel() {
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const timer = setTimeout(() => setLoading(false), 2000);
+        return () => clearTimeout(timer);
+    }, []);
+
     const { id } = useParams();
     const [house, setHouse] = useState(null);
 
     useEffect(() => {
         const fetchHouseDetail = async () => {
             try {
-                const res = await axios.get(`http://localhost:5773/api/designer/house-detail/model/${id}`, {
+                const res = await axios.get(`http://localhost:5773/api/user/search/detail/model/${id}`, {
                     withCredentials: true
                 });
                 setHouse(res.data);
@@ -87,8 +103,33 @@ export default function DesignRevModel() {
 
     return (
         <Container className='fluid'>
+            <Row>
+                <Col className="p-0 fs-7">
+                    <Breadcrumb>
+                        <Breadcrumb.Item linkAs={Link} to='/search' className='breadcrumb-link'>
+                            Pencarian
+                        </Breadcrumb.Item>
+                        <Breadcrumb.Item linkAs={Link} to={`../search/detail/${house.id}`} className='breadcrumb-link'>
+                            {house.title}
+                        </Breadcrumb.Item>
+                        <Breadcrumb.Item active>{house.house_design.design_file}</Breadcrumb.Item>
+                    </Breadcrumb>
+                </Col>
+            </Row>
+            <Row className='mb-5'>
+                <div className="fw-semibold fs-5 p-0">
+                    Denah Rumah
+                </div>
+                <img src={house.house_design.floor_plan} alt="" className='img-fluid w-50' />
+            </Row>
+            <Row>
+                <div className="fw-semibold fs-5 p-0 mb-2">
+                    3D Model
+                </div>
+            </Row>
             <Row className="h-100 mb-4">
                 <Col className='p-0'>
+                    {loading && <Skeleton height={500} width='100%' />}
                     <ThreeDViewer fileName={house.house_design.design_file} />
                 </Col>
             </Row>
@@ -101,6 +142,9 @@ export default function DesignRevModel() {
                 </Col>
                 <Col className='p-0'>
                     <span>- Gunakan tombol <strong>WASD</strong> atau <strong>Arrow (↑ ↓ ← →)</strong> untuk bergerak</span>
+                </Col>
+                <Col className='p-0'>
+                    <span>- <strong>Space</strong> untuk naik, <strong>Shift</strong> untuk turun</span>
                 </Col>
                 <Col className='p-0'>
                     <span>- Tekan tombol Esc untuk keluar dari mode 3D</span>
