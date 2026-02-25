@@ -27,11 +27,17 @@ export default function Register() {
         });
     };
 
+    const isPasswordStrong = (password) => {
+        return password.length >= 6
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         NProgress.start();
         if (!formData.email || !formData.password || !formData.confirmPassword) {
+            setLoading(false);
+            NProgress.done();
             return Swal.fire({
                 icon: 'warning',
                 title: 'Form Belum Lengkap',
@@ -39,7 +45,19 @@ export default function Register() {
             });
         }
 
+        if (!isPasswordStrong(formData.password)) {
+            setLoading(false);
+            NProgress.done();
+            return Swal.fire({
+                icon: 'warning',
+                title: 'Password Terlalu Lemah',
+                text: 'Minimal 6 karakter'
+            })
+        }
+
         if (formData.password !== formData.confirmPassword) {
+            setLoading(false);
+            NProgress.done();
             return Swal.fire({
                 icon: 'warning',
                 title: 'Password Tidak Cocok',
@@ -124,6 +142,7 @@ export default function Register() {
                             >
                                 {showPassword ? <LuEyeOff /> : <LuEye />}
                             </span>
+                            <small className="text-muted">Minimal 6 karakter</small>
                         </Form.Group>
                         <Form.Group className="mb-5 position-relative">
                             <Form.Label className='fw-bold'>Konfirmasi Password</Form.Label>
