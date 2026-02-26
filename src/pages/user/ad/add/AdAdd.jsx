@@ -108,6 +108,40 @@ export default function AdAdd() {
         setLoading(true);
 
         try {
+            const filesToUpload = [
+                ...photos.map(f => ({ name: f.name, type: f.type })),
+                ...(certificate ? [{ name: certificate.name, type: certificate.type }] : [])
+            ];
+
+            const { data: { urls } } = await axios.post(
+                'https://skripsi-homeline-backend.vercel.app/api/user/advertisement/presigned-urls',
+                { files: filesToUpload },
+                { withCredentials: true }
+            );
+
+            const photoUrls = [];
+            let certificateUrl = null;
+
+            const allFiles = [...photos, ...(certificate ? [certificate] : [])];
+
+            await Promise.all(
+                allFiles.map(async (file, index) => {
+                    const { presignedUrl, fileUrl } = urls[index];
+
+                    await fetch(presignedUrl, {
+                        method: 'PUT',
+                        body: file,
+                        headers: { 'Content-Type': file.type }
+                    });
+
+                    if (file.type === 'application/pdf') {
+                        certificateUrl = fileUrl;
+                    } else {
+                        photoUrls.push(fileUrl);
+                    }
+                })
+            );
+
             const requiredFacilities = formData.facilities.filter(f =>
                 (f.facility_id === 1 || f.facility_id === 2) && (!f.quantity || f.quantity <= 0)
             );
@@ -135,9 +169,7 @@ export default function AdAdd() {
                 if (!result.isConfirmed) return;
             }
 
-
             const data = new FormData();
-
             Object.entries(formData).forEach(([key, val]) => {
                 if (key !== 'facilities') {
                     data.append(key, val);
@@ -154,6 +186,9 @@ export default function AdAdd() {
 
             const validFacilities = formData.facilities.filter(f => f.quantity && f.quantity > 0);
             data.append('facilities', JSON.stringify(validFacilities));
+
+            data.append('photo_urls', JSON.stringify(photoUrls));
+            data.append('certificate_url', certificateUrl);
 
             console.log("=== Files yang diupload ===");
             console.log("Foto Rumah:", photos);
