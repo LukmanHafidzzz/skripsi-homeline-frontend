@@ -103,38 +103,25 @@ export default function AdAdd() {
         return item ? item.name : '';
     };
 
-    const convertToWebp = (file) => {
-        return new Promise((resolve) => {
-            const canvas = document.createElement('canvas');
-            const img = new Image();
-            const url = URL.createObjectURL(file);
-            img.onload = () => {
-                canvas.width = img.width;
-                canvas.height = img.height;
-                canvas.getContext('2d').drawImage(img, 0, 0);
-                canvas.toBlob((blob) => {
-                    resolve(blob);
-                    URL.revokeObjectURL(url);
-                }, 'image/webp', 0.8);
-            };
-            img.src = url;
-        });
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
+
         try {
-            // Validasi fasilitas
             const requiredFacilities = formData.facilities.filter(f =>
                 (f.facility_id === 1 || f.facility_id === 2) && (!f.quantity || f.quantity <= 0)
             );
+
             if (requiredFacilities.length > 0) {
-                Swal.fire({ icon: 'warning', title: 'Data Tidak Lengkap', text: 'Kamar Mandi dan Kamar Tidur wajib diisi', confirmButtonColor: '#f39c12' });
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Data Tidak Lengkap',
+                    text: 'Kamar Mandi dan Kamar Tidur wajib diisi',
+                    confirmButtonColor: '#f39c12'
+                });
                 setLoading(false);
                 return;
             }
-
             if (use3D) {
                 const result = await Swal.fire({
                     title: 'Gunakan fitur 3D modeling?',
@@ -144,90 +131,95 @@ export default function AdAdd() {
                     confirmButtonText: 'Ya',
                     cancelButtonText: 'Tidak',
                 });
-                if (!result.isConfirmed) { setLoading(false); return; }
+
+                if (!result.isConfirmed) return;
             }
 
-            // === STEP 1: Minta presigned URLs dari backend ===
-            const filesMeta = [];
-            photos.forEach(photo => {
-                filesMeta.push({ fileName: photo.name, contentType: 'image/webp', fileType: 'photo' });
-            });
-            if (certificate) {
-                filesMeta.push({ fileName: certificate.name, contentType: certificate.type, fileType: 'certificate' });
-            }
 
-            let photoUrls = [];
-            let certificateUrl = null;
-
-            if (filesMeta.length > 0) {
-                const { data } = await axios.post(
-                    'https://skripsi-homeline-backend.vercel.app/api/user/advertisement/presigned-url',
-                    { files: filesMeta },
-                    { withCredentials: true }
-                );
-
-                // === STEP 2: Upload langsung ke S3 ===
-                const photoEntries = data.urls.filter(u => u.fileType === 'photo');
-                const certEntry = data.urls.find(u => u.fileType === 'certificate');
-
-                // Upload foto (konversi ke webp dulu)
-                await Promise.all(photos.map(async (photo, index) => {
-                    const webpBlob = await convertToWebp(photo);
-                    await axios.put(photoEntries[index].presignedUrl, webpBlob, {
-                        headers: { 'Content-Type': 'image/webp' }
-                    });
-                    photoUrls.push(photoEntries[index].fileUrl);
-                }));
-
-                // Upload sertifikat
-                if (certificate && certEntry) {
-                    await axios.put(certEntry.presignedUrl, certificate, {
-                        headers: { 'Content-Type': certificate.type }
-                    });
-                    certificateUrl = certEntry.fileUrl;
-                }
-            }
-
-            // === STEP 3: Kirim data ke backend (tanpa file) ===
             const data = new FormData();
+
             Object.entries(formData).forEach(([key, val]) => {
-                if (key !== 'facilities') data.append(key, val);
+                if (key !== 'facilities') {
+                    data.append(key, val);
+                }
             });
+
             data.append('province', getNameById(provinsiList, selectedProvinsi));
             data.append('city', getNameById(kotaList, selectedKota));
             data.append('subdistrict', getNameById(kecamatanList, selectedKecamatan));
             data.append('village', getNameById(kelurahanList, selectedKelurahan));
             data.append('certificate_type_id', selectedType);
-            data.append('use_3d', use3D ? 'yes' : 'no');
-            data.append('facilities', JSON.stringify(formData.facilities.filter(f => f.quantity > 0)));
-            data.append('photo_urls', JSON.stringify(photoUrls));
-            if (certificateUrl) data.append('certificate_url', certificateUrl);
 
+            data.append('use_3d', use3D ? 'yes' : 'no');
+
+            const validFacilities = formData.facilities.filter(f => f.quantity && f.quantity > 0);
+            data.append('facilities', JSON.stringify(validFacilities));
+
+            console.log("=== Files yang diupload ===");
+            console.log("Foto Rumah:", photos);
+            console.log("Sertifikat:", certificate);
+
+            for (const file of photos) {
+                data.append('photos', file);
+            }
+            if (certificate) {
+                data.append('certificate', certificate);
+            }
             const response = await axios.post(
                 'https://skripsi-homeline-backend.vercel.app/api/user/advertisement/add',
                 data,
-                { withCredentials: true, timeout: 30000 }
+                {
+                    headers: { 'Content-Type': 'multipart/form-data' },
+                    withCredentials: true,
+                    timeout: 60000,
+                }
             );
 
             Swal.fire({
-                icon: 'success', title: 'Berhasil!', text: 'Rumah berhasil ditambahkan',
-                confirmButtonColor: '#28a745', timer: 2000, timerProgressBar: true, showConfirmButton: false
-            }).then(() => navigate('/advertisement/waiting'));
+                icon: 'success',
+                title: 'Berhasil!',
+                text: 'Rumah berhasil ditambahkan',
+                confirmButtonColor: '#28a745',
+                timer: 2000,
+                timerProgressBar: true,
+                showConfirmButton: false
+            }).then(() => {
+                navigate('/advertisement/waiting');
+            });
 
         } catch (err) {
             console.error('Error detail:', err);
+
             let errorTitle = 'Gagal Menyimpan';
             let errorMessage = 'Terjadi kesalahan saat menyimpan data rumah';
-            if (!err.response) {
+
+            if (err.message === 'Network Error' || !err.response) {
                 errorTitle = 'Masalah Koneksi';
-                errorMessage = 'Tidak dapat terhubung ke server.';
+                errorMessage = 'Tidak dapat terhubung ke server. Periksa koneksi internet Anda atau coba lagi nanti.';
+            } else if (err.response?.status === 403) {
+                errorTitle = 'Akses Ditolak';
+                errorMessage = 'Server menolak permintaan. Silakan hubungi administrator.';
             } else if (err.response?.status === 500) {
                 errorTitle = 'Error Server';
-                errorMessage = 'Terjadi kesalahan server. Silakan coba lagi.';
+                errorMessage = 'Terjadi kesalahan server. Silakan coba lagi dalam beberapa saat.';
+            } else if (err.response?.status === 401) {
+                errorTitle = 'Akses Ditolak';
+                errorMessage = 'Anda tidak memiliki akses. Silakan login terlebih dahulu.';
+            } else if (err.response?.status === 400) {
+                errorTitle = 'Data Tidak Valid';
+                errorMessage = 'Silakan periksa kembali data yang diinputkan.';
             } else if (err.response?.data?.message) {
                 errorMessage = err.response.data.message;
             }
-            Swal.fire({ icon: 'error', title: errorTitle, text: errorMessage, confirmButtonColor: '#dc3545' });
+
+            Swal.fire({
+                icon: 'error',
+                title: errorTitle,
+                text: errorMessage,
+                confirmButtonColor: '#dc3545',
+                footer: err.response?.status ? `Error Code: ${err.response.status}` : null
+            });
+
         } finally {
             setLoading(false);
         }
