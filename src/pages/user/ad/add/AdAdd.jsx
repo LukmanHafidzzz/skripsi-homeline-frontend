@@ -169,7 +169,6 @@ export default function AdAdd() {
                 'https://skripsi-homeline-backend.vercel.app/api/user/advertisement/add',
                 data,
                 {
-                    headers: { 'Content-Type': 'multipart/form-data' },
                     withCredentials: true,
                     timeout: 60000,
                 }
