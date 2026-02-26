@@ -103,17 +103,42 @@ export default function AdAdd() {
         return item ? item.name : '';
     };
 
+    const uploadFileToS3 = async (file, folder) => {
+        const presignRes = await axios.post(
+            "https://skripsi-homeline-backend.vercel.app/api/user/advertisement/presigned-url",
+            {
+                fileName: file.name,
+                contentType: file.type,
+                folder: folder
+            },
+            { withCredentials: true }
+        );
+        const { presignedUrl, fileUrl } = presignRes.data;
+        await fetch(presignedUrl, {
+            method: "PUT",
+            headers: {
+                "Content-Type": file.type
+            },
+            body: file
+        });
+        return fileUrl;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
 
         try {
+            // ===============================
+            // VALIDASI FASILITAS WAJIB
+            // ===============================
             const requiredFacilities = formData.facilities.filter(f =>
-                (f.facility_id === 1 || f.facility_id === 2) && (!f.quantity || f.quantity <= 0)
+                (f.facility_id === 1 || f.facility_id === 2) &&
+                (!f.quantity || f.quantity <= 0)
             );
 
             if (requiredFacilities.length > 0) {
-                Swal.fire({
+                await Swal.fire({
                     icon: 'warning',
                     title: 'Data Tidak Lengkap',
                     text: 'Kamar Mandi dan Kamar Tidur wajib diisi',
@@ -122,6 +147,10 @@ export default function AdAdd() {
                 setLoading(false);
                 return;
             }
+
+            // ===============================
+            // KONFIRMASI 3D
+            // ===============================
             if (use3D) {
                 const result = await Swal.fire({
                     title: 'Gunakan fitur 3D modeling?',
@@ -132,49 +161,70 @@ export default function AdAdd() {
                     cancelButtonText: 'Tidak',
                 });
 
-                if (!result.isConfirmed) return;
-            }
-
-
-            const data = new FormData();
-
-            Object.entries(formData).forEach(([key, val]) => {
-                if (key !== 'facilities') {
-                    data.append(key, val);
+                if (!result.isConfirmed) {
+                    setLoading(false);
+                    return;
                 }
-            });
-
-            data.append('province', getNameById(provinsiList, selectedProvinsi));
-            data.append('city', getNameById(kotaList, selectedKota));
-            data.append('subdistrict', getNameById(kecamatanList, selectedKecamatan));
-            data.append('village', getNameById(kelurahanList, selectedKelurahan));
-            data.append('certificate_type_id', selectedType);
-
-            data.append('use_3d', use3D ? 'yes' : 'no');
-
-            const validFacilities = formData.facilities.filter(f => f.quantity && f.quantity > 0);
-            data.append('facilities', JSON.stringify(validFacilities));
-
-            console.log("=== Files yang diupload ===");
-            console.log("Foto Rumah:", photos);
-            console.log("Sertifikat:", certificate);
-
-            for (const file of photos) {
-                data.append('photos', file);
             }
+
+            // ===============================
+            // UPLOAD FOTO (PARALEL 🚀)
+            // ===============================
+            let uploadedPhotoUrls = [];
+
+            if (photos.length > 0) {
+                uploadedPhotoUrls = await Promise.all(
+                    photos.map(file => uploadFileToS3(file, "photos"))
+                );
+            }
+
+            // ===============================
+            // UPLOAD SERTIFIKAT
+            // ===============================
+            let uploadedCertificateUrl = null;
+
             if (certificate) {
-                data.append('certificate', certificate);
+                uploadedCertificateUrl = await uploadFileToS3(
+                    certificate,
+                    "certificates"
+                );
             }
-            const response = await axios.post(
+
+            // ===============================
+            // SIAPKAN PAYLOAD JSON
+            // ===============================
+            const validFacilities = formData.facilities
+                .filter(f => f.quantity && f.quantity > 0);
+
+            const payload = {
+                ...formData,
+                province: getNameById(provinsiList, selectedProvinsi),
+                city: getNameById(kotaList, selectedKota),
+                subdistrict: getNameById(kecamatanList, selectedKecamatan),
+                village: getNameById(kelurahanList, selectedKelurahan),
+                certificate_type_id: selectedType,
+                use_3d: use3D ? 'yes' : 'no',
+                facilities: JSON.stringify(validFacilities),
+                photos: uploadedPhotoUrls,
+                certificate_url: uploadedCertificateUrl
+            };
+
+            // ===============================
+            // KIRIM KE BACKEND
+            // ===============================
+            await axios.post(
                 'https://skripsi-homeline-backend.vercel.app/api/user/advertisement/add',
-                data,
+                payload,
                 {
                     withCredentials: true,
                     timeout: 60000,
                 }
             );
 
-            Swal.fire({
+            // ===============================
+            // SUCCESS
+            // ===============================
+            await Swal.fire({
                 icon: 'success',
                 title: 'Berhasil!',
                 text: 'Rumah berhasil ditambahkan',
@@ -182,9 +232,9 @@ export default function AdAdd() {
                 timer: 2000,
                 timerProgressBar: true,
                 showConfirmButton: false
-            }).then(() => {
-                navigate('/advertisement/waiting');
             });
+
+            navigate('/advertisement/waiting');
 
         } catch (err) {
             console.error('Error detail:', err);
@@ -194,29 +244,26 @@ export default function AdAdd() {
 
             if (err.message === 'Network Error' || !err.response) {
                 errorTitle = 'Masalah Koneksi';
-                errorMessage = 'Tidak dapat terhubung ke server. Periksa koneksi internet Anda atau coba lagi nanti.';
+                errorMessage = 'Tidak dapat terhubung ke server.';
             } else if (err.response?.status === 403) {
                 errorTitle = 'Akses Ditolak';
-                errorMessage = 'Server menolak permintaan. Silakan hubungi administrator.';
+                errorMessage = 'Server menolak permintaan.';
             } else if (err.response?.status === 500) {
                 errorTitle = 'Error Server';
-                errorMessage = 'Terjadi kesalahan server. Silakan coba lagi dalam beberapa saat.';
+                errorMessage = 'Terjadi kesalahan server.';
             } else if (err.response?.status === 401) {
-                errorTitle = 'Akses Ditolak';
-                errorMessage = 'Anda tidak memiliki akses. Silakan login terlebih dahulu.';
+                errorTitle = 'Belum Login';
+                errorMessage = 'Silakan login terlebih dahulu.';
             } else if (err.response?.status === 400) {
                 errorTitle = 'Data Tidak Valid';
-                errorMessage = 'Silakan periksa kembali data yang diinputkan.';
-            } else if (err.response?.data?.message) {
                 errorMessage = err.response.data.message;
             }
 
-            Swal.fire({
+            await Swal.fire({
                 icon: 'error',
                 title: errorTitle,
                 text: errorMessage,
-                confirmButtonColor: '#dc3545',
-                footer: err.response?.status ? `Error Code: ${err.response.status}` : null
+                confirmButtonColor: '#dc3545'
             });
 
         } finally {
