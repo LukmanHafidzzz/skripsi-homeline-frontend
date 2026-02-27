@@ -111,6 +111,8 @@ const Register = Loadable(lazy(() => import("./pages/auth/register/Register.jsx"
 const ForgotPassword = Loadable(lazy(() => import("./pages/auth/forgot-password/ForgotPassword.jsx")));
 const ResetPassword = Loadable(lazy(() => import("./pages/auth/reset-password/ResetPassword.jsx")));
 
+const Test = Loadable(lazy(() => import("./pages/Test.jsx")));
+
 function App() {
     useEffect(() => {
         AOS.init();
@@ -128,6 +130,8 @@ function App() {
             <Route element={<SecondaryLayout />}>
                 <Route path="/" element={<Landingpage />} />
             </Route>
+
+            <Route path="/test" element={<Test />} />
 
             <Route
                 element={
