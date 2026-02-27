@@ -11,26 +11,6 @@ export default function Test() {
     const [models, setModels] = useState([]);
     const [loadingList, setLoadingList] = useState(false);
 
-    useEffect(() => {
-        fetchModels();
-    }, []);
-
-    const fetchModels = async () => {
-        setLoadingList(true);
-        try {
-            const res = await fetch(`${API_BASE}/api/tests`, {
-                credentials: "include",
-            });
-            const data = await res.json();
-            if (res.ok) setModels(data.data || []);
-            else throw new Error(data.message);
-        } catch (err) {
-            console.error("Gagal fetch models:", err);
-        } finally {
-            setLoadingList(false);
-        }
-    };
-
     const handleFileChange = (e) => {
         const selected = e.target.files[0];
         setErrorMsg("");
@@ -69,20 +49,10 @@ export default function Test() {
             if (!presignRes.ok) throw new Error(presignData.message || "Gagal mendapat presigned URL");
 
             const { presignedUrl, fileUrl } = presignData;
-
-            // ── STEP 2: Upload langsung ke S3 via presigned URL ──────────────────
-            // Pakai XHR supaya bisa tracking progress upload
             await new Promise((resolve, reject) => {
                 const xhr = new XMLHttpRequest();
                 xhr.open("PUT", presignedUrl);
-
-                // Content-Type HARUS sama dengan yang ada di params saat generate presigned URL di BE.
-                // Karena ContentType diset di PutObjectCommand → "content-type" masuk ke SignedHeaders
-                // → wajib dikirim persis sama di sini. Kalau beda → 403.
                 xhr.setRequestHeader("Content-Type", "model/gltf-binary");
-
-                // ⚠️  JANGAN tambah header lain di sini (x-amz-acl, x-amz-checksum, dll)
-                //     karena header yang tidak ada di SignedHeaders akan menyebabkan 403.
 
                 xhr.upload.onprogress = (event) => {
                     if (event.lengthComputable) {
@@ -94,7 +64,6 @@ export default function Test() {
                     if (xhr.status === 200 || xhr.status === 204) {
                         resolve();
                     } else {
-                        // responseText berisi XML error dari S3 — berguna untuk debug
                         console.error("S3 error response:", xhr.responseText);
                         reject(new Error(`Upload S3 gagal (${xhr.status}). Cek console untuk detail XML error.`));
                     }
@@ -103,8 +72,6 @@ export default function Test() {
                 xhr.onerror = () => reject(new Error("Network error saat upload ke S3"));
                 xhr.send(file);
             });
-
-            // ── STEP 3: Simpan fileUrl (string) ke database via BE ───────────────
             setStatus("saving");
 
             const saveRes = await fetch(`${API_BASE}/api/tests`, {
@@ -121,7 +88,6 @@ export default function Test() {
             setSuccessMsg(`Berhasil upload! URL: ${fileUrl}`);
             setFile(null);
             e.target.reset();
-            fetchModels();
         } catch (err) {
             console.error(err);
             setStatus("error");
@@ -290,77 +256,6 @@ export default function Test() {
                             </ol>
                         </div>
                     </div>
-
-                    {/* ── Daftar Model ── */}
-                    <div className="card shadow-sm">
-                        <div className="card-header d-flex justify-content-between align-items-center">
-                            <h5 className="mb-0">Daftar Model Tersimpan</h5>
-                            <button
-                                className="btn btn-sm btn-outline-secondary"
-                                onClick={fetchModels}
-                                disabled={loadingList}
-                            >
-                                {loadingList ? (
-                                    <span className="spinner-border spinner-border-sm" />
-                                ) : (
-                                    "↻ Refresh"
-                                )}
-                            </button>
-                        </div>
-                        <div className="card-body p-0">
-                            {loadingList ? (
-                                <div className="text-center py-4">
-                                    <div className="spinner-border text-primary" />
-                                </div>
-                            ) : models.length === 0 ? (
-                                <div className="text-center text-muted py-4">
-                                    Belum ada model yang diupload.
-                                </div>
-                            ) : (
-                                <div className="table-responsive">
-                                    <table className="table table-hover mb-0">
-                                        <thead className="table-light">
-                                            <tr>
-                                                <th>#</th>
-                                                <th>ID</th>
-                                                <th>URL File</th>
-                                                <th>Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {models.map((model, index) => (
-                                                <tr key={model.id}>
-                                                    <td>{index + 1}</td>
-                                                    <td>
-                                                        <code>{model.id}</code>
-                                                    </td>
-                                                    <td>
-                                                        <a
-                                                            href={model.file}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="text-break small"
-                                                        >
-                                                            {model.file}
-                                                        </a>
-                                                    </td>
-                                                    <td>
-                                                        <button
-                                                            className="btn btn-sm btn-outline-danger"
-                                                            onClick={() => handleDelete(model.id)}
-                                                        >
-                                                            Hapus
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>
