@@ -71,13 +71,18 @@ export default function Test() {
             const { presignedUrl, fileUrl } = presignData;
 
             // ── STEP 2: Upload langsung ke S3 via presigned URL ──────────────────
-            // Pakai XHR (bukan fetch) supaya bisa tracking progress upload
-            // Request ini langsung ke S3 — tidak melewati backend/Vercel sama sekali
+            // Pakai XHR supaya bisa tracking progress upload
             await new Promise((resolve, reject) => {
                 const xhr = new XMLHttpRequest();
                 xhr.open("PUT", presignedUrl);
-                // Content-Type HARUS identik dengan yang dikirim ke BE saat generate presigned URL
+
+                // Content-Type HARUS sama dengan yang ada di params saat generate presigned URL di BE.
+                // Karena ContentType diset di PutObjectCommand → "content-type" masuk ke SignedHeaders
+                // → wajib dikirim persis sama di sini. Kalau beda → 403.
                 xhr.setRequestHeader("Content-Type", "model/gltf-binary");
+
+                // ⚠️  JANGAN tambah header lain di sini (x-amz-acl, x-amz-checksum, dll)
+                //     karena header yang tidak ada di SignedHeaders akan menyebabkan 403.
 
                 xhr.upload.onprogress = (event) => {
                     if (event.lengthComputable) {
@@ -86,8 +91,13 @@ export default function Test() {
                 };
 
                 xhr.onload = () => {
-                    if (xhr.status === 200 || xhr.status === 204) resolve();
-                    else reject(new Error(`Upload S3 gagal (${xhr.status}): ${xhr.responseText}`));
+                    if (xhr.status === 200 || xhr.status === 204) {
+                        resolve();
+                    } else {
+                        // responseText berisi XML error dari S3 — berguna untuk debug
+                        console.error("S3 error response:", xhr.responseText);
+                        reject(new Error(`Upload S3 gagal (${xhr.status}). Cek console untuk detail XML error.`));
+                    }
                 };
 
                 xhr.onerror = () => reject(new Error("Network error saat upload ke S3"));
@@ -187,7 +197,7 @@ export default function Test() {
                                     </div>
                                 )}
 
-                                {/* Progress Bar - upload ke S3 */}
+                                {/* Progress Bar */}
                                 {status === "uploading" && (
                                     <div className="mb-3">
                                         <label className="form-label">
