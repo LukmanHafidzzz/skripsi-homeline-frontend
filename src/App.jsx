@@ -129,9 +129,9 @@ function App() {
 
             <Route element={<SecondaryLayout />}>
                 <Route path="/" element={<Landingpage />} />
+                <Route path="/test" element={<Test />} />
             </Route>
 
-            <Route path="/test" element={<Test />} />
 
             <Route
                 element={
