@@ -27,7 +27,7 @@ export default function DesignerMakeReqDetail() {
     useEffect(() => {
         const fetchHouseDetail = async () => {
             try {
-                const res = await axios.get(`https://skripsi-homeline-backend.vercel.app/api/designer/house-detail/${id}`, {
+                const res = await axios.get(`http://localhost:5773/api/designer/house-detail/${id}`, {
                     withCredentials: true,
                 });
                 setHouse(res.data);
@@ -215,7 +215,7 @@ export default function DesignerMakeReqDetail() {
                                                             if (result.isConfirmed) {
                                                                 setButtonLoading(true);
                                                                 try {
-                                                                    const res = await axios.post('https://skripsi-homeline-backend.vercel.app/api/designer/make-request', {
+                                                                    const res = await axios.post('http://localhost:5773/api/designer/make-request', {
                                                                         house_id: house.id
                                                                     }, {
                                                                         withCredentials: true,

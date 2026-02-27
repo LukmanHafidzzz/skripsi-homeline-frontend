@@ -41,15 +41,15 @@ export default function AdminHome() {
     })
 
     useEffect(() => {
-        axios.get(`https://skripsi-homeline-backend.vercel.app/api/admin/home/count-house`, { withCredentials: true })
+        axios.get(`http://localhost:5773/api/admin/home/count-house`, { withCredentials: true })
             .then(res => setHouses(res.data))
             .catch(err => console.error(err))
 
-        axios.get(`https://skripsi-homeline-backend.vercel.app/api/admin/home/count-survey`, { withCredentials: true })
+        axios.get(`http://localhost:5773/api/admin/home/count-survey`, { withCredentials: true })
             .then(res => setHouseSurveyProcesses(res.data))
             .catch(err => console.error(err))
 
-        axios.get(`https://skripsi-homeline-backend.vercel.app/api/admin/home/count-design`, { withCredentials: true })
+        axios.get(`http://localhost:5773/api/admin/home/count-design`, { withCredentials: true })
             .then(res => setHouseDesignProcesses(res.data))
             .catch(err => console.error(err))
     }, [])

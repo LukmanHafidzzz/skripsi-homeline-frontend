@@ -13,7 +13,7 @@ export default function AdminLayout() {
     const { setUser } = useAuth();
     const handleLogout = async () => {
         try {
-            await axios.delete('https://skripsi-homeline-backend.vercel.app/api/auth/logout', {
+            await axios.delete('http://localhost:5773/api/auth/logout', {
                 withCredentials: true
             });
             setUser(null);

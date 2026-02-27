@@ -36,7 +36,7 @@ export default function DesignerResultInputDetail() {
     useEffect(() => {
         const fetchHouseDetail = async () => {
             try {
-                const res = await axios.get(`https://skripsi-homeline-backend.vercel.app/api/designer/house-detail/${id}`, {
+                const res = await axios.get(`http://localhost:5773/api/designer/house-detail/${id}`, {
                     withCredentials: true
                 });
                 setHouse(res.data);
@@ -98,7 +98,7 @@ export default function DesignerResultInputDetail() {
                 const contentType = file.type || 'application/octet-stream';
 
                 const presignedResponse = await axios.post(
-                    'https://skripsi-homeline-backend.vercel.app/api/designer/get-presigned-url',
+                    'http://localhost:5773/api/designer/get-presigned-url',
                     {
                         fileName: file.name,
                         contentType
@@ -143,7 +143,7 @@ export default function DesignerResultInputDetail() {
             }
 
             const response = await axios.put(
-                'https://skripsi-homeline-backend.vercel.app/api/designer/rev-house-design',
+                'http://localhost:5773/api/designer/rev-house-design',
                 formData,
                 {
                     withCredentials: true,

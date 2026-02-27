@@ -12,7 +12,7 @@ export default function AdApproved() {
     useEffect(() => {
         const fetchHouses = async () => {
             try {
-                const res = await axios.get('https://skripsi-homeline-backend.vercel.app/api/user/advertisement/approved', {
+                const res = await axios.get('http://localhost:5773/api/user/advertisement/approved', {
                     withCredentials: true
                 });
                 setHouses(res.data);

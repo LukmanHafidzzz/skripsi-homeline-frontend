@@ -16,7 +16,7 @@ export default function GeoCoordinate() {
         const fetchHouses = async () => {
             try {
                 const res = await axios.get(
-                    'https://skripsi-homeline-backend.vercel.app/api/admin/house/geo-coordinate',
+                    'http://localhost:5773/api/admin/house/geo-coordinate',
                     { withCredentials: true }
                 );
                 setHouses(res.data);

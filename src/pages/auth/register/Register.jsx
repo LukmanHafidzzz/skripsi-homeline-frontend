@@ -67,7 +67,7 @@ export default function Register() {
         }
 
         try {
-            const res = await axios.post('https://skripsi-homeline-backend.vercel.app/api/auth/register', formData, {
+            const res = await axios.post('http://localhost:5773/api/auth/register', formData, {
                 withCredentials: true
             });
 

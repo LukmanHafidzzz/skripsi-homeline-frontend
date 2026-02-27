@@ -87,7 +87,7 @@ export default function DesignerHouseListModel() {
     useEffect(() => {
         const fetchHouseDetail = async () => {
             try {
-                const res = await axios.get(`https://skripsi-homeline-backend.vercel.app/api/user/search/detail/model/${id}`, {
+                const res = await axios.get(`http://localhost:5773/api/user/search/detail/model/${id}`, {
                     withCredentials: true
                 });
                 setHouse(res.data);

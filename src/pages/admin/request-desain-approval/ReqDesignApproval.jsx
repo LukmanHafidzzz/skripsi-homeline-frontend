@@ -20,7 +20,7 @@ export default function ReqDesignApproval() {
         const fetchDesignRequest = async () => {
             try {
                 const res = await axios.get(
-                    'https://skripsi-homeline-backend.vercel.app/api/admin/request/design-request',
+                    'http://localhost:5773/api/admin/request/design-request',
                     { withCredentials: true }
                 );
                 setDesignRequests(res.data);

@@ -16,7 +16,7 @@ export default function DesignRev() {
         const fetchHouses = async () => {
             try {
                 const res = await axios.get(
-                    'https://skripsi-homeline-backend.vercel.app/api/admin/design/revision-house-list',
+                    'http://localhost:5773/api/admin/design/revision-house-list',
                     { withCredentials: true }
                 );
                 setHouses(res.data);

@@ -26,7 +26,7 @@ export default function ForgotPassword() {
             NProgress.start()
 
             const res = await axios.post(
-                'https://skripsi-homeline-backend.vercel.app/api/auth/forgot-password',
+                'http://localhost:5773/api/auth/forgot-password',
                 { email }
             )
 

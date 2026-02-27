@@ -19,7 +19,7 @@ export default function DesignerHome() {
     })
 
     useEffect(() => {
-        axios.get(`https://skripsi-homeline-backend.vercel.app/api/admin/home/count-design`, { withCredentials: true })
+        axios.get(`http://localhost:5773/api/admin/home/count-design`, { withCredentials: true })
             .then(res => setHouseDesignProcesses(res.data))
             .catch(err => console.error(err))
     }, [])

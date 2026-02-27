@@ -23,7 +23,7 @@ export default function AdWaitingPayment() {
     useEffect(() => {
         const fetchHouses = async () => {
             try {
-                const res = await axios.get('https://skripsi-homeline-backend.vercel.app/api/user/advertisement/waiting-payment', {
+                const res = await axios.get('http://localhost:5773/api/user/advertisement/waiting-payment', {
                     withCredentials: true
                 });
                 setHouses(res.data);

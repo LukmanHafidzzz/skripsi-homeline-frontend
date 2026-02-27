@@ -15,7 +15,7 @@ export default function AdvertisementHome() {
     })
 
     useEffect(() => {
-        axios.get(`https://skripsi-homeline-backend.vercel.app/api/user/advertisement/count`,
+        axios.get(`http://localhost:5773/api/user/advertisement/count`,
             { withCredentials: true })
             .then(res => setHouses(res.data))
             .catch(err => console.error(err))
