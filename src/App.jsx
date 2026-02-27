@@ -111,7 +111,7 @@ const Register = Loadable(lazy(() => import("./pages/auth/register/Register.jsx"
 const ForgotPassword = Loadable(lazy(() => import("./pages/auth/forgot-password/ForgotPassword.jsx")));
 const ResetPassword = Loadable(lazy(() => import("./pages/auth/reset-password/ResetPassword.jsx")));
 
-const Test = Loadable(lazy(() => import("./pages/Test.jsx")));
+const Test = Loadable(lazy(() => import("./pages/test/Test.jsx")));
 
 function App() {
     useEffect(() => {
@@ -129,9 +129,9 @@ function App() {
 
             <Route element={<SecondaryLayout />}>
                 <Route path="/" element={<Landingpage />} />
-                <Route path="/test" element={<Test />} />
             </Route>
 
+            <Route path="/test" element={<Test />} />
 
             <Route
                 element={
