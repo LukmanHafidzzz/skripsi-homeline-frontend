@@ -20,7 +20,7 @@ export default function ReqSurveyApproval() {
         const fetchSurveyRequest = async () => {
             try {
                 const res = await axios.get(
-                    'http://localhost:5773/api/admin/request/survey-request',
+                    'https://skripsi-homeline-backend.vercel.app/api/admin/request/survey-request',
                     { withCredentials: true }
                 );
                 setSurveyRequests(res.data);

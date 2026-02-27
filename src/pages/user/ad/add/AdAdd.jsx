@@ -66,7 +66,7 @@ export default function AdAdd() {
     useEffect(() => {
         const fetchCertificateTypes = async () => {
             try {
-                const response = await axios.get('http://localhost:5773/api/user/certificate-types');
+                const response = await axios.get('https://skripsi-homeline-backend.vercel.app/api/user/certificate-types');
                 setCertificateTypes(response.data);
             } catch (error) {
                 console.error('Error fetching certificate types:', error);
@@ -105,7 +105,7 @@ export default function AdAdd() {
 
     const uploadFileToS3 = async (file, folder) => {
         const presignRes = await axios.post(
-            "http://localhost:5773/api/user/advertisement/presigned-url",
+            "https://skripsi-homeline-backend.vercel.app/api/user/advertisement/presigned-url",
             {
                 fileName: file.name,
                 contentType: file.type,
@@ -213,7 +213,7 @@ export default function AdAdd() {
             // KIRIM KE BACKEND
             // ===============================
             await axios.post(
-                'http://localhost:5773/api/user/advertisement/add',
+                'https://skripsi-homeline-backend.vercel.app/api/user/advertisement/add',
                 payload,
                 {
                     withCredentials: true,

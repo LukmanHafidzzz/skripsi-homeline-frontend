@@ -31,7 +31,7 @@ export default function SurveyInputDetail() {
     useEffect(() => {
         const fetchHouseDetail = async () => {
             try {
-                const res = await axios.get(`http://localhost:5773/api/admin/house/detail/${id}`, {
+                const res = await axios.get(`https://skripsi-homeline-backend.vercel.app/api/admin/house/detail/${id}`, {
                     withCredentials: true
                 });
                 setHouse(res.data);
@@ -53,7 +53,7 @@ export default function SurveyInputDetail() {
 
         try {
             const res = await axios.patch(
-                `http://localhost:5773/api/admin/survey/revision/${id}`,
+                `https://skripsi-homeline-backend.vercel.app/api/admin/survey/revision/${id}`,
                 { comment },
                 { withCredentials: true }
             );
@@ -320,7 +320,7 @@ export default function SurveyInputDetail() {
                                         setButtonLoading(true);
                                         try {
                                             const res = await axios.patch(
-                                                `http://localhost:5773/api/admin/survey/survey-input/${id}`,
+                                                `https://skripsi-homeline-backend.vercel.app/api/admin/survey/survey-input/${id}`,
                                                 { withCredentials: true }
                                             );
 

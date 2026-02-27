@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const API_BASE = "http://localhost:5773"; // Ganti dengan URL backend-mu
+const API_BASE = "https://skripsi-homeline-backend.vercel.app"; // Ganti dengan URL backend-mu
 
 export default function Test() {
     const [file, setFile] = useState(null);

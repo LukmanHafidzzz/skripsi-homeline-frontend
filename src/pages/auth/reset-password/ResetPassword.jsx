@@ -78,7 +78,7 @@ export default function ResetPassword() {
             NProgress.start()
 
             const res = await axios.post(
-                'http://localhost:5773/api/auth/reset-password',
+                'https://skripsi-homeline-backend.vercel.app/api/auth/reset-password',
                 {
                     token,
                     password: formData.password

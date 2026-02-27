@@ -34,7 +34,7 @@ export default function DesignerNeedDesign() {
         if (result.isConfirmed) {
             try {
                 await axios.patch(
-                    `http://localhost:5773/api/designer/start-design/${houseProcessId}`,
+                    `https://skripsi-homeline-backend.vercel.app/api/designer/start-design/${houseProcessId}`,
                     {},
                     { withCredentials: true }
                 );
@@ -48,7 +48,7 @@ export default function DesignerNeedDesign() {
                 });
 
                 const res = await axios.get(
-                    'http://localhost:5773/api/designer/need-design',
+                    'https://skripsi-homeline-backend.vercel.app/api/designer/need-design',
                     { withCredentials: true }
                 );
                 setHouseProcesses(res.data);
@@ -73,7 +73,7 @@ export default function DesignerNeedDesign() {
         const fetchHouses = async () => {
             try {
                 const res = await axios.get(
-                    'http://localhost:5773/api/designer/need-design',
+                    'https://skripsi-homeline-backend.vercel.app/api/designer/need-design',
                     { withCredentials: true }
                 );
                 setHouseProcesses(res.data);

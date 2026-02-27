@@ -54,7 +54,7 @@ export default function MainLayout() {
     }, [authLoading]);
 
     useEffect(() => {
-        fetch('http://localhost:5773/api/user/provinces')
+        fetch('https://skripsi-homeline-backend.vercel.app/api/user/provinces')
             .then(res => res.json())
             .then(data => setProvinsiList(data));
     }, []);

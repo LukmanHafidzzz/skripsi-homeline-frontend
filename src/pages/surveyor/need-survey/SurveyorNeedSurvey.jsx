@@ -34,7 +34,7 @@ export default function SurveyorNeedSurvey() {
         if (result.isConfirmed) {
             try {
                 await axios.patch(
-                    `http://localhost:5773/api/surveyor/start-survey/${houseProcessId}`,
+                    `https://skripsi-homeline-backend.vercel.app/api/surveyor/start-survey/${houseProcessId}`,
                     {},
                     { withCredentials: true }
                 );
@@ -48,7 +48,7 @@ export default function SurveyorNeedSurvey() {
                 });
 
                 const res = await axios.get(
-                    'http://localhost:5773/api/surveyor/need-survey',
+                    'https://skripsi-homeline-backend.vercel.app/api/surveyor/need-survey',
                     { withCredentials: true }
                 );
                 setHouseProcesses(res.data);
@@ -73,7 +73,7 @@ export default function SurveyorNeedSurvey() {
         const fetchHouses = async () => {
             try {
                 const res = await axios.get(
-                    'http://localhost:5773/api/surveyor/need-survey',
+                    'https://skripsi-homeline-backend.vercel.app/api/surveyor/need-survey',
                     { withCredentials: true }
                 );
                 setHouseProcesses(res.data);
