@@ -66,7 +66,7 @@ export default function AdAdd() {
     useEffect(() => {
         const fetchCertificateTypes = async () => {
             try {
-                const response = await axios.get('http://localhost:5773/api/user/certificate-types');
+                const response = await axios.get('https://skripsi-homeline-backend.vercel.app/api/user/certificate-types');
                 setCertificateTypes(response.data);
             } catch (error) {
                 console.error('Error fetching certificate types:', error);
@@ -166,7 +166,7 @@ export default function AdAdd() {
                 data.append('certificate', certificate);
             }
             const response = await axios.post(
-                'http://localhost:5773/api/user/advertisement/add',
+                'https://skripsi-homeline-backend.vercel.app/api/user/advertisement/add',
                 data,
                 {
                     headers: { 'Content-Type': 'multipart/form-data' },
