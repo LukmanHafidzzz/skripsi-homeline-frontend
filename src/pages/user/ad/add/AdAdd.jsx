@@ -9,6 +9,7 @@ export default function AdAdd() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [use3D, setUse3D] = useState(false);
+    const [displayPrice, setDisplayPrice] = useState('');
 
     const [provinsiList, setProvinsiList] = useState([]);
     const [kotaList, setKotaList] = useState([]);
@@ -75,6 +76,18 @@ export default function AdAdd() {
 
         fetchCertificateTypes();
     }, []);
+
+    const formatPrice = (value) => {
+        const numOnly = value.replace(/\D/g, '');
+        return numOnly.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    };
+
+    const handlePriceChange = (e) => {
+        const raw = e.target.value.replace(/\./g, '');
+        const formatted = formatPrice(raw);
+        setDisplayPrice(formatted);
+        setFormData({ ...formData, price: raw });
+    };
 
     const [formData, setFormData] = useState({
         title: '', building_area: '', land_area: '', price: '', no_telp: '', description: '',
@@ -258,7 +271,16 @@ export default function AdAdd() {
                             <Form.Label className='fw-semibold mb-2'>Harga <span className='text-danger'>*</span></Form.Label>
                             <InputGroup className="">
                                 <InputGroup.Text id="">Rp</InputGroup.Text>
-                                <Form.Control name='price' value={formData.price} onChange={handleChange} placeholder="Masukkan harga" aria-label="" aria-describedby="basic-addon1" className="form-add-group" required />
+                                <Form.Control
+                                    name='price'
+                                    value={displayPrice}
+                                    onChange={handlePriceChange}
+                                    placeholder="Masukkan harga"
+                                    aria-label=""
+                                    aria-describedby="basic-addon1"
+                                    className="form-add-group"
+                                    required
+                                />
                             </InputGroup>
                         </Col>
                         <Col>
